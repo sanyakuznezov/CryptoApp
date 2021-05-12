@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:payarapp/ui/enter_code_screen.dart';
@@ -65,7 +66,8 @@ class _MyAppState extends State<MyApp>{
              // Once complete, show your application
              if (snapshot.connectionState == ConnectionState.done) {
                print('connectionState done');
-               return MyApp();
+
+               return GetUserName();
              }
              // Otherwise, show something whilst waiting for initialization to complete
                return Container(
@@ -80,6 +82,36 @@ class _MyAppState extends State<MyApp>{
      }
      }
 
+
+class GetUserName extends StatelessWidget {
+
+  @override
+  Widget build(BuildContext context) {
+    CollectionReference order = FirebaseFirestore.instance.collection('orders');
+
+    return FutureBuilder<DocumentSnapshot>(
+      future: order.doc('HGuCIMX1h85JXNxybFQc').collection('tickets').doc('i0RxgQfwu6uGlLXARouf').get(),
+      builder:
+          (BuildContext context, AsyncSnapshot<DocumentSnapshot> snapshot) {
+
+        if (snapshot.hasError) {
+          return Text("Something went wrong");
+        }
+
+        if (snapshot.hasData && !snapshot.data.exists) {
+          return Text("Document does not exist");
+        }
+
+        if (snapshot.connectionState == ConnectionState.done) {
+          Map<String, dynamic> data = snapshot.data.data();
+          return Text("Order: ${data['combi']}");
+        }
+
+        return Text("loading");
+      },
+    );
+  }
+}
 
 
 
