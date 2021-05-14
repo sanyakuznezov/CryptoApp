@@ -8,12 +8,15 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:payarapp/internal/dependencies/repository_module.dart';
+import 'package:payarapp/ui/user_order_screen.dart';
 import 'package:payarapp/util/size_controll.dart';
 
 
 TextEditingController _textEditingController;
 FocusNode _focusNode;
 bool _isEditingCode=false;
+bool isEmptyCode=false;
 
 
 class EnterCodeScreen extends StatefulWidget{
@@ -23,7 +26,7 @@ class EnterCodeScreen extends StatefulWidget{
 
 }
    class _EnterCodeScreeState extends State<EnterCodeScreen> {
-
+     bool isLoader=false;
      bool _connectionStatus = false;
      final Connectivity _connectivity = Connectivity();
       StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -57,6 +60,10 @@ class EnterCodeScreen extends StatefulWidget{
                             _isEditingCode = true;
                           });
                         },
+                        onSubmitted: (value) {
+                          _focusNode.unfocus();
+                          FocusScope.of(context).requestFocus(_focusNode);
+                        },
                         style: TextStyle(color: Colors.orange),
                         decoration: InputDecoration(
                           border: new OutlineInputBorder(
@@ -72,9 +79,16 @@ class EnterCodeScreen extends StatefulWidget{
                           ),
                           hintText: "Code",
                           fillColor: Colors.black38,
+                          errorText: _isEditingCode
+                              ? isEmptyText(idUser: _textEditingController.text)
+                              : null,
+                          errorStyle: TextStyle(
+                            fontSize: 12,
+                            color: Colors.redAccent,
+                          ),
                         ),
                       ),
-                    ),
+                        ),
                    Padding(
                      padding: const EdgeInsets.all(20.0),
                      child: FlatButton(
@@ -84,8 +98,8 @@ class EnterCodeScreen extends StatefulWidget{
                        onPressed: ()=>{
                           if(_connectionStatus){
                          setState(() {
-                   _isEditingCode = true;
-                   })
+                           validateCode(idUser: _textEditingController.text);
+                        })
                           }else{
                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                        backgroundColor: Colors.white,
@@ -102,7 +116,7 @@ class EnterCodeScreen extends StatefulWidget{
                        ),
                        child: Padding(
                          padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                         child: _isEditingCode
+                         child: isLoader
                              ? SizedBox(
                            height: 16,
                            width: 16,
@@ -123,7 +137,33 @@ class EnterCodeScreen extends StatefulWidget{
            ),
          );
 
+
+
      }
+
+     Future <void>getUserDate({@required String idUser}) async {
+       isLoader=true;
+         final data=await RepositoryModule.firebaseRepository().getOrder(idUser: idUser);
+         setState(() {
+           isLoader=false;
+         });
+         Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data)));
+     }
+
+      validateCode({@required String idUser}){
+       if(idUser.isNotEmpty){
+         getUserDate(idUser: idUser);
+       }
+     }
+
+    String isEmptyText({@required String idUser}){
+       if(idUser.isEmpty){
+         return 'Enter the code';
+       }else{
+         return null;
+       }
+     }
+
 
      @override
   void initState() {
@@ -165,12 +205,12 @@ class EnterCodeScreen extends StatefulWidget{
        switch (result) {
          case ConnectivityResult.wifi:
            setState(() {
-             _connectionStatus=true;
+             _connectionStatus = true;
            });
            break;
          case ConnectivityResult.mobile:
            setState(() {
-             _connectionStatus=true;
+             _connectionStatus = true;
            });
 
            break;
@@ -190,14 +230,19 @@ class EnterCodeScreen extends StatefulWidget{
            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
              backgroundColor: Colors.white,
              content: Text('No network connection....',
-             style: TextStyle(
-               fontSize: 20.0,
-               color: Colors.red
-             ),),
+               style: TextStyle(
+                   fontSize: 20.0,
+                   color: Colors.red
+               ),),
            ));
            break;
+
        }
+
+
+
      }
+
 }
 
 

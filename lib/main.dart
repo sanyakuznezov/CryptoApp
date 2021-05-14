@@ -1,9 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:payarapp/domain/model/order.dart';
-import 'package:payarapp/domain/repository/firebase_repository.dart';
-import 'package:payarapp/internal/dependencies/repository_module.dart';
 import 'package:payarapp/ui/enter_code_screen.dart';
 
 void main() {
@@ -20,7 +16,7 @@ class MyApp extends StatefulWidget {
   @override
   _MyAppState createState() => _MyAppState();
 }
-class _MyAppState extends State<MyApp>{
+   class _MyAppState extends State<MyApp>{
 
 
   @override
@@ -52,42 +48,34 @@ class _MyAppState extends State<MyApp>{
      @override
      Widget build(BuildContext context) {
        // TODO: implement build
-       return  FutureBuilder(
-           // Initialize FlutterFire:
-           future: _initialization,
-           builder: (context, snapshot) {
-             // Check for errors
-             if (snapshot.hasError) {
-               print('hasError');
-               return Container(
-                 color: Colors.red,
-                 width: 200,
-                 height: 200,
-               );
+       return FutureBuilder(
+         // Initialize FlutterFire:
+         future: _initialization,
+         builder: (context, snapshot) {
+           // Check for errors
+           if (snapshot.hasError) {
+             print('hasError');
+             return Container(
+               color: Colors.red,
+               width: 200,
+               height: 200,
+             );
+           }
 
-             }
-
-             // Once complete, show your application
-             if (snapshot.connectionState == ConnectionState.done) {
-                getOrder('HGuCIMX1h85JXNxybFQc');
-               return MyApp();
-             }
-             // Otherwise, show something whilst waiting for initialization to complete
-               return Container(
-                 color: Colors.orange,
-                 width: 200,
-                 height: 200,
-               );
-           },
+           // Once complete, show your application
+           if (snapshot.connectionState == ConnectionState.done) {
+             return MyApp();
+           }
+           // Otherwise, show something whilst waiting for initialization to complete
+           return Container(
+             color: Colors.orange,
+             width: 200,
+             height: 200,
+           );
+         },
 
        );
-
-     }
      }
 
 
-    Future<void> getOrder(String idUser)async{
-       final reslt=await RepositoryModule.firebaseRepository().getOrder(idUser: idUser);
-       print(reslt.getNik);
-    }
-
+   }

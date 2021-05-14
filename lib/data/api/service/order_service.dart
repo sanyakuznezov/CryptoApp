@@ -9,8 +9,13 @@ class OrderService{
 
    Future<ApiOrder> getOrder({@required String idUser}) async{
      CollectionReference order = FirebaseFirestore.instance.collection('orders');
-     final result=await order.doc(idUser).get();
-     return ApiOrder.fromApi(result);
+     try{
+       final result=await order.doc(idUser).get();
+       return ApiOrder.fromApi(result);
+     }on FirebaseException catch(e){
+       return ApiOrder.fromApi(null);
+     }
+
    }
 
  }
