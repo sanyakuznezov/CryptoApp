@@ -8,7 +8,7 @@ import 'package:payarapp/domain/model/order.dart';
 class OrderMapper{
 
   static Order fromApi(ApiOrder apiOrder){
-     return Order(avatar: apiOrder.avatar, nik: apiOrder.nik);
+     return Order(notFond:apiOrder.notFond,avatar: apiOrder.avatar, nik: apiOrder.nik);
    }
 
  }

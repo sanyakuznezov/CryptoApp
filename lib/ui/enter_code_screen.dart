@@ -8,6 +8,8 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:payarapp/domain/model/order.dart';
+import 'package:payarapp/internal/dependencies/main_module.dart';
 import 'package:payarapp/internal/dependencies/repository_module.dart';
 import 'package:payarapp/ui/user_order_screen.dart';
 import 'package:payarapp/util/size_controll.dart';
@@ -32,6 +34,7 @@ class EnterCodeScreen extends StatefulWidget{
       StreamSubscription<ConnectivityResult> _connectivitySubscription;
      @override
      Widget build(BuildContext context) {
+       MainModule.setContext(context);
        return  Scaffold(
            body: Container(
              width: MediaQuery.of(context).size.height,
@@ -143,11 +146,12 @@ class EnterCodeScreen extends StatefulWidget{
 
      Future <void>getUserDate({@required String idUser}) async {
        isLoader=true;
-         final data=await RepositoryModule.firebaseRepository().getOrder(idUser: idUser);
+       final data= await RepositoryModule.firebaseRepository().getOrder(idUser: idUser);
          setState(() {
            isLoader=false;
          });
          Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data)));
+
      }
 
       validateCode({@required String idUser}){

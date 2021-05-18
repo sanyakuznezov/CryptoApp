@@ -14,5 +14,6 @@ class FirebaseDataRepository extends FirebaseRepository{
   Future<Order> getOrder({String idUser}) {
     return _apiUtil.getOrder(idUser: idUser);
   }
+  
 
   }

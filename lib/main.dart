@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:payarapp/internal/dependencies/main_module.dart';
 import 'package:payarapp/ui/enter_code_screen.dart';
 
 void main() {
