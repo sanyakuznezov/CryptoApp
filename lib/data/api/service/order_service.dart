@@ -12,7 +12,6 @@ class OrderService{
      CollectionReference order = FirebaseFirestore.instance.collection('orders');
      final result=await order.doc(idUser).get();
      return ApiOrder.fromApi(result);
-
    }
 
  }

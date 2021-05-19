@@ -105,11 +105,11 @@ class EnterCodeScreen extends StatefulWidget{
                         })
                           }else{
                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                       backgroundColor: Colors.white,
+                       backgroundColor: Colors.black,
                        content: Text('No network connection....',
                          style: TextStyle(
                              fontSize: 15.0,
-                             color: Colors.red
+                             color: Colors.white
                          ),),
                      ))
                      }
@@ -146,11 +146,28 @@ class EnterCodeScreen extends StatefulWidget{
 
      Future <void>getUserDate({@required String idUser}) async {
        isLoader=true;
-       final data= await RepositoryModule.firebaseRepository().getOrder(idUser: idUser);
+       try {
+         final data = await RepositoryModule.firebaseRepository().getOrder(idUser: idUser);
+         Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data)));
+       }on StateError catch(e){
+         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+           backgroundColor: Colors.black,
+             content: Text('Nothing found....',
+             style: TextStyle(
+               color: Colors.white
+             ),)));
+       }on FirebaseException catch(e){
+         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+             backgroundColor: Colors.black,
+             content: Text('Something went wrong....',
+               style: TextStyle(
+                   color: Colors.white
+               ),)));
+       }
          setState(() {
            isLoader=false;
          });
-         Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data)));
+
 
      }
 

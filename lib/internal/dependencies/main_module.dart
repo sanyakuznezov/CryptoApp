@@ -1,7 +1,6 @@
 
 
 import 'package:flutter/cupertino.dart';
-import 'package:payarapp/internal/dependencies/repository_module.dart';
 
 class MainModule{
    static BuildContext _buildContext;
