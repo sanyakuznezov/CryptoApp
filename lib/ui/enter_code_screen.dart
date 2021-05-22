@@ -148,7 +148,8 @@ class EnterCodeScreen extends StatefulWidget{
        isLoader=true;
        try {
          final data = await RepositoryModule.firebaseRepository().getOrder(idUser: idUser);
-         Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data)));
+         final tickets=await RepositoryModule.firebaseRepository().getTickets(idUser:idUser);
+          Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data,list:tickets,)));
        }on StateError catch(e){
          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
            backgroundColor: Colors.black,
@@ -237,11 +238,11 @@ class EnterCodeScreen extends StatefulWidget{
            break;
          case ConnectivityResult.none:
            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-             backgroundColor: Colors.white,
+             backgroundColor: Colors.black,
              content: Text('No network connection....',
                style: TextStyle(
                    fontSize: 15.0,
-                   color: Colors.red
+                   color: Colors.white
                ),),
            ));
            setState(() => _connectionStatus = false);

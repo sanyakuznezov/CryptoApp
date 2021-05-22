@@ -7,10 +7,11 @@ class Order{
 
     final String avatar;
      final String nik;
-     final bool notFond;
+     final String prize;
+     final String id;
 
 
-     Order({@required this.notFond,@required this.avatar,@required this.nik});
+     Order({@required this.id,@required this.prize,@required this.avatar,@required this.nik});
 
 
      get getAvatar{
@@ -20,10 +21,11 @@ class Order{
     get getNik{
       return this.nik;
     }
+ get getPrize=>this.prize;
+     get getId=>this.id;
 
-    get isNotFound{
-       return this.notFond;
-    }
+
+
 
 
 

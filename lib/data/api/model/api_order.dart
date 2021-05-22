@@ -7,11 +7,13 @@ class ApiOrder{
 
   final String avatar;
   final String nik;
-  final bool notFond;
+  final String prize;
+  final String id;
 
   ApiOrder.fromApi(DocumentSnapshot<Map<String,dynamic>> value):
       avatar = value['avatar'],
-        notFond=value.exists,
+      prize=value['prize'],
+      id=value.id,
       nik=value['nik'];
 
 
