@@ -50,7 +50,7 @@ class EnterCodeScreen extends StatefulWidget{
                  mainAxisAlignment: MainAxisAlignment.center,
                  children: [
                         Image.asset('assets/img_logo.png',
-                        width: Sizer(buildContext: context,maxSize: 200).size(50)),
+                        width:Sizer(buildContext: context,maxSize: 200).size(50)),
                     SizedBox(
                       width: Sizer(buildContext: context,maxSize: 300).size(50),
                       child: TextField(
@@ -149,7 +149,7 @@ class EnterCodeScreen extends StatefulWidget{
        try {
          final data = await RepositoryModule.firebaseRepository().getOrder(idUser: idUser);
          final tickets=await RepositoryModule.firebaseRepository().getTickets(idUser:idUser);
-          Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data,list:tickets,)));
+          Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data,list:tickets)));
        }on StateError catch(e){
          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
            backgroundColor: Colors.black,

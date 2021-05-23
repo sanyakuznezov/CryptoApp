@@ -9,12 +9,14 @@ class ApiOrder{
   final String nik;
   final String prize;
   final String id;
+  final String img;
 
   ApiOrder.fromApi(DocumentSnapshot<Map<String,dynamic>> value):
       avatar = value['avatar'],
       prize=value['prize'],
       id=value.id,
-      nik=value['nik'];
+      nik=value['nik'],
+       img=value['img'];
 
 
 }

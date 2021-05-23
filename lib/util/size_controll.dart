@@ -1,7 +1,9 @@
 
 
 
-   import 'package:flutter/material.dart';
+   import 'dart:ffi';
+
+import 'package:flutter/material.dart';
 
 class Sizer{
 
@@ -34,7 +36,7 @@ class Sizer{
      }
 
 
-   double size (value){
+      size (value){
      var g=MediaQuery.of(buildContext).size.width*value/100;
      var r;
      if(maxSize<g){
@@ -42,7 +44,7 @@ class Sizer{
      }else{
        r=g;
      }
-     return  r;
+     return  r.toDouble();
     }
 
 }
