@@ -5,6 +5,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:payarapp/domain/model/order.dart';
 import 'package:payarapp/domain/model/tickets.dart';
+import 'package:payarapp/ui/artifacts_widget.dart';
+import 'package:payarapp/util/combi_to_array.dart';
+import 'package:payarapp/util/path_to_img.dart';
 
 class UserOrderScreen extends StatefulWidget{
 
@@ -20,8 +23,7 @@ class UserOrderScreen extends StatefulWidget{
   
   
 }
-
-   class _UserOrderScreenState extends State<UserOrderScreen>{
+    class _UserOrderScreenState extends State<UserOrderScreen>{
 
 
   @override
@@ -44,51 +46,69 @@ class UserOrderScreen extends StatefulWidget{
               color: Colors.black45,
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(10.0, 40.0, 10.0,10.0),
-                child: Row(
+                child:Row(
                   children: [
-                    Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          image: DecorationImage(
-                              image: NetworkImage(widget.order.getAvatar),
-                              fit: BoxFit.fill
-                          )
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0,0.0, 0.0, 0.0),
-                      child: Text(widget.order.getNik,
-                        textAlign: TextAlign.start,
-                        style: TextStyle(
-                            fontSize: 15.0,
-                            color: Colors.white
-                        ),),
-                    ),
-                    Text('order id: ${widget.order.getId}',
-                      textAlign: TextAlign.end,
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 15.0
-                      ),)
+                     Container(
+                       alignment: Alignment.centerLeft,
+                       child: Row(
+                         children: [
+                           Container(
+                             width: 50,
+                             height: 50,
+                             decoration: BoxDecoration(
+                                 shape: BoxShape.circle,
+                                 image: DecorationImage(
+                                     image: NetworkImage(widget.order.getAvatar),
+                                     fit: BoxFit.fill
+                                 )
+                             ),
+                           ),
+                           Padding(
+                             padding: const EdgeInsets.fromLTRB(5.0,0.0, 0.0, 0.0),
+                             child: Text(widget.order.getNik,
+                               textAlign: TextAlign.start,
+                               style: TextStyle(
+                                   fontSize: 15.0,
+                                   color: Colors.white
+                               ),),
+                           ),
 
-                  ],
-                ),
+                         ],
+                       ),
+                     ),
+                    Expanded(
+                      child:  Container(
+                        alignment: Alignment.centerRight,
+                        child: Text('order id: ${widget.order.getId}',
+                          textAlign: TextAlign.right,
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 15.0
+                          ),),
+                      )
+                    )
+                    ],
+                )
               )
             ),
-            Padding(padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),
-            child: _widget(widget.order.getImg,widget.order.prize))
+            Padding(
+                padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),
+            child: _widget(widget.order.getImg, widget.order.prize, widget.list, context)),
+
 
           ],
         ),
       ),
     );
   }
-  
-   }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+}
    
-   Widget _widget(String url,String prize){
+   Widget _widget(String url,String prize,List<Tickets> list,BuildContext context){
       return SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -110,8 +130,45 @@ class UserOrderScreen extends StatefulWidget{
                 fontSize: 30,
                 color: Colors.white
               ),),
-            )
+            ),
+           HomeScreen(list: list)
           ],
         ),
       );
+   }
+
+class HomeScreen extends StatefulWidget {
+  final List<Tickets> list;
+  const HomeScreen({Key key,@required this.list}):super(key: key);
+  @override
+  _HomeScreenState createState() {
+    // TODO: implement createState
+    return _HomeScreenState();
+  }
+
+}
+
+   class _HomeScreenState extends State<HomeScreen>{
+  @override
+  Widget build(BuildContext context) {
+    // TODO: implement build
+   return Scaffold(
+     body: Padding(
+       padding: const EdgeInsets.all(8.0),
+       child: GridView.builder(
+           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+               crossAxisCount: 5,
+               crossAxisSpacing: 5,
+               mainAxisSpacing: 5),
+           itemCount: 30,
+           itemBuilder: (BuildContext ctx, index) {
+             return Container(
+                 alignment: Alignment.center,
+                 child: Image.asset(PathToImg.toPath(CombiToArray.toArray(widget.list[0].getCombi)[index]))
+             );
+           }),
+     ),
+   );
+  }
+
    }
