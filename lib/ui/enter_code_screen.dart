@@ -50,9 +50,9 @@ class EnterCodeScreen extends StatefulWidget{
                  mainAxisAlignment: MainAxisAlignment.center,
                  children: [
                         Image.asset('assets/img_logo.png',
-                        width:Sizer(buildContext: context,maxSize: 200).size(50)),
+                        width:Sizer(buildContext: context,maxSize: 200.0).size(50.0)),
                     SizedBox(
-                      width: Sizer(buildContext: context,maxSize: 300).size(50),
+                      width: Sizer(buildContext: context,maxSize: 300.0).size(50.0),
                       child: TextField(
                         focusNode: _focusNode,
                         controller: _textEditingController,

@@ -91,9 +91,7 @@ class UserOrderScreen extends StatefulWidget{
                 )
               )
             ),
-            Padding(
-                padding: EdgeInsets.fromLTRB(0.0, 20.0, 0.0, 10.0),
-            child: _widget(widget.order.getImg, widget.order.prize, widget.list, context)),
+            _widget(widget.order.getImg, widget.order.prize, widget.list, context),
 
 
           ],
@@ -109,66 +107,38 @@ class UserOrderScreen extends StatefulWidget{
 }
    
    Widget _widget(String url,String prize,List<Tickets> list,BuildContext context){
-      return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Container(
-              width: 200,
-              height: 200,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  image: NetworkImage(url)
-                )
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: Text(prize,
-              style: TextStyle(
-                fontSize: 30,
-                color: Colors.white
-              ),),
-            ),
-           HomeScreen(list: list)
-          ],
-        ),
-      );
-   }
+      return Container(
+        height: MediaQuery.of(context).size.height,
+          margin: EdgeInsets.all(10.0),
+          child:
+            ListView(
+              children: [
+                Container(
+                  width: 200,
+                  height: 200,
+                  decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      image: DecorationImage(
+                          image: NetworkImage(url)
+                      )
+                  ),
+                ),
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Text(prize,
+                      style: TextStyle(
+                          fontSize: 30,
+                          color: Colors.white
+                      ),),
+                  ),
+                ),
+                ArtifactsWidget(CombiToArray.toArray(list[0].getCombi)),
+                ArtifactsWidget(CombiToArray.toArray(list[1].getCombi))
+              ],
+            ));
 
-class HomeScreen extends StatefulWidget {
-  final List<Tickets> list;
-  const HomeScreen({Key key,@required this.list}):super(key: key);
-  @override
-  _HomeScreenState createState() {
-    // TODO: implement createState
-    return _HomeScreenState();
-  }
 
-}
 
-   class _HomeScreenState extends State<HomeScreen>{
-  @override
-  Widget build(BuildContext context) {
-    // TODO: implement build
-   return Scaffold(
-     body: Padding(
-       padding: const EdgeInsets.all(8.0),
-       child: GridView.builder(
-           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-               crossAxisCount: 5,
-               crossAxisSpacing: 5,
-               mainAxisSpacing: 5),
-           itemCount: 30,
-           itemBuilder: (BuildContext ctx, index) {
-             return Container(
-                 alignment: Alignment.center,
-                 child: Image.asset(PathToImg.toPath(CombiToArray.toArray(widget.list[0].getCombi)[index]))
-             );
-           }),
-     ),
-   );
-  }
 
    }

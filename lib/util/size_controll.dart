@@ -8,12 +8,12 @@ import 'package:flutter/material.dart';
 class Sizer{
 
      final BuildContext buildContext;
-     final int maxSize;
+     final double maxSize;
 
      Sizer({buildContext,maxSize}): this.buildContext=buildContext, this.maxSize=maxSize;
 
 
-      witch (value){
+      double witch (dynamic value){
         var g=MediaQuery.of(buildContext).size.width*value/100;
         var r;
         if(maxSize<g){
@@ -24,7 +24,7 @@ class Sizer{
         return  r;
     }
 
-     height (value){
+      double height (dynamic value){
        var g=MediaQuery.of(buildContext).size.height*value/100;
        var r;
        if(maxSize<g){
@@ -36,7 +36,7 @@ class Sizer{
      }
 
 
-      size (value){
+      size ( value){
      var g=MediaQuery.of(buildContext).size.width*value/100;
      var r;
      if(maxSize<g){
@@ -44,7 +44,7 @@ class Sizer{
      }else{
        r=g;
      }
-     return  r.toDouble();
+     return  r;
     }
 
 }
