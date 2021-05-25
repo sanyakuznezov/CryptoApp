@@ -8,6 +8,7 @@ import 'package:payarapp/domain/model/tickets.dart';
 import 'package:payarapp/ui/artifacts_widget.dart';
 import 'package:payarapp/util/combi_to_array.dart';
 import 'package:payarapp/util/path_to_img.dart';
+import 'package:payarapp/util/size_controll.dart';
 
 class UserOrderScreen extends StatefulWidget{
 
@@ -34,69 +35,72 @@ class UserOrderScreen extends StatefulWidget{
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: Image.asset('assets/bg_page.png').image,
-            fit: BoxFit.cover
+              image: Image.asset('assets/bg_activity.png').image,
+              fit: BoxFit.cover
           ),
         ),
-        child: Column(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 80,
-              color: Colors.black45,
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10.0, 40.0, 10.0,10.0),
-                child:Row(
-                  children: [
-                     Container(
-                       alignment: Alignment.centerLeft,
-                       child: Row(
+         child:SingleChildScrollView(
+           child: Column(
+             children: [
+               Container(
+                   width: MediaQuery.of(context).size.width,
+                   height: 80,
+                   color: Colors.black45,
+                   child: Padding(
+                       padding: const EdgeInsets.fromLTRB(10.0, 40.0, 10.0,10.0),
+                       child:Row(
                          children: [
                            Container(
-                             width: 50,
-                             height: 50,
-                             decoration: BoxDecoration(
-                                 shape: BoxShape.circle,
-                                 image: DecorationImage(
-                                     image: NetworkImage(widget.order.getAvatar),
-                                     fit: BoxFit.fill
-                                 )
+                             alignment: Alignment.centerLeft,
+                             child: Row(
+                               children: [
+                                 Container(
+                                   width: 50,
+                                   height: 50,
+                                   decoration: BoxDecoration(
+                                       shape: BoxShape.circle,
+                                       image: DecorationImage(
+                                           image: NetworkImage(widget.order.getAvatar),
+                                           fit: BoxFit.fill
+                                       )
+                                   ),
+                                 ),
+                                 Padding(
+                                   padding: const EdgeInsets.fromLTRB(5.0,0.0, 0.0, 0.0),
+                                   child: Text(widget.order.getNik,
+                                     textAlign: TextAlign.start,
+                                     style: TextStyle(
+                                         fontSize: 15.0,
+                                         color: Colors.white
+                                     ),),
+                                 ),
+
+                               ],
                              ),
                            ),
-                           Padding(
-                             padding: const EdgeInsets.fromLTRB(5.0,0.0, 0.0, 0.0),
-                             child: Text(widget.order.getNik,
-                               textAlign: TextAlign.start,
-                               style: TextStyle(
-                                   fontSize: 15.0,
-                                   color: Colors.white
-                               ),),
-                           ),
-
+                           Expanded(
+                               child:  Container(
+                                 alignment: Alignment.centerRight,
+                                 child: Text('order id: ${widget.order.getId}',
+                                   textAlign: TextAlign.right,
+                                   style: TextStyle(
+                                       color: Colors.white,
+                                       fontSize: 15.0
+                                   ),),
+                               )
+                           )
                          ],
-                       ),
-                     ),
-                    Expanded(
-                      child:  Container(
-                        alignment: Alignment.centerRight,
-                        child: Text('order id: ${widget.order.getId}',
-                          textAlign: TextAlign.right,
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15.0
-                          ),),
-                      )
-                    )
-                    ],
-                )
-              )
-            ),
-            _widget(widget.order.getImg, widget.order.prize, widget.list, context),
+                       )
+                   )
+               ),
+               _widget(widget.order.getImg, widget.order.prize, widget.list, context),
 
 
-          ],
-        ),
-      ),
+             ],
+           ),
+         )
+
+      )
     );
   }
 
@@ -109,36 +113,176 @@ class UserOrderScreen extends StatefulWidget{
    Widget _widget(String url,String prize,List<Tickets> list,BuildContext context){
       return Container(
         height: MediaQuery.of(context).size.height,
-          margin: EdgeInsets.all(10.0),
           child:
-            ListView(
-              children: [
-                Container(
-                  width: 200,
-                  height: 200,
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      image: DecorationImage(
-                          image: NetworkImage(url)
-                      )
-                  ),
-                ),
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(prize,
-                      style: TextStyle(
-                          fontSize: 30,
-                          color: Colors.white
-                      ),),
-                  ),
-                ),
-                ArtifactsWidget(CombiToArray.toArray(list[0].getCombi)),
-                ArtifactsWidget(CombiToArray.toArray(list[1].getCombi))
-              ],
-            ));
+      ListView.builder(
+        padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 100.0),
+        itemCount: list.length+1,
+          itemBuilder: (BuildContext c,int i){
+         if(i==0){
+           return _widgetTop(context,url,prize);
+         }else{
+           return ArtifactsWidget(CombiToArray.toArray(list[i-1].getCombi));
+         }
+
+      }));
 
 
 
 
    }
+
+
+
+   Widget _widgetTop(BuildContext context,String url,String prize){
+     return  Container(
+       margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
+       width: MediaQuery.of(context).size.width,
+       height: Sizer(buildContext: context,maxSize: 460.0).height(70.0),
+       decoration: BoxDecoration(
+         image: DecorationImage(
+           image: Image.asset('assets/fabric_red_you_win.png',
+           fit: BoxFit.fill,).image
+         )
+       ),
+
+       child: Center(
+         child: Stack(
+           children: [
+             Padding(
+               padding: const EdgeInsets.fromLTRB(0.0,70.0,0.0,0.0),
+               child: Column(
+                 children: [
+                   Stack(
+                     children:<Widget> [
+                          Center(
+                            child: Container(
+                             margin: EdgeInsets.all(15.0),
+                              width: 100.0,
+                              height: 100.0,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                      image: Image.network(url,
+                                          fit: BoxFit.contain).image
+                                  )
+                              ),
+
+                            ),
+                          ),
+                       Center(
+                         child: Container(
+                           width: 140.0,
+                           height: 140.0,
+                           decoration: BoxDecoration(
+                               image: DecorationImage(
+                                   image: Image.asset('assets/rating_frame.png',
+                                       fit: BoxFit.fill).image
+                               )
+                           ),
+
+                         ),
+                       )
+
+                     ],
+                   ),
+                   Container(
+                     width: 230.0,
+                     height: 160.0,
+                     decoration: BoxDecoration(
+                       image: DecorationImage(
+                         image: Image.asset('assets/content_field_big.png',
+                         fit: BoxFit.fill,).image
+                       )
+                     ),
+                     child: Center(
+                       child: Padding(
+                         padding: const EdgeInsets.fromLTRB(8.0, 30.0, 8.0, 8.0),
+                         child: Column(
+                           children: [
+                             Text('$prize',
+                             textAlign: TextAlign.center,
+                             style: TextStyle(
+                               fontSize: 20.0,
+                               color: Colors.white
+                             ),),
+                             Text('Payment for participation in the game is made using the GPay service. In case of winning, the prize will be delivered by local delivery services',
+                             textAlign: TextAlign.center,
+                             style: TextStyle(
+                               fontSize: 13.0,
+                               color: Colors.white
+                             ),)
+                           ],
+                         ),
+                       ),
+                     ),
+                   )
+                 ],
+               ),
+             ),
+             Center(
+               child: Padding(
+                 padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 40.0),
+                 child: Container(
+                   width: 180.0,
+                   height: 60.0,
+                   decoration: BoxDecoration(
+                     image: DecorationImage(
+                       image: Image.asset('assets/chest.png',
+                       fit: BoxFit.fill).image
+                     )
+                   ),
+                   child: Padding(
+                     padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
+                     child: Center(
+                       child: Text('You prize',
+                       textAlign: TextAlign.center,
+                       style: TextStyle(
+                         color: Colors.white,
+                         fontSize: 20.0,
+                         fontFamily: 'Old'
+                       ),),
+                     ),
+                   ),
+                 ),
+               ),
+             ),
+             Align(
+               alignment: Alignment.bottomCenter,
+               child: Padding(
+                 padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 45.0),
+                 child: GestureDetector(
+                     onTap: () {
+                       //action pay
+                     },
+                     child: Container(
+                       width: 120.0,
+                       height: 90,
+                       decoration: BoxDecoration(
+                           image: DecorationImage(
+                               image: Image.asset('assets/button_orange.png').image
+                           )
+                       ),
+                      child: Center(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 5.0),
+                          child: Text('0.99 USD',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontFamily: 'Old',
+                            fontSize: 15.0,
+                            color: Colors.orange[300]
+                          ),),
+                        ),
+                      ),
+                     )
+                 ),
+               ),
+             )
+
+           ],
+         ),
+       ),
+     );
+}
+
+
+
