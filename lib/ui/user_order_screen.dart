@@ -42,60 +42,8 @@ class UserOrderScreen extends StatefulWidget{
          child:SingleChildScrollView(
            child: Column(
              children: [
-               Container(
-                   width: MediaQuery.of(context).size.width,
-                   height: 80,
-                   color: Colors.black45,
-                   child: Padding(
-                       padding: const EdgeInsets.fromLTRB(10.0, 40.0, 10.0,10.0),
-                       child:Row(
-                         children: [
-                           Container(
-                             alignment: Alignment.centerLeft,
-                             child: Row(
-                               children: [
-                                 Container(
-                                   width: 50,
-                                   height: 50,
-                                   decoration: BoxDecoration(
-                                       shape: BoxShape.circle,
-                                       image: DecorationImage(
-                                           image: NetworkImage(widget.order.getAvatar),
-                                           fit: BoxFit.fill
-                                       )
-                                   ),
-                                 ),
-                                 Padding(
-                                   padding: const EdgeInsets.fromLTRB(5.0,0.0, 0.0, 0.0),
-                                   child: Text(widget.order.getNik,
-                                     textAlign: TextAlign.start,
-                                     style: TextStyle(
-                                         fontSize: 15.0,
-                                         color: Colors.white
-                                     ),),
-                                 ),
-
-                               ],
-                             ),
-                           ),
-                           Expanded(
-                               child:  Container(
-                                 alignment: Alignment.centerRight,
-                                 child: Text('order id: ${widget.order.getId}',
-                                   textAlign: TextAlign.right,
-                                   style: TextStyle(
-                                       color: Colors.white,
-                                       fontSize: 15.0
-                                   ),),
-                               )
-                           )
-                         ],
-                       )
-                   )
-               ),
-               _widget(widget.order.getImg, widget.order.prize, widget.list, context),
-
-
+               _appBar(widget.order.getAvatar,widget.order.getNik,widget.order.getId, context),
+               _bodyWidget(widget.order.getImg, widget.order.prize, widget.list, context),
              ],
            ),
          )
@@ -110,7 +58,7 @@ class UserOrderScreen extends StatefulWidget{
   }
 }
    
-   Widget _widget(String url,String prize,List<Tickets> list,BuildContext context){
+   Widget _bodyWidget(String url,String prize,List<Tickets> list,BuildContext context){
       return Container(
         height: MediaQuery.of(context).size.height,
           child:
@@ -285,4 +233,80 @@ class UserOrderScreen extends StatefulWidget{
 }
 
 
+   Widget _appBar(String urlAva,String nik,String id,BuildContext context){
+      return Container(
+          width: MediaQuery.of(context).size.width,
+          height: 90,
+          color: Colors.black45,
+          child: Padding(
+              padding: const EdgeInsets.fromLTRB(10.0, 30.0, 10.0,0.0),
+              child:Row(
+                children: [
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    child: Row(
+                      children: [
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 7.0),
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                image: DecorationImage(
+                                  image: NetworkImage(urlAva)
+                                )
+                              ),
+                            ),
+                            Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: Image.asset('assets/avaframe_circle.png').image,
+                                    fit: BoxFit.fill
+                                )
+                            ),
+                          ),],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(5.0,0.0, 0.0, 0.0),
+                          child: Text(nik,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                                fontSize: 15.0,
+                                color: Colors.white
+                            ),),
+                        ),
 
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                      child:  Container(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(0.0, 0.0, 5.0, 0.0),
+                              child: Image.asset('assets/star_big.png',
+                              width: 20.0,
+                              height: 20.0,),
+                            ),
+                            Text('$id',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              color: Colors.orange
+                            ),)
+                          ],
+                        ),
+                      )
+                  )
+                ],
+              )
+          )
+      );
+   }
