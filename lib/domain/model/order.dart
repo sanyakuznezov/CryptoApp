@@ -5,11 +5,11 @@ import 'package:flutter/cupertino.dart';
 
 class Order{
 
-    final String avatar;
-     final String nik;
-     final String prize;
-     final String id;
-     final String img;
+    final String? avatar;
+     final String? nik;
+     final String? prize;
+     final String? id;
+     final String? img;
 
 
      Order({@required this.id,@required this.prize,@required this.img,@required this.avatar,@required this.nik});

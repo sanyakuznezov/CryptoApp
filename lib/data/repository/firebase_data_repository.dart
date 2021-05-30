@@ -12,13 +12,13 @@ class FirebaseDataRepository extends FirebaseRepository{
    FirebaseDataRepository(this._apiUtil);
 
   @override
-  Future<Order> getOrder({String idUser}) {
-    return _apiUtil.getOrder(idUser: idUser);
+  Future<Order> getOrder({String? idUser}) {
+    return _apiUtil.getOrder(idUser: idUser!);
   }
 
   @override
-  Future<List<Tickets>> getTickets({String idUser}) {
-    return _apiUtil.getTickets(idUser: idUser);
+  Future<List<Tickets>> getTickets({String? idUser}) {
+    return _apiUtil.getTickets(idUser: idUser!);
   }
   
 

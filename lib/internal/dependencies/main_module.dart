@@ -8,12 +8,12 @@ import 'package:in_app_purchase_android/in_app_purchase_android.dart';
 
 
 class MainModule{
-   static BuildContext _buildContext;
+   static BuildContext? _buildContext;
    static  setContext(BuildContext context){
       _buildContext=context;
    }
    static BuildContext getContext(){
-   return _buildContext;
+   return _buildContext!;
    }
 
    static ininBillingAndroid(){

@@ -15,8 +15,8 @@ import 'package:payarapp/ui/user_order_screen.dart';
 import 'package:payarapp/util/size_controll.dart';
 
 
-TextEditingController _textEditingController;
-FocusNode _focusNode;
+TextEditingController? _textEditingController;
+FocusNode? _focusNode;
 bool _isEditingCode=false;
 bool isEmptyCode=false;
 
@@ -31,7 +31,7 @@ class EnterCodeScreen extends StatefulWidget{
      bool isLoader=false;
      bool _connectionStatus = false;
      final Connectivity _connectivity = Connectivity();
-      StreamSubscription<ConnectivityResult> _connectivitySubscription;
+      StreamSubscription<ConnectivityResult>? _connectivitySubscription;
      @override
      Widget build(BuildContext context) {
        MainModule.setContext(context);
@@ -64,7 +64,7 @@ class EnterCodeScreen extends StatefulWidget{
                           });
                         },
                         onSubmitted: (value) {
-                          _focusNode.unfocus();
+                          _focusNode?.unfocus();
                           FocusScope.of(context).requestFocus(_focusNode);
                         },
                         style: TextStyle(color: Colors.orange),
@@ -83,7 +83,7 @@ class EnterCodeScreen extends StatefulWidget{
                           hintText: "Code",
                           fillColor: Colors.black38,
                           errorText: _isEditingCode
-                              ? isEmptyText(idUser: _textEditingController.text)
+                              ? isEmptyText(idUser: _textEditingController!.text)
                               : null,
                           errorStyle: TextStyle(
                             fontSize: 12,
@@ -101,7 +101,7 @@ class EnterCodeScreen extends StatefulWidget{
                        onPressed: ()=>{
                           if(_connectionStatus){
                          setState(() {
-                           validateCode(idUser: _textEditingController.text);
+                           validateCode(idUser: _textEditingController!.text);
                         })
                           }else{
                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -129,8 +129,8 @@ class EnterCodeScreen extends StatefulWidget{
                            ),
                          )
                              : Text(
-                             'To confirm',
-                             style: TextStyle(fontSize: 14, color: Colors.white)))),
+                             'OK',
+                             style: TextStyle(fontSize: 15, color: Colors.white,fontFamily: 'Old')))),
                    ),
 
 
@@ -144,10 +144,10 @@ class EnterCodeScreen extends StatefulWidget{
 
      }
 
-     Future <void>getUserDate({@required String idUser}) async {
+     Future <void>getUserDate({@required String? idUser}) async {
        isLoader=true;
        try {
-         final data = await RepositoryModule.firebaseRepository().getOrder(idUser: idUser);
+         final data = await RepositoryModule.firebaseRepository().getOrder(idUser:idUser!);
          final tickets=await RepositoryModule.firebaseRepository().getTickets(idUser:idUser);
          Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data,list:tickets)));
        }on StateError catch(e){
@@ -172,14 +172,14 @@ class EnterCodeScreen extends StatefulWidget{
 
      }
 
-      validateCode({@required String idUser}){
-       if(idUser.isNotEmpty){
+      validateCode({@required String? idUser}){
+       if(idUser!.isNotEmpty){
          getUserDate(idUser: idUser);
        }
      }
 
-    String isEmptyText({@required String idUser}){
-       if(idUser.isEmpty){
+    String? isEmptyText({@required String? idUser}){
+       if(idUser!.isEmpty){
          return 'Enter the code';
        }else{
          return null;
@@ -199,7 +199,7 @@ class EnterCodeScreen extends StatefulWidget{
 
      @override
      void dispose() {
-       _connectivitySubscription.cancel();
+       _connectivitySubscription!.cancel();
        super.dispose();
      }
 

@@ -5,12 +5,12 @@
 
 class Tickets{
 
-    final String combi;
-    final String status;
+    final String? combi;
+    final String? status;
 
     Tickets({@required this.combi,@required this.status});
 
-    String get getStatus => status;
+    String get getStatus => status!;
 
-  String get getCombi => combi;
+  String get getCombi => combi!;
 }

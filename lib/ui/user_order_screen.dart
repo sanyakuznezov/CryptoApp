@@ -17,9 +17,9 @@ import 'package:payarapp/util/size_controll.dart';
 
 class UserOrderScreen extends StatefulWidget{
 
-   final Order order;
-   final List<Tickets> list;
-   const UserOrderScreen({Key key,@required this.order,@required this.list}):super(key: key);
+   final Order? order;
+   final List<Tickets>? list;
+   const UserOrderScreen({Key? key,@required this.order,@required this.list}):super(key: key);
 
   @override
   _UserOrderScreenState createState() {
@@ -31,12 +31,12 @@ class UserOrderScreen extends StatefulWidget{
 }
     class _UserOrderScreenState extends State<UserOrderScreen> {
 
-      final List<String> _id=<String>['artifact_1','artifact_2'];
+      final List<String> _id=<String>['artifact_1','artifact_2','artifact_3','artifact_4','artifact_5'];
       bool _available = true;
       final InAppPurchase _iap = InAppPurchase.instance;
       List<ProductDetails> _products = [];
       List<PurchaseDetails> _purchases = [];
-      StreamSubscription _subscription;
+      StreamSubscription? _subscription;
       int lenght=0;
 
 
@@ -63,10 +63,10 @@ class UserOrderScreen extends StatefulWidget{
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      _appBar(widget.order.getAvatar, widget.order.getNik,
-                          widget.order.getId, context),
+                      _appBar(widget.order!.getAvatar, widget.order!.getNik,
+                          widget.order!.getId, context),
                       _bodyWidget(
-                          widget.order.getImg, widget.order.prize, widget.list,
+                          widget.order!.getImg, widget.order!.prize, widget.list,
                           context),
                     ],
                   ),
@@ -84,13 +84,13 @@ class UserOrderScreen extends StatefulWidget{
 
       @override
       void dispose() {
-        _subscription.cancel();
+        _subscription!.cancel();
         super.dispose();
       }
 
      //billing
       void _initialize() async {
-        lenght=widget.list.length-1;
+        lenght=widget.list!.length-1;
         final Stream<List<PurchaseDetails>> purchaseUpdated = _iap.purchaseStream;
         _available = await _iap.isAvailable();
         if (_available) {
@@ -103,14 +103,14 @@ class UserOrderScreen extends StatefulWidget{
           _purchases.addAll(purchaseDetailsList);
           _verifyPurchase();
         }, onDone: () {
-          _subscription.cancel();
+          _subscription!.cancel();
         }, onError: (error) {
           // handle error here.
         });
       }
 
       PurchaseDetails _hasPurchased(String productID) {
-        return _purchases.firstWhere( (purchase) => purchase.productID == productID, orElse: () => null);
+        return _purchases.firstWhere( (purchase) => purchase.productID == productID);
       }
 
       void _verifyPurchase() {
@@ -141,7 +141,7 @@ class UserOrderScreen extends StatefulWidget{
 
 
 
-      Widget _bodyWidget(String url, String prize, List<Tickets> list,
+      Widget _bodyWidget(String? url, String? prize, List<Tickets>? list,
           BuildContext context) {
         return Container(
             height: MediaQuery
@@ -151,10 +151,10 @@ class UserOrderScreen extends StatefulWidget{
             child:
             ListView.builder(
                 padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 100.0),
-                itemCount: list.length + 1,
+                itemCount: list!.length + 1,
                 itemBuilder: (BuildContext c, int i) {
                   if (i == 0) {
-                    return _widgetTop(context, url, prize);
+                    return _widgetTop(context, url!, prize!);
                   } else {
                     return ArtifactsWidget(
                         CombiToArray.toArray(list[i - 1].getCombi));
