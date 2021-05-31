@@ -149,7 +149,22 @@ class EnterCodeScreen extends StatefulWidget{
        try {
          final data = await RepositoryModule.firebaseRepository().getOrder(idUser:idUser!);
          final tickets=await RepositoryModule.firebaseRepository().getTickets(idUser:idUser);
-         Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data,list:tickets)));
+         if(data.getStatus=='2'){
+           showDialog<String>(context: context,
+             builder: (BuildContext context) => AlertDialog(
+               title: const Text('This set is activated'),
+               content: const Text('This set of artifacts is paid for and participates in the game'),
+               actions: <Widget>[
+                 TextButton(
+                   onPressed: () => Navigator.pop(context, 'Cancel'),
+                   child: const Text('Cancel'),
+                 ),
+               ],
+             ),
+           );
+         }else{
+           Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data,list:tickets)));
+         }
        }on StateError catch(e){
          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
            backgroundColor: Colors.black,
@@ -266,6 +281,8 @@ class EnterCodeScreen extends StatefulWidget{
      }
 
 }
+
+
 
 
 

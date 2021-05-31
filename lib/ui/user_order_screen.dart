@@ -11,6 +11,7 @@ import 'package:payarapp/domain/model/tickets.dart';
 import 'package:payarapp/ui/artifacts_widget.dart';
 import 'package:payarapp/util/combi_to_array.dart';
 import 'package:payarapp/util/size_controll.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 
 
@@ -36,6 +37,7 @@ class UserOrderScreen extends StatefulWidget{
       final InAppPurchase _iap = InAppPurchase.instance;
       List<ProductDetails> _products = [];
       List<PurchaseDetails> _purchases = [];
+      String _price='Load price...';
       StreamSubscription? _subscription;
       int lenght=0;
 
@@ -118,6 +120,7 @@ class UserOrderScreen extends StatefulWidget{
         if (purchase != null && purchase.status == PurchaseStatus.purchased) {
           print('Transaction ${purchase.purchaseID}');
         }else if(purchase.status==PurchaseStatus.error){
+            //error
 
         }
       }
@@ -127,6 +130,7 @@ class UserOrderScreen extends StatefulWidget{
         ProductDetailsResponse response = await _iap.queryProductDetails(ids);
         setState(() {
           _products = response.productDetails;
+          _price=_products[0].price;
         });
       }
       void _buyProduct(ProductDetails prod) {
@@ -194,13 +198,20 @@ class UserOrderScreen extends StatefulWidget{
                               margin: EdgeInsets.all(15.0),
                               width: 100.0,
                               height: 100.0,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                      image: Image
-                                          .network(url,
-                                          fit: BoxFit.contain)
-                                          .image
-                                  )
+                              child:  Center(
+                                child: FadeInImage.assetNetwork(
+                                  placeholder: 'assets/loader.gif',
+                                  imageErrorBuilder:(context, error, stackTrace) {
+                                  return Image.asset(
+                              'assets/unknown.png',
+                              width: 70.0,
+                              height: 70.0,
+                              fit: BoxFit.fitWidth);
+                              },
+                                  image: url,
+                                  width: 100,
+                                  height: 100,
+                                ),
                               ),
 
                             ),
@@ -312,7 +323,7 @@ class UserOrderScreen extends StatefulWidget{
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(
                                   0.0, 0.0, 0.0, 5.0),
-                              child: Text('0.99 USD',
+                              child: Text(_price,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     fontFamily: 'Old',
@@ -353,24 +364,28 @@ class UserOrderScreen extends StatefulWidget{
                           Stack(
                             alignment: Alignment.center,
                             children: [
-                              Container(
-                                margin: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 7.0),
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                        image: NetworkImage(urlAva)
-                                    )
+                              Center(
+                                child: FadeInImage.assetNetwork(
+                                  placeholder: 'assets/loader.gif',
+                                  image: urlAva,
+                                  imageErrorBuilder:(context, error, stackTrace) {
+                                    return Image.asset(
+                                        'assets/woman.png',
+                                        width: 30.0,
+                                        height: 30.0,
+                                        fit: BoxFit.fitWidth);
+                                  },
+                                  width: 30.0,
+                                  height: 30.0,
                                 ),
                               ),
                               Container(
-                                width: 60,
-                                height: 60,
+                                width: 40.0,
+                                height: 40.0,
                                 decoration: BoxDecoration(
                                     image: DecorationImage(
                                         image: Image
-                                            .asset('assets/avaframe_circle.png')
+                                            .asset('assets/rating_frame.png')
                                             .image,
                                         fit: BoxFit.fill
                                     )

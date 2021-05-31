@@ -10,7 +10,7 @@ import 'package:payarapp/domain/model/tickets.dart';
 class OrderMapper{
 
   static Order fromApi(ApiOrder apiOrder){
-     return Order(id:apiOrder.id,prize:apiOrder.prize,img:apiOrder.img,avatar: apiOrder.avatar, nik: apiOrder.nik);
+     return Order(status:apiOrder.status,id:apiOrder.id,prize:apiOrder.prize,img:apiOrder.img,avatar: apiOrder.avatar, nik: apiOrder.nik);
    }
 
 
