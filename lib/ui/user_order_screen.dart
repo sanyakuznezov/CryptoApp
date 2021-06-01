@@ -120,7 +120,26 @@ class UserOrderScreen extends StatefulWidget{
         if (purchase != null && purchase.status == PurchaseStatus.purchased) {
           print('Transaction ${purchase.purchaseID}');
         }else if(purchase.status==PurchaseStatus.error){
-            //error
+            showDialog<String>(context: context,
+                builder: (BuildContext context)=>AlertDialog(
+                  title: Text('Payment error',
+                  style: TextStyle(
+                    fontFamily: 'Old',
+                  ),),
+                  content: Text('Close this message and try again',
+                  style: TextStyle(
+                    fontFamily: 'Old'
+                  ),),
+                  actions: [
+                    TextButton(
+                        onPressed: ()=>Navigator.pop(context,'Cancel'),
+                        child: Text('Cancel',
+                        style: TextStyle(
+                          fontFamily: 'Old',
+                          color: Colors.orange
+                        ),))
+                  ],
+                ));
 
         }
       }

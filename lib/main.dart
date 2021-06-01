@@ -17,19 +17,7 @@ void main() {
 
 
 
-class MyApp extends StatefulWidget {
-
-  // This widget is the root of your application.
-  @override
-  _MyAppState createState() => _MyAppState();
-}
-   class _MyAppState extends State<MyApp>{
-
-
-  @override
-  void initState() {
-    super.initState();
-  }
+class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -55,31 +43,47 @@ class _InitFireState extends State<InitFire> {
        // TODO: implement build
        return MaterialApp(
          debugShowCheckedModeBanner: false,
-         home: FutureBuilder(
-           // Initialize FlutterFire:
-           future: _initialization,
-           builder: (context, snapshot) {
-             // Check for errors
-             if (snapshot.hasError) {
-               print('hasError');
-               return Container(
-                 color: Colors.red,
-                 width: 200,
-                 height: 200,
-               );
-             }
+         home: Scaffold(
+           body: FutureBuilder(
+             // Initialize FlutterFire:
+             future: _initialization,
+             builder: (context, snapshot) {
+               // Check for errors
+               if (snapshot.hasError) {
+                 return Container(
+                   width: MediaQuery.of(context).size.width,
+                   height: MediaQuery.of(context).size.height,
+                   child: Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     crossAxisAlignment: CrossAxisAlignment.center,
+                     children: [
+                       Image.asset('assets/dinamite.png',width: 100.0,height: 100.0),
+                       Padding(
+                         padding: const EdgeInsets.all(15.0),
+                         child: Text('Something went wrong',
+                           textAlign: TextAlign.center,
+                           style: TextStyle(
+                               fontSize: 20.0,
+                               fontFamily: 'Old',
+                               color: Colors.red
+                           ),),
+                       )
+                     ],
+                   ),
+                 );
+               }
 
-             // Once complete, show your application
-             if (snapshot.connectionState == ConnectionState.done) {
-               startTime(context);
-               //return MyApp();
+               // Once complete, show your application
+               if (snapshot.connectionState == ConnectionState.done) {
+                 startTime(context);
 
-             }
-             // Otherwise, show something whilst waiting for initialization to complete
-             return LoadIndicator();
+               }
+               // Otherwise, show something whilst waiting for initialization to complete
+               return LoadIndicator();
 
-           },
+             },
 
+           )
          )
        );
 
@@ -101,7 +105,10 @@ class _InitFireState extends State<InitFire> {
 
 
 Future startTime(BuildContext context)async{
- await Timer(Duration(seconds: 3),()=>Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (context)=>MyApp())));
+
+    await Timer(Duration(seconds: 3), () =>
+        Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (context) => MyApp())));
 }
 
 
@@ -191,8 +198,5 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget> with TickerProvider
       ),
     );
   }
-
-
-
 
 }

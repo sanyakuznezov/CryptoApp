@@ -152,12 +152,22 @@ class EnterCodeScreen extends StatefulWidget{
          if(data.getStatus=='2'){
            showDialog<String>(context: context,
              builder: (BuildContext context) => AlertDialog(
-               title: const Text('This set is activated'),
-               content: const Text('This set of artifacts is paid for and participates in the game'),
+               title: const Text('This set is activated',
+               style: TextStyle(
+                 fontFamily: 'Old'
+               ),),
+               content: const Text('This set of artifacts is paid for and participates in the game',
+               style: TextStyle(
+                 fontFamily: 'Old'
+               ),),
                actions: <Widget>[
                  TextButton(
                    onPressed: () => Navigator.pop(context, 'Cancel'),
-                   child: const Text('Cancel'),
+                   child: const Text('Cancel',
+                   style: TextStyle(
+                     color: Colors.orange,
+                     fontFamily: 'Old'
+                   ),),
                  ),
                ],
              ),
