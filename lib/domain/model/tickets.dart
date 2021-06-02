@@ -6,11 +6,11 @@
 class Tickets{
 
     final String? combi;
-    final String? status;
+    final String? id;
 
-    Tickets({@required this.combi,@required this.status});
+    Tickets({@required this.combi,@required this.id});
 
-    String get getStatus => status!;
+    String get getStatus => id!;
 
   String get getCombi => combi!;
 }

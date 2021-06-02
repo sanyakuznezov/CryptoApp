@@ -8,6 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:payarapp/domain/model/order.dart';
 import 'package:payarapp/domain/model/tickets.dart';
+import 'package:payarapp/domain/repository/firebase_repository.dart';
+import 'package:payarapp/internal/dependencies/repository_module.dart';
 import 'package:payarapp/ui/artifacts_widget.dart';
 import 'package:payarapp/util/combi_to_array.dart';
 import 'package:payarapp/util/size_controll.dart';
@@ -97,9 +99,7 @@ class UserOrderScreen extends StatefulWidget{
         _available = await _iap.isAvailable();
         if (_available) {
           await _getProducts();
-          // Verify and deliver a purchase with your own business logic
           _verifyPurchase();
-
         }
         _subscription = purchaseUpdated.listen((purchaseDetailsList) {
           _purchases.addAll(purchaseDetailsList);
@@ -115,10 +115,15 @@ class UserOrderScreen extends StatefulWidget{
         return _purchases.firstWhere( (purchase) => purchase.productID == productID);
       }
 
+      Future<void> addOrder(String id_puschase,String price,Order order, List<Tickets> tickets)async{
+        await RepositoryModule.firebaseRepository().addOrders(id_puschase: id_puschase, price: price, order: order, tickets: tickets);
+      }
+
       void _verifyPurchase() {
         PurchaseDetails purchase = _hasPurchased(_id[lenght]);
         if (purchase != null && purchase.status == PurchaseStatus.purchased) {
-          print('Transaction ${purchase.purchaseID}');
+          print('Transaction id ${purchase.purchaseID}');
+          addOrder(purchase.purchaseID!,_price,widget.order!, widget.list!);
         }else if(purchase.status==PurchaseStatus.error){
             showDialog<String>(context: context,
                 builder: (BuildContext context)=>AlertDialog(

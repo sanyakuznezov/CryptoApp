@@ -11,6 +11,7 @@ class ApiOrder{
   final String id;
   final String img;
   final String status;
+  final String id_user;
 
   ApiOrder.fromApi(DocumentSnapshot<Map<String,dynamic>> value):
       avatar = value['avatar'],
@@ -18,7 +19,12 @@ class ApiOrder{
       id=value.id,
       nik=value['nik'],
        img=value['img'],
+  id_user=value['id_user'],
        status=value['status'];
+
+
+
+
 
 
 }

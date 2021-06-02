@@ -20,6 +20,11 @@ class FirebaseDataRepository extends FirebaseRepository{
   Future<List<Tickets>> getTickets({String? idUser}) {
     return _apiUtil.getTickets(idUser: idUser!);
   }
+
+  @override
+  Future<void> addOrders({String? id_puschase,String? price, Order? order, List<Tickets>? tickets}) async {
+       return _apiUtil.addOrder(id_puschase: id_puschase, price: price, order: order, tickets: tickets);
+  }
   
 
   }

@@ -10,14 +10,14 @@ import 'package:payarapp/domain/model/tickets.dart';
 class OrderMapper{
 
   static Order fromApi(ApiOrder apiOrder){
-     return Order(status:apiOrder.status,id:apiOrder.id,prize:apiOrder.prize,img:apiOrder.img,avatar: apiOrder.avatar, nik: apiOrder.nik);
+     return Order(id_user:apiOrder.id_user,status:apiOrder.status,id:apiOrder.id,prize:apiOrder.prize,img:apiOrder.img,avatar: apiOrder.avatar, nik: apiOrder.nik);
    }
 
 
    static List<Tickets> fromApiTickets(QuerySnapshot querySnapshot){
          List<Tickets> d=[];
         querySnapshot.docs.forEach((element) {
-             d.add(Tickets(combi: element['combi'], status:element['status']));
+             d.add(Tickets(combi: element['combi'], id:element.id));
         });
 
         return d;

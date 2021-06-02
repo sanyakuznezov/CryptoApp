@@ -176,6 +176,7 @@ class EnterCodeScreen extends StatefulWidget{
            Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data,list:tickets)));
          }
        }on StateError catch(e){
+         print('Error $e');
          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
            backgroundColor: Colors.black,
              content: Text('Nothing found....',
@@ -271,17 +272,6 @@ class EnterCodeScreen extends StatefulWidget{
                ),),
            ));
            setState(() => _connectionStatus = false);
-           break;
-         default:
-           setState(() => _connectionStatus = false);
-           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-             backgroundColor: Colors.white,
-             content: Text('No network connection....',
-               style: TextStyle(
-                   fontSize: 20.0,
-                   color: Colors.red
-               ),),
-           ));
            break;
 
        }
