@@ -115,15 +115,15 @@ class UserOrderScreen extends StatefulWidget{
         return _purchases.firstWhere( (purchase) => purchase.productID == productID);
       }
 
-      Future<void> addOrder(String id_puschase,String price,Order order, List<Tickets> tickets)async{
-        await RepositoryModule.firebaseRepository().addOrders(id_puschase: id_puschase, price: price, order: order, tickets: tickets);
+      Future<void> addOrder(String id_puschase,String price,Order order)async{
+        await RepositoryModule.firebaseRepository().addOrders(id_puschase: id_puschase, price: price, order: order);
       }
 
       void _verifyPurchase() {
         PurchaseDetails purchase = _hasPurchased(_id[lenght]);
         if (purchase != null && purchase.status == PurchaseStatus.purchased) {
           print('Transaction id ${purchase.purchaseID}');
-          addOrder(purchase.purchaseID!,_price,widget.order!, widget.list!);
+          addOrder(purchase.purchaseID!,_price,widget.order!);
         }else if(purchase.status==PurchaseStatus.error){
             showDialog<String>(context: context,
                 builder: (BuildContext context)=>AlertDialog(

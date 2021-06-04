@@ -23,8 +23,8 @@ class ApiUtil{
     }
 
 
-    Future<void> addOrder({@required String? id_puschase,@required String? price, @required Order? order,@required List<Tickets>? tickets})async{
-      await _orderService.addOrder(id_puschase: id_puschase,price: price, order: order, tickets: tickets);
+    Future<void> addOrder({@required String? id_puschase,@required String? price, @required Order? order})async{
+      await _orderService.addOrder(id_puschase: id_puschase,price: price, order: order);
 
     }
 

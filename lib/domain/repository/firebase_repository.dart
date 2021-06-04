@@ -8,6 +8,6 @@ abstract class FirebaseRepository{
 
    Future<Order> getOrder({@required String idUser});
     Future<List<Tickets>> getTickets({@required String idUser});
-    Future<void> addOrders({@required String id_puschase,@required String price, @required Order order,@required List<Tickets> tickets});
+    Future<void> addOrders({@required String id_puschase,@required String price, @required Order order});
 
  }
