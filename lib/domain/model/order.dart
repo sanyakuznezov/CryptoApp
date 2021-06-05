@@ -12,12 +12,15 @@ class Order{
      final String? img;
      final String? status;
      final String? id_user;
+     final String? date_game;
 
 
 
-     Order({@required this.id_user,@required this.status,@required this.id,@required this.prize,@required this.img,@required this.avatar,@required this.nik});
+     Order({@required this.date_game,@required this.id_user,@required this.status,@required this.id,@required this.prize,@required this.img,@required this.avatar,@required this.nik});
 
-
+     get getDateGame{
+       return this.date_game;
+     }
      get getAvatar{
       return this.avatar;
     }

@@ -8,6 +8,7 @@ import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:payarapp/domain/model/order.dart';
 import 'package:payarapp/internal/dependencies/main_module.dart';
 import 'package:payarapp/internal/dependencies/repository_module.dart';
@@ -173,10 +174,9 @@ class EnterCodeScreen extends StatefulWidget{
              ),
            );
          }else{
-           Navigator.push(context,MaterialPageRoute(builder:(context)=>UserOrderScreen(order: data,list:tickets)));
+           Navigator.of(context).pushReplacement( PageTransition(type: PageTransitionType.fade,duration: Duration(seconds: 2), child:UserOrderScreen(order: data,list:tickets)));
          }
        }on StateError catch(e){
-         print('Error $e');
          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
            backgroundColor: Colors.black,
              content: Text('Nothing found....',

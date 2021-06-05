@@ -42,6 +42,7 @@ class UserOrderScreen extends StatefulWidget{
       String _price='Load price...';
       StreamSubscription? _subscription;
       int lenght=0;
+      bool isPurchase=true;
 
 
       @override
@@ -99,7 +100,6 @@ class UserOrderScreen extends StatefulWidget{
         _available = await _iap.isAvailable();
         if (_available) {
           await _getProducts();
-          _verifyPurchase();
         }
         _subscription = purchaseUpdated.listen((purchaseDetailsList) {
           _purchases.addAll(purchaseDetailsList);
@@ -115,15 +115,41 @@ class UserOrderScreen extends StatefulWidget{
         return _purchases.firstWhere( (purchase) => purchase.productID == productID);
       }
 
-      Future<void> addOrder(String id_puschase,String price,Order order)async{
-        await RepositoryModule.firebaseRepository().addOrders(id_puschase: id_puschase, price: price, order: order);
+      Future<void> addOrder(String idPuschase,String price,Order order)async{
+        await RepositoryModule.firebaseRepository().addOrders(id_puschase: idPuschase, price: price, order: order);
       }
 
       void _verifyPurchase() {
-        PurchaseDetails purchase = _hasPurchased(_id[lenght]);
+        PurchaseDetails purchase =_hasPurchased(_id[lenght]);
         if (purchase != null && purchase.status == PurchaseStatus.purchased) {
-          print('Transaction id ${purchase.purchaseID}');
           addOrder(purchase.purchaseID!,_price,widget.order!);
+          setState(() {
+            isPurchase=false;
+          });
+          showDialog<String>(context: context,
+              builder: (BuildContext context)=>AlertDialog(
+                title: Text('Сongratulations!',
+                  style: TextStyle(
+                    fontFamily: 'Old',
+                    fontSize: 25.0,
+                    color: Colors.orange
+                  ),),
+                content: Text('You have become a member of the Arcade2.0 game project. We remind you that the results of the game will be published on our YouTube channel ${widget.order!.getDateGame}, which we will notify you by email. Good luck!',
+                  style: TextStyle(
+                      fontFamily: 'Old',
+                    fontSize: 20.0
+                  ),),
+                actions: [
+                  TextButton(
+                      onPressed: ()=>Navigator.pop(context,'Cancel'),
+                      child: Text('Cancel',
+                        style: TextStyle(
+                            fontFamily: 'Old',
+                            fontSize: 20.0,
+                            color: Colors.orange
+                        ),))
+                ],
+              ));
         }else if(purchase.status==PurchaseStatus.error){
             showDialog<String>(context: context,
                 builder: (BuildContext context)=>AlertDialog(
@@ -327,7 +353,7 @@ class UserOrderScreen extends StatefulWidget{
                 ),
                 Align(
                   alignment: Alignment.bottomCenter,
-                  child: Padding(
+                  child: isPurchase? Padding(
                     padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 45.0),
                     child: GestureDetector(
                         onTap: () {
@@ -358,7 +384,7 @@ class UserOrderScreen extends StatefulWidget{
                           ),
                         )
                     ),
-                  ),
+                  ): null
                 )
 
               ],
@@ -459,3 +485,6 @@ class UserOrderScreen extends StatefulWidget{
         );
       }
     }
+
+
+

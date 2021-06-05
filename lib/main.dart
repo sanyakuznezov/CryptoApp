@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:page_transition/page_transition.dart';
 
 import 'package:payarapp/internal/dependencies/main_module.dart';
 import 'package:payarapp/ui/enter_code_screen.dart';
@@ -107,8 +108,7 @@ class _InitFireState extends State<InitFire> {
 Future startTime(BuildContext context)async{
 
     await Timer(Duration(seconds: 3), () =>
-        Navigator.of(context).pushReplacement(
-            MaterialPageRoute(builder: (context) => MyApp())));
+        Navigator.of(context).pushReplacement(PageTransition(type: PageTransitionType.fade,duration: Duration(seconds: 2), child:MyApp())));
 }
 
 

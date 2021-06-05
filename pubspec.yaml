@@ -33,6 +33,7 @@ dependencies:
   async: ^2.6.1
   transparent_image: ^2.0.0
   cloud_functions: ^1.1.0
+  page_transition: ^2.0.2
 
 
 
