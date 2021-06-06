@@ -207,8 +207,8 @@ import 'package:payarapp/util/size_controll.dart';
         return Padding(
           padding: const EdgeInsets.all(2.0),
           child: Container(
-            width: Sizer(buildContext: context,maxSize: 60.0).witch(60.0),
-            height: Sizer(buildContext: context,maxSize: 70.0).height(70.0),
+            width: Sizer(buildContext: context,maxSize: 60.0).witch(15.0),
+            height: Sizer(buildContext: context,maxSize: 75.0).height(26.0),
             child: Image.asset(PathToImg.toPath(id),
             fit: BoxFit.fill,),
           ),

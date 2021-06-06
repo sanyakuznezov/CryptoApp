@@ -220,11 +220,8 @@ class UserOrderScreen extends StatefulWidget{
       Widget _widgetTop(BuildContext context, String url, String prize) {
         return Container(
           margin: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
-          height: Sizer(buildContext: context, maxSize: 460.0).height(70.0),
+          width:Sizer(buildContext: context, maxSize: 360.0).height(90.0),
+          height: Sizer(buildContext: context, maxSize: 460.0).height(75.0),
           decoration: BoxDecoration(
               image: DecorationImage(
                   image: Image
@@ -246,21 +243,21 @@ class UserOrderScreen extends StatefulWidget{
                           Center(
                             child: Container(
                               margin: EdgeInsets.all(15.0),
-                              width: 100.0,
-                              height: 100.0,
+                               width: Sizer(buildContext: context,maxSize: 100.0).witch(30),
+                              height: Sizer(buildContext: context,maxSize: 100.0).witch(30),
                               child:  Center(
                                 child: FadeInImage.assetNetwork(
                                   placeholder: 'assets/loader.gif',
                                   imageErrorBuilder:(context, error, stackTrace) {
                                   return Image.asset(
                               'assets/unknown.png',
-                              width: 70.0,
-                              height: 70.0,
+                              width: Sizer(buildContext: context,maxSize: 100.0).witch(20),
+                              height: Sizer(buildContext: context,maxSize: 100.0).witch(20),
                               fit: BoxFit.fitWidth);
                               },
                                   image: url,
-                                  width: 100,
-                                  height: 100,
+                                  width: Sizer(buildContext: context,maxSize: 100.0).witch(30),
+                                  height:Sizer(buildContext: context,maxSize: 100.0).witch(30),
                                 ),
                               ),
 
@@ -268,8 +265,8 @@ class UserOrderScreen extends StatefulWidget{
                           ),
                           Center(
                             child: Container(
-                              width: 140.0,
-                              height: 140.0,
+                              width: Sizer(buildContext: context,maxSize: 140.0).witch(35),
+                              height: Sizer(buildContext: context,maxSize: 140.0).witch(35),
                               decoration: BoxDecoration(
                                   image: DecorationImage(
                                       image: Image
@@ -285,8 +282,8 @@ class UserOrderScreen extends StatefulWidget{
                         ],
                       ),
                       Container(
-                        width: 230.0,
-                        height: 160.0,
+                        width:Sizer(buildContext: context,maxSize: 230.0).witch(60),
+                        height:Sizer(buildContext: context,maxSize: 160.0).witch(38),
                         decoration: BoxDecoration(
                             image: DecorationImage(
                                 image: Image
@@ -297,8 +294,8 @@ class UserOrderScreen extends StatefulWidget{
                         ),
                         child: Center(
                           child: Padding(
-                            padding: const EdgeInsets.fromLTRB(
-                                8.0, 30.0, 8.0, 8.0),
+                            padding: EdgeInsets.fromLTRB(
+                                8.0,Sizer(buildContext: context,maxSize: 30.0).size(8), 8.0, 8.0),
                             child: Column(
                               children: [
                                 Text('$prize',
@@ -324,10 +321,10 @@ class UserOrderScreen extends StatefulWidget{
                 ),
                 Center(
                   child: Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 40.0),
+                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0, Sizer(buildContext: context,maxSize: 40.0).size(10)),
                     child: Container(
-                      width: 180.0,
-                      height: 60.0,
+                      width: Sizer(buildContext: context,maxSize: 180.0).witch(45),
+                      height: Sizer(buildContext: context,maxSize: 60.0).witch(15),
                       decoration: BoxDecoration(
                           image: DecorationImage(
                               image: Image
@@ -339,7 +336,7 @@ class UserOrderScreen extends StatefulWidget{
                       child: Padding(
                         padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 10.0),
                         child: Center(
-                          child: Text('You prize',
+                          child: Text('Your choice',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                                 color: Colors.white,
@@ -354,14 +351,14 @@ class UserOrderScreen extends StatefulWidget{
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: isPurchase? Padding(
-                    padding: const EdgeInsets.fromLTRB(0.0, 0.0, 0.0, 45.0),
+                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0,Sizer(buildContext: context,maxSize: 70.0).size(20)),
                     child: GestureDetector(
                         onTap: () {
                           _buyProduct(_products[0]);
                         },
                         child: Container(
-                          width: 120.0,
-                          height: 90,
+                          width: Sizer(buildContext: context,maxSize: 120.0).witch(30),
+                          height: Sizer(buildContext: context,maxSize: 50.0).witch(12),
                           decoration: BoxDecoration(
                               image: DecorationImage(
                                   image: Image
