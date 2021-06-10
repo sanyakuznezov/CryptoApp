@@ -33,8 +33,6 @@ class UserOrderScreen extends StatefulWidget{
   
 }
     class _UserOrderScreenState extends State<UserOrderScreen> with SingleTickerProviderStateMixin{
-      double? _scale;
-      AnimationController? _controller;
       final List<String> _id=<String>['artifact_1','artifact_2','artifact_3','artifact_4','artifact_5'];
       bool _available = true;
       final InAppPurchase _iap = InAppPurchase.instance;
@@ -44,12 +42,12 @@ class UserOrderScreen extends StatefulWidget{
       StreamSubscription? _subscription;
       int lenght=0;
       bool isPurchase=true;
+      bool isTapped=false;
+
 
 
       @override
       Widget build(BuildContext context) {
-        _scale=1-_controller!.value;
-        print('Value ${_controller!.value}');
         return Scaffold(
             body: Container(
                 width: MediaQuery
@@ -87,34 +85,15 @@ class UserOrderScreen extends StatefulWidget{
       @override
       void initState() {
         super.initState();
-        _controller=AnimationController(
-            vsync: this,
-            duration: Duration(milliseconds: 200),
-            lowerBound: 0.0,
-            upperBound: 0.1,
-        )..addListener(() {
-          setState(() {
-          });
-        });
         _initialize();
       }
 
       @override
       void dispose() {
-        _controller!.dispose();
         _subscription!.cancel();
         super.dispose();
       }
 
-      void _onTapDown(TapDownDetails details){
-        _controller!.forward();
-        print('_onTapDown $_scale');
-      }
-
-      void _onTapUp(TapUpDetails details){
-        _controller!.reverse();
-        print('_onTapUp $_scale');
-      }
 
      //billing
       void _initialize() async {
@@ -374,18 +353,21 @@ class UserOrderScreen extends StatefulWidget{
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: isPurchase? Padding(
-                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0,Sizer(buildContext: context,maxSize: 70.0).size(20)),
-                    child: GestureDetector(
-                      onTapDown: _onTapDown,
-                        onTapUp: _onTapUp,
+                    padding: EdgeInsets.fromLTRB(0.0, 0.0, 0.0,Sizer(buildContext: context,maxSize: 65.0).size(20)),
+                    child:InkWell(
+                        onHighlightChanged: (value){
+                          setState(() {
+                            isTapped=value;
+                            print('setState $isTapped');
+                          });
+                        },
                         onTap: ()=>{
                         _buyProduct(_products[0])
                         },
-                        child: Transform.scale(
-                          scale: _scale!,
-                          child: Container(
-                            width: Sizer(buildContext: context,maxSize: 120.0).witch(30),
-                            height: Sizer(buildContext: context,maxSize: 50.0).witch(12),
+                          child: AnimatedContainer(
+                            duration: Duration(milliseconds: 200),
+                           width: isTapped?Sizer(buildContext: context,maxSize: 120.0).witch(30):Sizer(buildContext: context,maxSize: 140.0).witch(40),
+                            height:isTapped?Sizer(buildContext: context,maxSize: 50.0).witch(12):Sizer(buildContext: context,maxSize: 60.0).witch(20),
                             decoration: BoxDecoration(
                                 image: DecorationImage(
                                     image: Image
@@ -407,8 +389,7 @@ class UserOrderScreen extends StatefulWidget{
                               ),
                             ),
                           ),
-                        )
-                    ),
+                    )
                   ): null
                 )
 
@@ -421,6 +402,7 @@ class UserOrderScreen extends StatefulWidget{
 
       Widget _appBar(String urlAva, String nik, String id,
           BuildContext context) {
+        final textTheme=Theme.of(context).textTheme;
         return Container(
             width: MediaQuery
                 .of(context)
@@ -475,7 +457,8 @@ class UserOrderScreen extends StatefulWidget{
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                   fontSize: 15.0,
-                                  color: Colors.white
+                                  color: Colors.white,
+
                               ),),
                           ),
 
