@@ -8,8 +8,10 @@
 
 
    <application
-        android:label="payarapp"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Buy a set"
+       android:usesCleartextTraffic="true"
+        android:icon="@mipmap/ic_launcher_app"
+       android:roundIcon="@mipmap/ic_launcher_app_round">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"

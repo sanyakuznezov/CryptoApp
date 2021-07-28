@@ -9,7 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:page_transition/page_transition.dart';
-import 'package:payarapp/domain/model/order.dart';
+
 import 'package:payarapp/internal/dependencies/main_module.dart';
 import 'package:payarapp/internal/dependencies/repository_module.dart';
 import 'package:payarapp/ui/user_order_screen.dart';
@@ -51,87 +51,105 @@ class EnterCodeScreen extends StatefulWidget{
                  mainAxisAlignment: MainAxisAlignment.center,
                  children: [
                         Image.asset('assets/img_logo.png',
-                        width:Sizer(buildContext: context,maxSize: 200.0).size(50.0)),
-                    SizedBox(
-                      width: Sizer(buildContext: context,maxSize: 300.0).size(50.0),
-                      child: TextField(
-                        focusNode: _focusNode,
-                        controller: _textEditingController,
-                        keyboardType: TextInputType.text,
-                        autofocus: false,
-                        onChanged: (value) {
-                          setState(() {
-                            _isEditingCode = true;
-                          });
-                        },
-                        onSubmitted: (value) {
-                          _focusNode?.unfocus();
-                          FocusScope.of(context).requestFocus(_focusNode);
-                        },
-                        style: TextStyle(color: Colors.orange),
-                        decoration: InputDecoration(
-                          border: new OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: Colors.black45,
-                              width: 3,
+                        width: 200),
+
+                    Container(
+                      alignment: Alignment.center,
+                       width:Sizer(buildContext: context,maxSize: 300.0).size(55.0) ,
+                       height: Sizer(buildContext: context,maxSize: 300.0).size(20.0),
+                        decoration: BoxDecoration(
+                            color: Colors.black87,
+                          borderRadius: BorderRadius.all(Radius.circular(10))
+                        ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: Sizer(buildContext: context,maxSize: 300.0).size(50.0),
+                            child: TextField(
+                              focusNode: _focusNode,
+                              controller: _textEditingController,
+                              keyboardType: TextInputType.text,
+                              autofocus: false,
+                              onChanged: (value) {
+                                setState(() {
+                                  _isEditingCode = true;
+                                });
+                              },
+                              onSubmitted: (value) {
+                                _focusNode?.unfocus();
+                                FocusScope.of(context).requestFocus(_focusNode);
+                              },
+                              style: TextStyle(color: Colors.orangeAccent),
+                              decoration: InputDecoration(
+                                border: new OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(10),
+                                  borderSide: BorderSide(
+                                    color: Colors.orange,
+                                    width: 2,
+                                  ),
+                                ),
+                                filled: true,
+                                hintStyle: new TextStyle(
+                                  color: Colors.orange[100],
+                                ),
+                                hintText: "Code",
+                                fillColor: Colors.white12,
+                                errorText: _isEditingCode
+                                    ? isEmptyText(idUser: _textEditingController!.text)
+                                    : null,
+                                errorStyle: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.redAccent,
+                                ),
+                              ),
                             ),
                           ),
-                          filled: true,
-                          hintStyle: new TextStyle(
-                            color: Colors.white24,
-                          ),
-                          hintText: "Code",
-                          fillColor: Colors.black38,
-                          errorText: _isEditingCode
-                              ? isEmptyText(idUser: _textEditingController!.text)
-                              : null,
-                          errorStyle: TextStyle(
-                            fontSize: 12,
-                            color: Colors.redAccent,
-                          ),
-                        ),
+                        ],
                       ),
-                        ),
+
+                    ),
+
                    Padding(
                      padding: const EdgeInsets.all(20.0),
                      child: FlatButton(
-                       color: Colors.black54,
-                       hoverColor: Colors.blueGrey[900],
-                       highlightColor: Colors.black,
-                       onPressed: ()=>{
-                          if(_connectionStatus){
-                         setState(() {
-                           validateCode(idUser: _textEditingController!.text);
-                        })
-                          }else{
-                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                       backgroundColor: Colors.black,
-                       content: Text('No network connection....',
-                         style: TextStyle(
-                             fontSize: 15.0,
-                             color: Colors.white
-                         ),),
-                     ))
-                     }
-                       },
-                       shape: RoundedRectangleBorder(
-                         borderRadius: BorderRadius.circular(15),
-                       ),
-                       child: Padding(
-                         padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
-                         child: isLoader
-                             ? SizedBox(
-                           height: 16,
-                           width: 16,
-                           child: CircularProgressIndicator(
-                             strokeWidth: 2,
-                             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                           ),
-                         )
-                             : Text(
-                             'OK',
-                             style: TextStyle(fontSize: 15, color: Colors.white,fontFamily: 'Old')))),
+                         color: Colors.orange,
+                         hoverColor: Colors.orange[100],
+                         highlightColor: Colors.orangeAccent,
+                         onPressed: ()=>{
+                           if(_connectionStatus){
+                             setState(() {
+                               validateCode(idUser: _textEditingController!.text);
+                             })
+                           }else{
+                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                               backgroundColor: Colors.black,
+                               content: Text('No network connection....',
+                                 style: TextStyle(
+                                     fontSize: 15.0,
+                                     color: Colors.white
+                                 ),),
+                             ))
+                           }
+                         },
+                         shape: RoundedRectangleBorder(
+                           borderRadius: BorderRadius.circular(15),
+                         ),
+                         child: Padding(
+                             padding: EdgeInsets.only(top: 15.0, bottom: 15.0),
+                             child: isLoader
+                                 ? SizedBox(
+                               height: 16,
+                               width: 16,
+                               child: CircularProgressIndicator(
+                                 strokeWidth: 2,
+                                 valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                               ),
+                             )
+                                 : Text(
+                                 'OK',
+                                 style: TextStyle(fontSize: 15, color: Colors.white,fontFamily: 'Old')))),
                    ),
 
 

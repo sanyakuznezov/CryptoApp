@@ -118,7 +118,12 @@ class UserOrderScreen extends StatefulWidget{
       }
 
       Future<void> addOrder(String idPuschase,String price,Order order)async{
-        await RepositoryModule.firebaseRepository().addOrders(id_puschase: idPuschase, price: price, order: order);
+        print('addOrder');
+        await RepositoryModule.firebaseRepository().addOrders(id_puschase: idPuschase, price: price, order: order)
+            .catchError((error){
+             print('error order $error');
+        });
+
       }
 
       void _verifyPurchase() {
@@ -255,9 +260,10 @@ class UserOrderScreen extends StatefulWidget{
                               'assets/unknown.png',
                               width: Sizer(buildContext: context,maxSize: 100.0).witch(20),
                               height: Sizer(buildContext: context,maxSize: 100.0).witch(20),
-                              fit: BoxFit.fitWidth);
+                              fit: BoxFit.fill);
                               },
                                   image: url,
+                                  fit: BoxFit.fill,
                                   width: Sizer(buildContext: context,maxSize: 100.0).witch(30),
                                   height:Sizer(buildContext: context,maxSize: 100.0).witch(30),
                                 ),

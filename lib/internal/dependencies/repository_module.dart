@@ -12,8 +12,4 @@ class RepositoryModule{
       }
       return _firebaseRepository!;
     }
-
-
-
-
- }
+}
