@@ -29,7 +29,7 @@ class OrderService{
 
 
   Future<void> addOrder({@required String? id_puschase,@required String? price, @required Order? order}) async{
-    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('addPurchase');
+    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('addP');
      await callable.call(
       <String,dynamic>{
           'prize':order!.getPrize,

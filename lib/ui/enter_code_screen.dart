@@ -4,6 +4,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -132,6 +133,7 @@ class EnterCodeScreen extends StatefulWidget{
                                  ),),
                              ))
                            }
+
                          },
                          shape: RoundedRectangleBorder(
                            borderRadius: BorderRadius.circular(15),
@@ -149,7 +151,7 @@ class EnterCodeScreen extends StatefulWidget{
                              )
                                  : Text(
                                  'OK',
-                                 style: TextStyle(fontSize: 15, color: Colors.white,fontFamily: 'Old')))),
+                                 style: TextStyle(fontSize: 15, color: Colors.white,fontFamily: 'Berlin')))),
                    ),
 
 
@@ -246,6 +248,7 @@ class EnterCodeScreen extends StatefulWidget{
        _connectivitySubscription!.cancel();
        super.dispose();
      }
+
 
      Future<void> initConnectivity() async {
        ConnectivityResult result = ConnectivityResult.none;
