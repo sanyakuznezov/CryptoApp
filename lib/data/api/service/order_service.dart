@@ -38,7 +38,8 @@ class OrderService{
         'ava_user':order.getAvatar,
         'id_user':order.getIdUser,
         'nik_user':order.getNik,
-        'payment':order.getPrize
+        'payment':order.getPrize,
+        'url_prize':order.getImg
       },
     );
   }
