@@ -9,7 +9,7 @@ import 'package:payarapp/data/api/model/model_ticker_price_api.dart';
 
 class MainTradingService{
 
- static const _BASE_URL='https://api.binance.com/api/v1/';
+ static const _BASE_URL='https://api.binance.com/api/v3/';
 
    final Dio _dio=Dio(BaseOptions(baseUrl: _BASE_URL));
 

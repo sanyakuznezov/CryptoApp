@@ -84,13 +84,13 @@ class _ListCryptsState extends State<ListCrypts> {
              fontSize: 12,
            ),
          ),
-         Divider(color: Colors.white30),
          Text('$price USD',
            style: TextStyle(
              color: Colors.white,
              fontSize: 10,
            ),
          ),
+         Divider(color: Colors.white30),
        ],
      ),
    );
