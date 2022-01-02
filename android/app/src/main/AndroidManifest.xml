@@ -8,13 +8,14 @@
 
 
    <application
-        android:label="Buy a set"
+        android:label="CryptoMan"
        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher_app"
        android:roundIcon="@mipmap/ic_launcher_app_round">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
+            android:exported="true"
             android:theme="@style/LaunchTheme"
             android:screenOrientation="portrait"
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"

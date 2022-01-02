@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 import 'package:payarapp/internal/dependencies/main_module.dart';
-import 'package:payarapp/ui/enter_code_screen.dart';
+
+import 'package:payarapp/ui/trading/list_crypts.dart';
 
 
 void main() {
@@ -24,7 +25,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  EnterCodeScreen(),
+      home:  ListCrypts(),
     );
   }
 
