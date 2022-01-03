@@ -4,7 +4,7 @@
  class ModelTickerPrice{
 
    String symbol;
-   String price;
+   double price;
 
     ModelTickerPrice({required this.symbol,required this.price});
 

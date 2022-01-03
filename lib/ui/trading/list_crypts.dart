@@ -33,13 +33,7 @@ class _ListCryptsState extends State<ListCrypts> {
       ),
       body: Observer(
           builder: (_){
-             if(_stateListTicker.isLoading){
-               return Center(
-                 child: CircularProgressIndicator(
-                   color: Colors.white,
-                 ),
-               );
-             }else {
+            if(!_stateListTicker.isError&&!_stateListTicker.isLoading){
                return ListView(
                  children: List.generate(_stateListTicker.listTicker!.length, (index){
                    return _ItemPrice(symbol: _stateListTicker.listTicker![index].symbol,price:
@@ -47,6 +41,12 @@ class _ListCryptsState extends State<ListCrypts> {
                  }),
                );
              }
+
+            return  Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            );
       }),
     );
   }
@@ -68,7 +68,7 @@ class _ListCryptsState extends State<ListCrypts> {
  class _ItemPrice extends StatelessWidget{
 
    final String symbol;
-   final String price;
+   final double price;
    _ItemPrice({required this.symbol,required this.price});
   @override
   Widget build(BuildContext context) {
