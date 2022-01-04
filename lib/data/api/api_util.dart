@@ -43,4 +43,8 @@ class ApiUtil{
        return list;
     }
 
+    Future<void> startWS() async{
+      await _mainTradingService.startWS();
+    }
+
 }

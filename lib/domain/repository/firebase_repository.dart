@@ -11,5 +11,5 @@ abstract class FirebaseRepository{
    //  Future<List<Tickets>> getTickets({@required String idUser});
    //  Future<void> addOrders({@required String id_puschase,@required String price, @required Order order});
   Future<List<ModelTickerPrice>> getListTickerPrice();
-
+  Future<void> startWS();
  }

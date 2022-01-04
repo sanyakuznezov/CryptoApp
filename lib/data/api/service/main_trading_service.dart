@@ -3,6 +3,7 @@
 
 
 
+import 'package:cloud_functions/cloud_functions.dart';
 import 'package:dio/dio.dart';
 import 'package:payarapp/data/api/model/model_ticker_price_api.dart';
 
@@ -39,5 +40,16 @@ class MainTradingService{
     return null;
 
     }
+
+
+
+ Future<void> startWS() async{
+   HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('startWS');
+   await callable.call(
+     <String,dynamic>{
+       'start':123456,
+     },
+   );
+ }
 
 }

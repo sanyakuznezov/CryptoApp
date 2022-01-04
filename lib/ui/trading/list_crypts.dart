@@ -6,6 +6,7 @@
  import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:payarapp/domain/state/state_list_ticker.dart';
+import 'package:payarapp/internal/dependencies/repository_module.dart';
 
 class ListCrypts extends StatefulWidget{
   @override
@@ -20,6 +21,11 @@ class _ListCryptsState extends State<ListCrypts> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+         await RepositoryModule.firebaseRepository().startWS();
+        },
+      ),
       appBar: AppBar(
         backgroundColor: Colors.black26,
         actions: [

@@ -15,6 +15,11 @@ class FirebaseDataRepository extends FirebaseRepository{
       return _apiUtil.getListTickerPrice();
   }
 
+  @override
+  Future<void> startWS() async {
+    await _apiUtil.startWS();
+  }
+
   // @override
   // Future<Order> getOrder({String? idUser}) {
   //   return _apiUtil.getOrder(idUser: idUser!);
