@@ -52,4 +52,33 @@ class MainTradingService{
    );
  }
 
+
+ Future<void> stopWS() async{
+   HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('stopWS');
+   await callable.call(
+     <String,dynamic>{
+       'stop':123456,
+     },
+   );
+ }
+
+
+ Future<void> addOrdersell() async{
+   HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('addOrdersell');
+   await callable.call(
+     <String,dynamic>{
+       'stop':123456,
+     },
+   );
+ }
+
+ Future<void> addOrderbuy() async{
+   HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('addOrderbuy');
+   await callable.call(
+     <String,dynamic>{
+       'stop':123456,
+     },
+   );
+ }
+
 }

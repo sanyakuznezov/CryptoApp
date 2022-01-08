@@ -47,4 +47,15 @@ class ApiUtil{
       await _mainTradingService.startWS();
     }
 
+    Future<void> stopWS() async{
+      await _mainTradingService.stopWS();
+    }
+    Future<void> addOrdersell() async{
+      await _mainTradingService.addOrdersell();
+    }
+
+    Future<void> addOrderbuy() async{
+      await _mainTradingService.addOrderbuy();
+    }
+
 }

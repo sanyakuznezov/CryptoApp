@@ -7,6 +7,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:payarapp/internal/dependencies/main_module.dart';
 
 import 'package:payarapp/ui/trading/list_crypts.dart';
+import 'package:payarapp/ui/trading/screen_control.dart';
 
 
 void main() {
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  ListCrypts(),
+      home:  ScreenControl(),
     );
   }
 
