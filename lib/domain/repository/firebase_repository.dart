@@ -15,4 +15,5 @@ abstract class FirebaseRepository{
   Future<void> stopWS();
   Future<void> addOrdersell();
   Future<void> addOrderbuy();
+  Future<void> startTrending();
  }

@@ -25,7 +25,8 @@ class _ScreenControlState extends State<ScreenControl> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                       onPressed: ()async{
-                        await RepositoryModule.firebaseRepository().startWS();
+                        await RepositoryModule.firebaseRepository().startTrending();
+
                   },
                       child:
                   const Text('start')),
@@ -34,29 +35,12 @@ class _ScreenControlState extends State<ScreenControl> {
                   padding: const EdgeInsets.all(8.0),
                   child: ElevatedButton(
                       onPressed: ()async{
-                        await RepositoryModule.firebaseRepository().stopWS();
+                        await RepositoryModule.firebaseRepository().startWS();
                   },
                       child:
-                      const Text('stop')),
+                      const Text('start ws')),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      onPressed: ()async{
-                        await RepositoryModule.firebaseRepository().addOrdersell();
-                      },
-                      child:
-                      const Text('sell')),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ElevatedButton(
-                      onPressed: ()async{
-                       await RepositoryModule.firebaseRepository().addOrderbuy();
-                      },
-                      child:
-                      const Text('buy')),
-                )
+
               ],
             ),
           ),

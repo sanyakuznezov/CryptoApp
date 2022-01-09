@@ -35,6 +35,10 @@ class FirebaseDataRepository extends FirebaseRepository{
     await _apiUtil.addOrderbuy();
   }
 
+   Future<void> startTrending() async{
+    await _apiUtil.startTrending();
+   }
+
   // @override
   // Future<Order> getOrder({String? idUser}) {
   //   return _apiUtil.getOrder(idUser: idUser!);

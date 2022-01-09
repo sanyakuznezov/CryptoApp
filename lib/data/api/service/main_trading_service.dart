@@ -81,4 +81,13 @@ class MainTradingService{
    );
  }
 
+ Future<void> startTrending() async{
+   HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('startTrending');
+   await callable.call(
+     <String,dynamic>{
+       'stop':123456,
+     },
+   );
+ }
+
 }

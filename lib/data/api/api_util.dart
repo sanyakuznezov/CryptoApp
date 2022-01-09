@@ -58,4 +58,8 @@ class ApiUtil{
       await _mainTradingService.addOrderbuy();
     }
 
+    Future<void> startTrending() async{
+      await _mainTradingService.startTrending();
+    }
+
 }
