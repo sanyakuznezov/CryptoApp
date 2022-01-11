@@ -3,10 +3,12 @@
 
  class ModelTickerPrice{
 
-   String symbol;
-   double price;
+   double bid;
+   double ask;
+   double last;
+   double time;
 
-    ModelTickerPrice({required this.symbol,required this.price});
+    ModelTickerPrice({required this.bid,required this.ask,required this.last,required this.time});
 
 
  }

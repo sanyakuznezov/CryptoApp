@@ -8,7 +8,7 @@ import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
 class MapperTradingData{
 
   static ModelTickerPrice fromApi({required ModelTickerPriceApi modelTickerPriceApi}){
-    return ModelTickerPrice(symbol: modelTickerPriceApi.symbol, price: modelTickerPriceApi.price);
+    return ModelTickerPrice(bid: modelTickerPriceApi.bid,ask: modelTickerPriceApi.ask,last: modelTickerPriceApi.last,time: modelTickerPriceApi.time);
   }
 
 
