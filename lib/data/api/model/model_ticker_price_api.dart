@@ -12,10 +12,10 @@
 
 
     ModelTickerPriceApi.fromApi({required Map<String, dynamic> map}):
-          bid=map['bid'] as double,
-          ask=map['ask'] as double,
-          last=map['last'] as double,
-          time=map['time'] as double;
+          bid=map['bid']??0.0,
+          ask=map['ask']??0.0,
+          last=map['last']??0.0,
+          time=map['time']??0.0;
 
 
   }

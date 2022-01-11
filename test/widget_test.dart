@@ -10,12 +10,12 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:payarapp/main.dart';
 
-import 'package:payarapp/ui/trading/list_crypts.dart';
+
 
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(ListCrypts());
+
 
     // Verify that our counter starts at 0.
     expect(find.text('0'), findsOneWidget);
