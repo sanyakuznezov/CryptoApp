@@ -39,30 +39,138 @@ class _ScreenControlState extends State<ScreenControl> {
   @override
   Widget build(BuildContext context) {
       return Scaffold(
+        backgroundColor: Colors.blueGrey[800],
         appBar: AppBar(
-          backgroundColor: Colors.black,
+          backgroundColor: Colors.blueGrey[900],
+          actions: [
+            Observer(builder: (_){
+              if(!_stateListTicker!.hasData){
+                return Expanded(
+                  child: Center(
+                      child: SizedBox(
+                    height: 30,
+                      width: 30,
+                      child: CircularProgressIndicator(color: Colors.blueGrey[800],))),
+                );
+              }
+              return Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('ASK',
+                              style: TextStyle(
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.bold
+                              )),
+
+                        ),
+                        //ask
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('${_stateListTicker!.ticker!.ask}',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold
+                          ),),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: 2,
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        //bid
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                            width: 2,
+                            color: Colors.green,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('${_stateListTicker!.ticker!.bid}',
+                            style: TextStyle(
+                                color: Colors.green,
+                                fontWeight: FontWeight.bold
+                            )),
+
+                        ),
+
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('BID',
+                              style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold
+                              )),
+
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            }),
+          ],
         ),
         body: Container(
-          child: Column(
-            children: [
-              Observer(builder: (_){
-                if(!_stateListTicker!.hasData){
-                  return CircularProgressIndicator();
-                }
-                return Column(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('Ask: ${_stateListTicker!.ticker!.ask}'),
-                    Text('Bid: ${_stateListTicker!.ticker!.bid}'),
+                    Row(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.arrow_circle_down_rounded,color:Colors.red,size: 15,),
+                        ),
+                        Text('USD: 7.98',
+                          style:
+                          TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Colors.white,
+                          ),),
+                      ],
+                    ),
+                    Row(
+                      children: [
+                        Text('47.05 DOGE',
+                          style:
+                          TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                            color: Colors.white,
+                          ),),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(Icons.arrow_circle_up_sharp,color:Colors.green,size: 15,),
+                        ),
+                      ],
+                    ),
                   ],
-                );
-              }),
-              ElevatedButton(onPressed: (){
-                _stateListTicker!.close();
-              }, child: Text('close')
-              )
-            ],
+                ),
+                ElevatedButton(onPressed: (){
+                  RepositoryModule.firebaseRepository().getBalance();
+                }, child: Text('res'))
+              ],
+            ),
           ),
-        ),
+        )
+
       );
   }
 }

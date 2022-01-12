@@ -13,6 +13,8 @@ class WebSocketClient{
 
 
    static const BASE_URL='wss://ftx.com/ws/';
+   static const API_KEY='';
+   static const API_PRIVATE_KEY='';
    WebSocketChannel? _channel;
 
 

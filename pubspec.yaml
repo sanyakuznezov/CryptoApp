@@ -40,6 +40,7 @@ dependencies:
   flutter_mobx: ^2.0.2
   mobx_codegen: ^2.0.4
   web_socket_channel: ^2.1.0
+  crypto: ^3.0.1
 
 
 

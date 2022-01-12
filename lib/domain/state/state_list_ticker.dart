@@ -8,6 +8,7 @@
 import 'package:mobx/mobx.dart';
 import 'package:payarapp/data/api/service/socket/websocketclient.dart';
 import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
+import 'package:payarapp/internal/dependencies/repository_module.dart';
 part 'state_list_ticker.g.dart';
 class StateListTicker=StateListTickerBase with _$StateListTicker;
 abstract class StateListTickerBase with Store{
@@ -28,6 +29,7 @@ abstract class StateListTickerBase with Store{
         ticker=data;
         hasData=true;
       });
+
 
    }
 

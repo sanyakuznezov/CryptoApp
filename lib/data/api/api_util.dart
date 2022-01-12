@@ -12,12 +12,12 @@ class ApiUtil{
     ApiUtil(this._mainTradingService);
 
 
-    Future <List<ModelTickerPrice>> getListTickerPrice() async{
+    Future <List<ModelTickerPrice>> getBalance() async{
       List<ModelTickerPrice> list=[];
-       final result= await _mainTradingService.getListTickerPrice();
-       result!.forEach((element) {
-          list.add(MapperTradingData.fromApi(modelTickerPriceApi: element));
-       });
+       final result= await _mainTradingService.getBalance();
+       // result!.forEach((element) {
+       //    list.add(MapperTradingData.fromApi(modelTickerPriceApi: element));
+       // });
        return list;
     }
 

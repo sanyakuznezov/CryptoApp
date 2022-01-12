@@ -3,32 +3,48 @@
 
 
 
+import 'dart:convert';
+
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
-import 'package:payarapp/data/api/model/model_ticker_price_api.dart';
 
 class MainTradingService{
 
  static const _BASE_URL='https://ftx.com/api/';
-
+ static const API_KEY='AQmjcrH8Q-vWS8tsrzZjqWDRzNXH-QVIysguGeu9';
+ static const API_PRIVATE_KEY='S3FtewQslutLHbji4hm2_FyJOpjjDMRN0imc6xjY';
    final Dio _dio=Dio(BaseOptions(baseUrl: _BASE_URL));
 
 
-   //список цена тикера
-    Future<List<ModelTickerPriceApi>?> getListTickerPrice() async{
+   //main balsnse
+    Future<void> getBalance() async{
      try{
+
+       final ts=DateTime.now().millisecondsSinceEpoch;
+       var key = utf8.encode(API_PRIVATE_KEY);
+       var signaturePayload = utf8.encode('f${ts}GET/api/wallet/balances');
+       final hmac256=Hmac(sha256, key);
+       Digest sha256Result = hmac256.convert(signaturePayload);
+       final value = {
+         'FTX-KEY': API_KEY,
+         'FTX-SIGN': sha256Result,
+         'FTX-TS': ts};
        final response = await _dio.get(
-           'markets',
+           'wallet/balances',
+           queryParameters: value,
            options: Options(
              sendTimeout: 5000,
              receiveTimeout: 10000,
              contentType: 'application/x-www-form-urlencoded',
            )
        );
-       return (response.data['result'] as List)
-           .map((x) => ModelTickerPriceApi.fromApi(map: x))
-           .toList();
+       print('Response $response');
+       // return (response.data['result'] as List)
+       //     .map((x) => ModelTickerPriceApi.fromApi(map: x))
+       //     .toList();
      }on DioError catch(error){
+       print('Error respounse $error');
        if (error.type == DioErrorType.receiveTimeout ||
            error.type == DioErrorType.sendTimeout) {
        //  timeout error

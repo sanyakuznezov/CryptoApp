@@ -11,8 +11,8 @@ class FirebaseDataRepository extends FirebaseRepository{
    FirebaseDataRepository(this._apiUtil);
 
   @override
-  Future<List<ModelTickerPrice>> getListTickerPrice(){
-      return _apiUtil.getListTickerPrice();
+  Future<List<ModelTickerPrice>> getBalance(){
+      return _apiUtil.getBalance();
   }
 
   @override
