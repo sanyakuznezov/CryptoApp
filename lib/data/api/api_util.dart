@@ -2,6 +2,7 @@
 
 import 'package:payarapp/data/api/service/rest/main_trading_service.dart';
 import 'package:payarapp/data/mapper/mapper_trading_data.dart';
+import 'package:payarapp/domain/model/trading/model_all_balances.dart';
 import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
 
 
@@ -12,12 +13,12 @@ class ApiUtil{
     ApiUtil(this._mainTradingService);
 
 
-    Future <List<ModelTickerPrice>> getBalance() async{
-      List<ModelTickerPrice> list=[];
+    Future <List<ModelAllBalances>> getBalance() async{
+      List<ModelAllBalances> list=[];
        final result= await _mainTradingService.getBalance();
-       // result!.forEach((element) {
-       //    list.add(MapperTradingData.fromApi(modelTickerPriceApi: element));
-       // });
+       result!.forEach((element) {
+          list.add(MapperTradingData.fromApi(modelAllBalancesApi: element));
+       });
        return list;
     }
 

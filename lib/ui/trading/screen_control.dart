@@ -32,7 +32,8 @@ class _ScreenControlState extends State<ScreenControl> {
     // TODO: implement initState
     super.initState();
     _stateListTicker=StateListTicker();
-    _stateListTicker!.getTicker();
+    _stateListTicker!.getOrders();
+    _stateListTicker!.getAllBalances();
   }
 
 
@@ -44,7 +45,7 @@ class _ScreenControlState extends State<ScreenControl> {
           backgroundColor: Colors.blueGrey[900],
           actions: [
             Observer(builder: (_){
-              if(!_stateListTicker!.hasData){
+              if(!_stateListTicker!.hasDataTicker){
                 return Expanded(
                   child: Center(
                       child: SizedBox(
@@ -86,6 +87,13 @@ class _ScreenControlState extends State<ScreenControl> {
                         ),
                       ],
                     ),
+                    Text('DOGE/USD',
+                      style:
+                      TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 11,
+                        color: Colors.white,
+                      ),),
                     Row(
                       children: [
                         //bid
@@ -124,53 +132,74 @@ class _ScreenControlState extends State<ScreenControl> {
           ],
         ),
         body: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(Icons.arrow_circle_down_rounded,color:Colors.red,size: 15,),
-                        ),
-                        Text('USD: 7.98',
-                          style:
-                          TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                            color: Colors.white,
-                          ),),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Text('47.05 DOGE',
-                          style:
-                          TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                            color: Colors.white,
-                          ),),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(Icons.arrow_circle_up_sharp,color:Colors.green,size: 15,),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                ElevatedButton(onPressed: (){
-                  RepositoryModule.firebaseRepository().getBalance();
-                }, child: Text('res'))
-              ],
-            ),
+          child: Observer(
+            builder: (_) {
+              if(_stateListTicker!.hasDataBalances){
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: List.generate(_stateListTicker!.listBalances!.length, (index){
+                      return _ItemBalances(usdValue:_stateListTicker!.listBalances![index].usdValue,coin: _stateListTicker!.listBalances![index].coin, free: _stateListTicker!.listBalances![index].total);
+                    }),
+                  ),
+                );
+              }
+              return SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: CircularProgressIndicator(color: Colors.blueGrey[800],));
+
+            }
           ),
         )
 
       );
   }
 }
+
+   class _ItemBalances extends StatelessWidget{
+
+   String coin;
+   double free;
+   double usdValue;
+    _ItemBalances({required this.coin, required this.free,required this.usdValue});
+
+  @override
+  Widget build(BuildContext context) {
+   return  Column(
+     children: [
+       Row(
+         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         children: [
+           Text('$coin: $free',
+             style:
+             TextStyle(
+               fontWeight: FontWeight.bold,
+               fontSize: 11,
+               color: Colors.white,
+             ),),
+           Row(
+             children: [
+               Text('$usdValue USD',
+                 style:
+                 TextStyle(
+                   fontWeight: FontWeight.normal,
+                   fontSize: 12,
+                   color: Colors.orange,
+                 ),),
+               Padding(
+                 padding: const EdgeInsets.all(5.0),
+                 child: Icon(Icons.arrow_circle_down_rounded,color:Colors.red,size: 15,),
+               ),
+             ],
+           ),
+
+         ],
+       ),
+       Divider(color: Colors.grey[600],)
+     ],
+   );
+  }
+
+
+   }

@@ -8,6 +8,8 @@ import 'dart:convert';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
+import 'package:payarapp/data/api/model/model_all_balances_api.dart';
+import 'package:payarapp/data/api/model/modelorderplaceapi.dart';
 
 class MainTradingService{
 
@@ -18,48 +20,107 @@ class MainTradingService{
 
 
    //main balsnse
-    Future<void> getBalance() async{
+    Future<List<ModelAllBalancesApi>?> getBalance() async{
      try{
-
        final ts=DateTime.now().millisecondsSinceEpoch;
        var key = utf8.encode(API_PRIVATE_KEY);
-       var signaturePayload = utf8.encode('f${ts}GET/api/wallet/balances');
+       var signaturePayload = utf8.encode('${ts}GET/api/wallet/all_balances');
        final hmac256=Hmac(sha256, key);
        Digest sha256Result = hmac256.convert(signaturePayload);
-       final value = {
-         'FTX-KEY': API_KEY,
-         'FTX-SIGN': sha256Result,
-         'FTX-TS': ts};
        final response = await _dio.get(
-           'wallet/balances',
-           queryParameters: value,
+           'wallet/all_balances',
            options: Options(
              sendTimeout: 5000,
              receiveTimeout: 10000,
-             contentType: 'application/x-www-form-urlencoded',
+              headers: {'FTX-KEY':API_KEY,'FTX-SIGN':sha256Result,'FTX-TS': ts},
            )
        );
-       print('Response $response');
-       // return (response.data['result'] as List)
-       //     .map((x) => ModelTickerPriceApi.fromApi(map: x))
-       //     .toList();
+
+       return (response.data['result']['main'] as List)
+           .map((x) => ModelAllBalancesApi.fromApi(map: x))
+           .toList();
      }on DioError catch(error){
-       print('Error respounse $error');
        if (error.type == DioErrorType.receiveTimeout ||
            error.type == DioErrorType.sendTimeout) {
        //  timeout error
        }
 
 
+       return null;
      }
 
-    return null;
+    }
+
+
+    Future<bool> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi})async{
+      try{
+        final ts=DateTime.now().millisecondsSinceEpoch;
+        var key = utf8.encode(API_PRIVATE_KEY);
+        var signaturePayload = utf8.encode('${ts}GET/api/orders');
+        final hmac256=Hmac(sha256, key);
+        Digest sha256Result = hmac256.convert(signaturePayload);
+        final response = await _dio.post(
+            'orders',
+            data: {
+              "market": modelOrderRequestPlaceApi.market,
+              "side": modelOrderRequestPlaceApi.side,
+              "price":modelOrderRequestPlaceApi.price,
+              "type": modelOrderRequestPlaceApi.type,
+              "size": modelOrderRequestPlaceApi.size,
+              "reduceOnly": false,
+              "ioc": false,
+              "postOnly": false,
+              "clientId": null
+            },
+            options: Options(
+              sendTimeout: 5000,
+              receiveTimeout: 10000,
+              headers: {'FTX-KEY':API_KEY,'FTX-SIGN':sha256Result,'FTX-TS': ts},
+            )
+        );
+
+        return response.data['success'];
+
+      }on DioError catch(error){
+        if (error.type == DioErrorType.receiveTimeout ||
+            error.type == DioErrorType.sendTimeout) {
+          //  timeout error
+        }
+
+
+        return false;
+      }
+
+
 
     }
 
 
 
- Future<void> startWS() async{
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    Future<void> startWS() async{
    HttpsCallable callable = FirebaseFunctions.instance.httpsCallable('startWS');
    await callable.call(
      <String,dynamic>{
