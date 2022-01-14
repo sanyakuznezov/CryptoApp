@@ -40,6 +40,12 @@ class FirebaseDataRepository extends FirebaseRepository{
     await _apiUtil.startTrending();
    }
 
+  @override
+  Future<void> getOrders() async{
+    // TODO: implement getOrders
+    await _apiUtil.getOrders();
+  }
+
   // @override
   // Future<Order> getOrder({String? idUser}) {
   //   return _apiUtil.getOrder(idUser: idUser!);

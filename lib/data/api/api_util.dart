@@ -40,5 +40,7 @@ class ApiUtil{
     Future<void> startTrending() async{
       await _mainTradingService.startTrending();
     }
-
+    Future<void> getOrders()async{
+      await _mainTradingService.getOrders();
+    }
 }

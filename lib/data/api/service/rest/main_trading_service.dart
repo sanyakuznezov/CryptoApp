@@ -4,7 +4,6 @@
 
 
 import 'dart:convert';
-
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
@@ -56,7 +55,7 @@ class MainTradingService{
       try{
         final ts=DateTime.now().millisecondsSinceEpoch;
         var key = utf8.encode(API_PRIVATE_KEY);
-        var signaturePayload = utf8.encode('${ts}GET/api/orders');
+        var signaturePayload = utf8.encode('${ts}POST/api/orders');
         final hmac256=Hmac(sha256, key);
         Digest sha256Result = hmac256.convert(signaturePayload);
         final response = await _dio.post(
@@ -100,6 +99,37 @@ class MainTradingService{
 
 
 
+ Future<void> getOrders() async{
+   try{
+     final ts=DateTime.now().millisecondsSinceEpoch;
+     var key = utf8.encode(API_PRIVATE_KEY);
+     var signaturePayload = utf8.encode('${ts}GET/api/orders');
+     final hmac256=Hmac(sha256, key);
+     Digest sha256Result = hmac256.convert(signaturePayload);
+     final response = await _dio.get(
+         'orders',
+         queryParameters: {
+           'market':'DOGE/USD',
+         },
+         options: Options(
+           sendTimeout: 5000,
+           receiveTimeout: 10000,
+           headers: {'FTX-KEY':API_KEY,'FTX-SIGN':sha256Result,'FTX-TS': ts},
+         )
+     );
+    print('respone order ${response.data}');
+
+   }on DioError catch(error){
+     if (error.type == DioErrorType.receiveTimeout ||
+         error.type == DioErrorType.sendTimeout) {
+       //  timeout error
+     }
+
+     print('DioError order ${error}');
+     return null;
+   }
+
+ }
 
 
 

@@ -32,6 +32,7 @@ class _ScreenControlState extends State<ScreenControl> {
     // TODO: implement initState
     super.initState();
     _stateListTicker=StateListTicker();
+    //_stateListTicker!.getTicker();
     _stateListTicker!.getOrders();
     _stateListTicker!.getAllBalances();
   }

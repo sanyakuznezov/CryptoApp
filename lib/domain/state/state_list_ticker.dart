@@ -41,9 +41,10 @@ abstract class StateListTickerBase with Store{
 
    @action
    getOrders(){
-      webSocketClient!.subscribeOrders(channel: Constant.CHANNEL_ORDERS, update:(data){
-        print('Orders $data');
-      });
+      // webSocketClient!.subscribeOrders(channel: Constant.CHANNEL_ORDERS, update:(data){
+      //   print('Orders $data');
+      // });
+     RepositoryModule.firebaseRepository().getOrders();
    }
 
     @action
