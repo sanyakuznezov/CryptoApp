@@ -1,6 +1,7 @@
 
 
   import 'package:payarapp/data/api/api_util.dart';
+import 'package:payarapp/data/api/model/modelorderplaceapi.dart';
 import 'package:payarapp/domain/model/trading/model_all_balances.dart';
 import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
 import 'package:payarapp/domain/repository/firebase_repository.dart';
@@ -44,6 +45,16 @@ class FirebaseDataRepository extends FirebaseRepository{
   Future<void> getOrders() async{
     // TODO: implement getOrders
     await _apiUtil.getOrders();
+  }
+
+  @override
+  Future<bool> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi}) async{
+    return await _apiUtil.placeOrder(modelOrderRequestPlaceApi: modelOrderRequestPlaceApi);
+  }
+
+  @override
+  Future<void> getTrades({required String market}) {
+    return _apiUtil.getTrades(market:market);
   }
 
   // @override

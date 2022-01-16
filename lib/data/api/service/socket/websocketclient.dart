@@ -26,7 +26,7 @@ class WebSocketClient{
 
    WebSocketClient(){
      _channel=WebSocketChannel.connect(Uri.parse('wss://ftx.com/ws/'));
-    // _chanellTicker=WebSocketChannel.connect(Uri.parse('wss://ftx.com/ws/'));
+    _chanellTicker=WebSocketChannel.connect(Uri.parse('wss://ftx.com/ws/'));
    }
 
    subscribeTicker({required String channel,required Function update}){
@@ -70,5 +70,6 @@ class WebSocketClient{
 
    close(){
      _channel!.sink.close();
+     _chanellTicker!.sink.close();
    }
  }

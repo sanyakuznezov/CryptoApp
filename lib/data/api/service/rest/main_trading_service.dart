@@ -55,22 +55,24 @@ class MainTradingService{
       try{
         final ts=DateTime.now().millisecondsSinceEpoch;
         var key = utf8.encode(API_PRIVATE_KEY);
+        var body={
+          "market": modelOrderRequestPlaceApi.market,
+          "side": modelOrderRequestPlaceApi.side,
+          "price":null,
+          "type": modelOrderRequestPlaceApi.type,
+          "size": modelOrderRequestPlaceApi.size,
+          "reduceOnly": false,
+          "ioc": false,
+          "postOnly": false,
+          "clientId": null
+        };
         var signaturePayload = utf8.encode('${ts}POST/api/orders');
+        signaturePayload+=utf8.encode(jsonEncode(body));
         final hmac256=Hmac(sha256, key);
         Digest sha256Result = hmac256.convert(signaturePayload);
         final response = await _dio.post(
             'orders',
-            data: {
-              "market": modelOrderRequestPlaceApi.market,
-              "side": modelOrderRequestPlaceApi.side,
-              "price":modelOrderRequestPlaceApi.price,
-              "type": modelOrderRequestPlaceApi.type,
-              "size": modelOrderRequestPlaceApi.size,
-              "reduceOnly": false,
-              "ioc": false,
-              "postOnly": false,
-              "clientId": null
-            },
+            data: body,
             options: Options(
               sendTimeout: 5000,
               receiveTimeout: 10000,
@@ -95,7 +97,32 @@ class MainTradingService{
     }
 
 
+  Future<void> getTrades({required String market}) async{
+    try{
+      final response = await _dio.get(
+          'markets/$market/trades',
+          options: Options(
+            sendTimeout: 5000,
+            receiveTimeout: 10000,
 
+          )
+      );
+      print('respone book ${response.data}');
+
+    }on DioError catch(error){
+      if (error.type == DioErrorType.receiveTimeout ||
+          error.type == DioErrorType.sendTimeout) {
+        //  timeout error
+      }
+
+      print('DioError order ${error}');
+      return null;
+    }
+
+
+
+
+  }
 
 
 
@@ -103,14 +130,17 @@ class MainTradingService{
    try{
      final ts=DateTime.now().millisecondsSinceEpoch;
      var key = utf8.encode(API_PRIVATE_KEY);
+
+     var body={
+       'market':'${Uri.decodeComponent('DOGE/USD')}',
+     };
      var signaturePayload = utf8.encode('${ts}GET/api/orders');
+     signaturePayload+=utf8.encode(jsonEncode(body));
      final hmac256=Hmac(sha256, key);
      Digest sha256Result = hmac256.convert(signaturePayload);
      final response = await _dio.get(
          'orders',
-         queryParameters: {
-           'market':'DOGE/USD',
-         },
+         queryParameters: body,
          options: Options(
            sendTimeout: 5000,
            receiveTimeout: 10000,

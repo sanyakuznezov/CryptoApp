@@ -7,6 +7,7 @@
 
 import 'package:mobx/mobx.dart';
 import 'package:payarapp/constant.dart';
+import 'package:payarapp/data/api/model/modelorderplaceapi.dart';
 import 'package:payarapp/data/api/service/socket/websocketclient.dart';
 import 'package:payarapp/domain/model/trading/model_all_balances.dart';
 import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
