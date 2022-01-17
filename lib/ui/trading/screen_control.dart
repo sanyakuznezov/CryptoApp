@@ -8,9 +8,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:payarapp/data/api/model/model_ticker_price_api.dart';
 import 'package:payarapp/data/api/service/socket/websocketclient.dart';
 import 'package:payarapp/data/mapper/mapper_trading_data.dart';
+import 'package:payarapp/domain/model/trading/model_log_trading.dart';
 import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
-import 'package:payarapp/domain/state/state_list_ticker.dart';
+import 'package:payarapp/domain/state/state_screen_control.dart';
 import 'package:payarapp/internal/dependencies/repository_module.dart';
+import 'package:payarapp/ui/trading/list_log_trading.dart';
 
 class  ScreenControl extends StatefulWidget{
   @override
@@ -20,6 +22,7 @@ class  ScreenControl extends StatefulWidget{
 class _ScreenControlState extends State<ScreenControl> {
 
   StateListTicker? _stateListTicker;
+  ValueNotifier<ModelLogTrading>? _valueNotifier;
 
   @override
   void dispose() {
@@ -31,16 +34,38 @@ class _ScreenControlState extends State<ScreenControl> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    _valueNotifier=ValueNotifier(ModelLogTrading(price: 0,timeStamp: '',status: '',profit: 0.0,market: '',size: 0, nameLog: ''));
     _stateListTicker=StateListTicker();
     _stateListTicker!.getTicker();
     _stateListTicker!.getOrders();
     _stateListTicker!.getAllBalances();
   }
 
-
+  List<ModelLogTrading> _list=[ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5),
+    ModelLogTrading(market:'DOGE/USD',timeStamp: '2021-01-12', status: 'open', profit: 0, nameLog: 'buy', price: 0.17665, size: 5)];
+  List<ModelLogTrading> _newList=[];
+  int i=-1;
   @override
   Widget build(BuildContext context) {
       return Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.orange,
+          child: Icon(Icons.update,color: Colors.white,),
+          onPressed: () {
+            i++;
+            _valueNotifier!.value=_list[i];
+        },
+        ),
         backgroundColor: Colors.blueGrey[800],
         appBar: AppBar(
           backgroundColor: Colors.blueGrey[900],
@@ -132,25 +157,57 @@ class _ScreenControlState extends State<ScreenControl> {
             }),
           ],
         ),
-        body: Container(
-          child: Observer(
-            builder: (_) {
-              if(_stateListTicker!.hasDataBalances){
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: List.generate(_stateListTicker!.listBalances!.length, (index){
-                      return _ItemBalances(usdValue:_stateListTicker!.listBalances![index].usdValue,coin: _stateListTicker!.listBalances![index].coin, free: _stateListTicker!.listBalances![index].total);
-                    }),
-                  ),
-                );
-              }
-              return SizedBox(
-                  height: 30,
-                  width: 30,
-                  child: CircularProgressIndicator(color: Colors.blueGrey[800],));
+        body: SingleChildScrollView(
+          child: Container(
+            child: Column(
+              children: [
+                Container(
+                  child: Observer(
+                    builder: (_) {
+                      if(_stateListTicker!.hasDataBalances){
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            children: List.generate(_stateListTicker!.listBalances!.length, (index){
+                              return _ItemBalances(usdValue:_stateListTicker!.listBalances![index].usdValue,coin: _stateListTicker!.listBalances![index].coin, free: _stateListTicker!.listBalances![index].total);
+                            }),
+                          ),
+                        );
+                      }
+                      return SizedBox(
+                          height: 30,
+                          width: 30,
+                          child: CircularProgressIndicator(color: Colors.blueGrey[800],));
 
-            }
+                    }
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text('Log trading',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20
+                      ),),
+                    ),
+                    ValueListenableBuilder<ModelLogTrading>(
+                      valueListenable: _valueNotifier!,
+                      builder: (contex,value,child) {
+                        if(value.nameLog.isNotEmpty){
+                          _newList.add(value);
+                        }
+                        return ListLogTrading(modelLogTrading: _newList);
+                      }
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         )
 

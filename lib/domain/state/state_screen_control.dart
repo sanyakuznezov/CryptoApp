@@ -6,13 +6,11 @@
 
 
 import 'package:mobx/mobx.dart';
-import 'package:payarapp/constant.dart';
-import 'package:payarapp/data/api/model/modelorderplaceapi.dart';
 import 'package:payarapp/data/api/service/socket/websocketclient.dart';
 import 'package:payarapp/domain/model/trading/model_all_balances.dart';
 import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
 import 'package:payarapp/internal/dependencies/repository_module.dart';
-part 'state_list_ticker.g.dart';
+part 'state_screen_control.g.dart';
 class StateListTicker=StateListTickerBase with _$StateListTicker;
 abstract class StateListTickerBase with Store{
 
@@ -45,9 +43,9 @@ abstract class StateListTickerBase with Store{
       // webSocketClient!.subscribeOrders(channel: Constant.CHANNEL_ORDERS, update:(data){
       //   print('Orders $data');
       // });
-     webSocketClient!.subscribeTrades(update: (value){
-       print('Trades data ${value}');
-     });
+     // webSocketClient!.subscribeTrades(update: (value){
+     //   print('Trades data ${value}');
+     // });
    }
 
     @action
