@@ -42,9 +42,9 @@ class FirebaseDataRepository extends FirebaseRepository{
    }
 
   @override
-  Future<void> getOrders() async{
+  Future<void> getOpenOrders() async{
     // TODO: implement getOrders
-    await _apiUtil.getOrders();
+    await _apiUtil.getOpenOrders();
   }
 
   @override
@@ -56,6 +56,8 @@ class FirebaseDataRepository extends FirebaseRepository{
   Future<void> getTrades({required String market}) {
     return _apiUtil.getTrades(market:market);
   }
+
+
 
   // @override
   // Future<Order> getOrder({String? idUser}) {

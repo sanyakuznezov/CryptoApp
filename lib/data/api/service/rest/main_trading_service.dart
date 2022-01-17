@@ -126,21 +126,17 @@ class MainTradingService{
 
 
 
- Future<void> getOrders() async{
+ Future<void> getOpenOrders() async{
    try{
      final ts=DateTime.now().millisecondsSinceEpoch;
      var key = utf8.encode(API_PRIVATE_KEY);
 
-     var body={
-       'market':'${Uri.decodeComponent('DOGE/USD')}',
-     };
      var signaturePayload = utf8.encode('${ts}GET/api/orders');
-     signaturePayload+=utf8.encode(jsonEncode(body));
+     signaturePayload+=utf8.encode('?market=DOGE/USD');
      final hmac256=Hmac(sha256, key);
      Digest sha256Result = hmac256.convert(signaturePayload);
      final response = await _dio.get(
-         'orders',
-         queryParameters: body,
+         'orders?market=DOGE/USD',
          options: Options(
            sendTimeout: 5000,
            receiveTimeout: 10000,

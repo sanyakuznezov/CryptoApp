@@ -8,7 +8,7 @@ abstract class FirebaseRepository{
   Future<List<ModelAllBalances>> getBalance();
   Future<bool> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi});
   Future<void> getTrades({required String market});
-  Future<void> getOrders();
+  Future<void> getOpenOrders();
   Future<void> startWS();
   Future<void> stopWS();
   Future<void> addOrdersell();

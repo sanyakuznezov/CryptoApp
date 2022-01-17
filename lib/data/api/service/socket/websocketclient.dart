@@ -12,6 +12,8 @@ import 'package:payarapp/data/api/model/model_ticker_price_api.dart';
 import 'package:payarapp/data/mapper/mapper_trading_data.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
+import '../../../../constant.dart';
+
 class WebSocketClient{
 
 
@@ -20,6 +22,7 @@ class WebSocketClient{
    static const API_PRIVATE_KEY='S3FtewQslutLHbji4hm2_FyJOpjjDMRN0imc6xjY';
    WebSocketChannel? _channel;
    WebSocketChannel? _chanellTicker;
+   WebSocketChannel? _channelTrades;
 
 
 
@@ -27,11 +30,12 @@ class WebSocketClient{
    WebSocketClient(){
      _channel=WebSocketChannel.connect(Uri.parse('wss://ftx.com/ws/'));
     _chanellTicker=WebSocketChannel.connect(Uri.parse('wss://ftx.com/ws/'));
+     _channelTrades=WebSocketChannel.connect(Uri.parse('wss://ftx.com/ws/'));
    }
 
-   subscribeTicker({required String channel,required Function update}){
+   subscribeTicker({required Function update}){
      _chanellTicker!.sink.add(jsonEncode({
-       'op': 'subscribe', 'channel': channel, 'market': 'DOGE/USD'
+       'op': 'subscribe', 'channel': Constant.CHANNEL_TICKER, 'market': 'DOGE/USD'
      }));
      _chanellTicker!.stream.listen((event) {
        update(MapperTradingData.fromApiTicker(modelTickerPriceApi: ModelTickerPriceApi.fromApi(map: jsonDecode(event)['data'])));
@@ -39,6 +43,17 @@ class WebSocketClient{
 
    }
 
+
+   subscribeTrades({required Function update}){
+     _channelTrades!.sink.add(jsonEncode({
+       'op': 'subscribe', 'channel': 'trades', 'market': 'DOGE/USD'
+     }));
+     _channelTrades!.stream.listen((event) {
+       update(event);
+     });
+
+   }
+   //Todo not work
    subscribeOrders({required String channel,required Function update})async{
 
      final ts=DateTime.now().millisecondsSinceEpoch;
@@ -71,5 +86,6 @@ class WebSocketClient{
    close(){
      _channel!.sink.close();
      _chanellTicker!.sink.close();
+     _channelTrades!.sink.close();
    }
  }

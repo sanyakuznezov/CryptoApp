@@ -32,7 +32,7 @@ abstract class StateListTickerBase with Store{
     @action
     getTicker(){
       hasDataTicker=false;
-      webSocketClient!.subscribeTicker(channel: Constant.CHANNEL_TICKER,update: (ModelTickerPrice data){
+      webSocketClient!.subscribeTicker(update: (ModelTickerPrice data){
         ticker=data;
         hasDataTicker=true;
       });
@@ -45,7 +45,9 @@ abstract class StateListTickerBase with Store{
       // webSocketClient!.subscribeOrders(channel: Constant.CHANNEL_ORDERS, update:(data){
       //   print('Orders $data');
       // });
-     RepositoryModule.firebaseRepository().getOrders();
+     webSocketClient!.subscribeTrades(update: (value){
+       print('Trades data ${value}');
+     });
    }
 
     @action
