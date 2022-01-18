@@ -24,7 +24,7 @@ class _ListLogTradingState extends State<ListLogTrading> {
   @override
   Widget build(BuildContext context) {
       return SizedBox(
-        height: 120.0*widget.modelLogTrading.length,
+        height: 100.0*widget.modelLogTrading.length,
         child: ListView(
           children: List.generate(widget.modelLogTrading.length, (index) {
                return _ItemList(modelLogTrading: widget.modelLogTrading[index]);
@@ -104,6 +104,18 @@ class _ListLogTradingState extends State<ListLogTrading> {
                             color: Colors.grey
                         ),),
                       Text('${modelLogTrading.size}',
+                        style: TextStyle(
+                            color: Colors.grey
+                        ),)
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Price: ',
+                        style: TextStyle(
+                            color: Colors.grey
+                        ),),
+                      Text('${modelLogTrading.price}',
                         style: TextStyle(
                             color: Colors.grey
                         ),)
