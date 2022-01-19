@@ -36,7 +36,7 @@ class _ScreenControlState extends State<ScreenControl> {
     super.initState();
     _stateListTicker=StateListTicker();
     _stateListTicker!.getTicker();
-    _stateListTicker!.getOrders();
+    _stateListTicker!.getOrderBook();
     _stateListTicker!.getAllBalances();
   }
 
@@ -143,63 +143,61 @@ class _ScreenControlState extends State<ScreenControl> {
             }),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            child: Column(
-              children: [
-                Container(
-                  child: Observer(
-                    builder: (_) {
-                      if(_stateListTicker!.hasDataBalances){
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: List.generate(_stateListTicker!.listBalances!.length, (index){
-                              return _ItemBalances(usdValue:_stateListTicker!.listBalances![index].usdValue,coin: _stateListTicker!.listBalances![index].coin, free: _stateListTicker!.listBalances![index].total);
-                            }),
-                          ),
-                        );
-                      }
-                      return SizedBox(
-                          height: 30,
-                          width: 30,
-                          child: CircularProgressIndicator(color: Colors.blueGrey[800],));
-
+        body: Container(
+          child: Column(
+            children: [
+              Container(
+                child: Observer(
+                  builder: (_) {
+                    if(_stateListTicker!.hasDataBalances){
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: List.generate(_stateListTicker!.listBalances!.length, (index){
+                            return _ItemBalances(usdValue:_stateListTicker!.listBalances![index].usdValue,coin: _stateListTicker!.listBalances![index].coin, free: _stateListTicker!.listBalances![index].total);
+                          }),
+                        ),
+                      );
                     }
-                  ),
+                    return SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(color: Colors.blueGrey[800],));
+
+                  }
                 ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text('Log trading',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20
-                        ),),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Log trading',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20
+                      ),),
+                  ),
 
-                    Observer(
-                      builder: (context) {
-                       if(_stateListTicker!.listLogTrading.isNotEmpty){
-                         return ListLogTrading(modelLogTrading: _stateListTicker!.listLogTrading);
-                       }else{
-                         return Center(child: Icon(Icons.do_not_disturb_alt,color:Colors.grey,size: 60,));
+                  Observer(
+                    builder: (context) {
+                     if(_stateListTicker!.listLogTrading.isNotEmpty){
+                       return ListLogTrading(modelLogTrading: _stateListTicker!.listLogTrading);
+                     }else{
+                       return Center(child: Icon(Icons.do_not_disturb_alt,color:Colors.grey,size: 60,));
 
-                       }
+                     }
 
-                      },
-                    )
-                  ],
-                )
+                    },
+                  )
+                ],
+              )
 
 
-              ],
-            ),
+            ],
           ),
         )
 

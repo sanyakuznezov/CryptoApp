@@ -96,7 +96,7 @@ class MainTradingService{
 
     }
 
-
+  //запрос сделок предоставляет данные обо всех сделках на рынке.
   Future<void> getTrades({required String market}) async{
     try{
       final response = await _dio.get(

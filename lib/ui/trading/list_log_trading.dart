@@ -23,13 +23,8 @@ class _ListLogTradingState extends State<ListLogTrading> {
 
   @override
   Widget build(BuildContext context) {
-      return SizedBox(
-        height: 100.0*widget.modelLogTrading.length,
-        child: ListView(
-          children: List.generate(widget.modelLogTrading.length, (index) {
-               return _ItemList(modelLogTrading: widget.modelLogTrading[index]);
-          }),
-        ),
+      return Container(
+        child: _ItemList(modelLogTrading: widget.modelLogTrading[widget.modelLogTrading.length-1]),
       );
   }
 }
