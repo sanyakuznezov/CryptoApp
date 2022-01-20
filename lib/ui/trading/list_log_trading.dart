@@ -9,9 +9,9 @@ import 'package:payarapp/domain/model/trading/model_log_trading.dart';
 
 class ListLogTrading extends StatefulWidget{
 
-  List<ModelLogTrading> modelLogTrading;
+  List<ModelLogTrading> listmodelLogTrading;
 
-  ListLogTrading({required this.modelLogTrading});
+  ListLogTrading({required this.listmodelLogTrading});
 
 
   @override
@@ -24,10 +24,144 @@ class _ListLogTradingState extends State<ListLogTrading> {
   @override
   Widget build(BuildContext context) {
       return Container(
-        child: _ItemList(modelLogTrading: widget.modelLogTrading[widget.modelLogTrading.length-1]),
+        child: ViewDataStatistics(widget.listmodelLogTrading)
       );
   }
 }
+
+
+
+  class ViewDataStatistics extends StatelessWidget{
+
+   final List<ModelLogTrading> _list;
+   ViewDataStatistics(this._list);
+
+  @override
+  Widget build(BuildContext context) {
+     return Wrap(
+       crossAxisAlignment: WrapCrossAlignment.center,
+       children: [
+             Container(
+               margin:const EdgeInsets.all(5.0),
+               height: 85,
+               width: 100,
+               decoration: BoxDecoration(
+                 borderRadius: BorderRadius.circular(10.0),
+                 color: Colors.blueGrey[500]
+               ),
+               child: Column(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   Icon(Icons.local_mall_rounded,color:Colors.blueGrey[800],size: 30,),
+                   Padding(
+                     padding: const EdgeInsets.all(3.0),
+                     child: Text('ALL LOG',style: TextStyle(
+                         color:  Colors.blueGrey[900],
+                         fontSize: 13,
+
+                     ),),
+                   ),
+                   Text('${getPurshases(_list)}',style: TextStyle(
+                     color: Colors.blueGrey[900],
+                     fontSize: 11,
+                     fontWeight: FontWeight.bold
+                   ),)
+                 ],
+               ),
+             ),
+         Container(
+           margin:const EdgeInsets.all(5.0),
+           height: 85,
+           width: 100,
+           decoration: BoxDecoration(
+               borderRadius: BorderRadius.circular(10.0),
+               color: Colors.blueGrey[500]
+           ),
+           child: Column(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+               Icon(Icons.local_mall_rounded,color: Colors.blueGrey[800],size: 30,),
+               Padding(
+                 padding: const EdgeInsets.all(3.0),
+                 child: Text('BUY/SEll',style: TextStyle(
+                     color:  Colors.blueGrey[900],
+                     fontSize: 13
+                 ),),
+               ),
+             Row(
+               mainAxisAlignment: MainAxisAlignment.center,
+               children: [
+                 Text('376',style: TextStyle(
+                     color:  Colors.blueGrey[900],
+                     fontSize: 11,
+                     fontWeight: FontWeight.bold
+                 ),),
+                 Padding(
+                   padding: const EdgeInsets.fromLTRB(3.0,0,0,0),
+                   child: Icon(Icons.arrow_circle_down_rounded,color:Colors.red,size: 11,),
+                 )
+               ],
+             ),
+               Row(
+                 mainAxisAlignment: MainAxisAlignment.center,
+                 children: [
+                   Text('3546',style: TextStyle(
+                       color:  Colors.blueGrey[900],
+                       fontSize: 11,
+                       fontWeight: FontWeight.bold
+                   ),),
+                   Padding(
+                     padding: const EdgeInsets.fromLTRB(3.0,0,0,0),
+                     child: Icon(Icons.arrow_circle_up_rounded,color:Colors.green,size: 11,),
+                   )
+                 ],
+               )
+
+
+             ],
+           ),
+         ),
+         Container(
+           margin:const EdgeInsets.all(5.0),
+           height: 80,
+           width: 100,
+           decoration: BoxDecoration(
+               borderRadius: BorderRadius.circular(10.0),
+               color: Colors.blueGrey[500]
+           ),
+           child: Column(
+             mainAxisAlignment: MainAxisAlignment.center,
+             children: [
+               Icon(Icons.local_mall_rounded,color: Colors.blueGrey[800],size: 30,),
+               Padding(
+                 padding: const EdgeInsets.all(3.0),
+                 child: Text('PROFIT',style: TextStyle(
+                     color:  Colors.blueGrey[900],
+                     fontSize: 13
+                 ),),
+               ),
+               Text('0.293898',style: TextStyle(
+                   color: Colors.blueGrey[900],
+                   fontSize: 11,
+                   fontWeight: FontWeight.bold
+               ),)
+             ],
+           ),
+         )
+       ],
+     );
+  }
+   getPurshases(List<ModelLogTrading> list){
+
+      return list.length;
+
+
+   }
+
+
+  }
+
+
 
 
  class _ItemList extends StatelessWidget{
@@ -134,7 +268,6 @@ class _ListLogTradingState extends State<ListLogTrading> {
           ),
         );
   }
-
 
 
  }

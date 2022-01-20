@@ -185,7 +185,7 @@ class _ScreenControlState extends State<ScreenControl> {
                   Observer(
                     builder: (context) {
                      if(_stateListTicker!.listLogTrading.isNotEmpty){
-                       return ListLogTrading(modelLogTrading: _stateListTicker!.listLogTrading);
+                       return ListLogTrading(listmodelLogTrading: _stateListTicker!.listLogTrading);
                      }else{
                        return Center(child: Icon(Icons.do_not_disturb_alt,color:Colors.grey,size: 60,));
 
