@@ -10,7 +10,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:payarapp/data/api/model/model_ticker_price_api.dart';
 import 'package:payarapp/data/mapper/mapper_trading_data.dart';
-import 'package:payarapp/domain/model/trading/model_orderbook.dart';
+import 'package:payarapp/domain/model/trading/model_orderbook_bid.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../../constant.dart';
@@ -94,7 +94,7 @@ class WebSocketClient{
        'op': 'subscribe', 'channel': 'orderbook', 'market': 'DOGE/USD'
      }));
      _channelOrdersbookGrouped!.stream.listen((event) {
-       update(ModelOrderBook.fromApi(map: jsonDecode(event)['data']));
+       update(jsonDecode(event)['data']);
      });
 
    }
