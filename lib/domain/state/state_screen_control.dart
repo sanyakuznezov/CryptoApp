@@ -40,7 +40,6 @@ abstract class StateListTickerBase with Store{
     TradeHandler _tradeHandler=TradeHandler();
     List<ModelOrderBookBid> _bids=[];
     List<ModelOrderBookAsk> _asks=[];
-    int _iterableDot=0;
     int _tick=0;
     double _tickPrice=0.0;
     bool _isBuy=false;
@@ -57,18 +56,20 @@ abstract class StateListTickerBase with Store{
         hasDataTicker=true;
         _isBuy=isValidTrade(_priceMarketBid);
         if(_isTrading){
-          if(_stateTrade==1&&_isBuy){
-            startTrading();
-          }else if(_stateTrade==2){
+          if(_stateTrade==1){
+            if(_isBuy){
+              startTrading();
+            }
+          }else{
             _tradeHandler.control(bidPriceOfTicker:ticker!.bid, callback:(int status,double price,double profit){
               if(status==1){
                 hasDataBalances=true;
                 listBalances![0].total=listBalances![0].total+price*3;
                 listBalances![1].total=listBalances![1].total+3;
+                _stateTrade=1;
                 listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'open',profit: profit,nameLog:'Sell Start', size: 3,price: price));
                 Timer(Duration(seconds: 2), (){
                   listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'executed',profit: profit,nameLog:'Sell End', size: 3,price: 0));
-                  _stateTrade=1;
                 });
 
               }
@@ -77,17 +78,19 @@ abstract class StateListTickerBase with Store{
                 hasDataBalances=true;
                 listBalances![0].total=listBalances![0].total+price*3;
                 listBalances![1].total=listBalances![1].total+3;
+                _stateTrade=1;
                 listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'open',profit: profit,nameLog:'Sell Start Trend Fell', size: 3,price: price));
                 Timer(Duration(seconds: 2), (){
                   listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'executed',profit: profit,nameLog:'Sell End Trend Fell', size: 3,price: 0));
-                  _stateTrade=1;
                 });
               }
             });
           }
 
+          }
 
-        }
+
+
       });
 
 
@@ -97,20 +100,18 @@ abstract class StateListTickerBase with Store{
    isValidTrade(double bid){
       bool result=false;
       if(_tick==0){
-        _tickPrice=bid+(bid*0.001)/100;
+        _tickPrice=bid+(bid*0.005)/100;
       }
       _tick++;
       if(_tickPrice<bid&&_tick==2){
-          _iterableDot++;
+        print('tick $_tick _tickPrice $_tickPrice bid $bid');
+        result= true;
        }
       if(_tick==2){
         _tick=0;
       }
-      print('tick $_tick _iterableDot $_iterableDot _tickPrice $_tickPrice bid $bid');
-      if(_iterableDot==3){
-        result= true;
-        _iterableDot=0;
-      }
+
+
       return result;
    }
 
@@ -126,20 +127,34 @@ abstract class StateListTickerBase with Store{
 
    @action
    getOrderBook(){
-      // webSocketClient!.subscribeOrderbookgrouped(update: (data){
-      //   List asks=data['asks'] as List;
-      //   if(asks.isNotEmpty){
-      //     asks.forEach((element) {
-      //       if(element[1]!=0.0){
-      //         _asks.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
-      //       }
-      //
-      //     });
-      //   }
-      //    _asks.forEach((element) {
-      //      print('list ask ${element.price}- ${element.size} lenght ${_asks.length}');
-      //    });
-      // });
+      webSocketClient!.subscribeOrderbookgrouped(update: (data){
+        List asks=data['asks'] as List;
+        if(asks.isNotEmpty){
+          asks.forEach((element) {
+            if(_asks.isNotEmpty){
+              _asks.where((row){
+                print('Where list ${row.price} ${element[0]}');
+                if(element[0]==row.price){
+                  print('Update list');
+                  _asks.removeWhere((item) => item.size == 0.0);
+                  _asks[_asks.indexOf(row)].size=element[1];
+                }else{
+                  print('Add list');
+                  _asks.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+                }
+                return true;
+              });
+            }else{
+              _asks.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+            }
+
+
+          });
+        }
+         _asks.forEach((element) {
+           print('list ask ${element.price}- ${element.size} lenght ${_asks.length}');
+         });
+      });
    }
 
     @action
@@ -167,9 +182,9 @@ abstract class StateListTickerBase with Store{
         hasDataBalances=true;
         listBalances![0].total=listBalances![0].total-_priceMarketAsk*3;
         listBalances![1].total=listBalances![1].total-3;
+        _stateTrade=2;
          listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'open',profit: 0,nameLog:'BUY Start', size: 3,price: _priceMarketAsk));
          Timer(Duration(seconds: 2), (){
-           _stateTrade=2;
            listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'executed',profit: 0,nameLog:'BUY End', size: 3,price: _priceMarketAsk));
          });
       }

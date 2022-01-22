@@ -168,7 +168,7 @@ class _ListLogTradingState extends State<ListLogTrading> {
   getBuyAndSellProfitUp(List<ModelLogTrading> list){
     int c=0;
     list.forEach((element) {
-      if(element.nameLog=='Sell End'){
+      if(element.nameLog=='Sell End'&&element.status=='executed'){
         c++;
       }
     });
@@ -178,7 +178,7 @@ class _ListLogTradingState extends State<ListLogTrading> {
    getBuyAndSellProfitDown(List<ModelLogTrading> list){
      int c=0;
      list.forEach((element) {
-       if(element.nameLog=='Sell End Trend Fell'){
+       if(element.nameLog=='Sell End Trend Fell'&&element.status=='executed'){
          c++;
        }
      });

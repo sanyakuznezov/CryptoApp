@@ -5,7 +5,7 @@
  class TradeHandler{
 
     static const double SALE_THRESHOLD=0.05;
-    static const double PURCHASE_THRESHOLD=0.03;
+    static const double PURCHASE_THRESHOLD=0.05;
     bool _isCall=false;
     double? priceSell;
     double? priceSellTrendFell;
