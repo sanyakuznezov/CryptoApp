@@ -129,21 +129,18 @@ abstract class StateListTickerBase with Store{
    getOrderBook(){
       webSocketClient!.subscribeOrderbookgrouped(update: (data){
         List asks=data['asks'] as List;
+        int index=-1;
         if(asks.isNotEmpty){
           asks.forEach((element) {
             if(_asks.isNotEmpty){
-              _asks.where((row){
-                print('Where list ${row.price} ${element[0]}');
-                if(element[0]==row.price){
-                  print('Update list');
-                  _asks.removeWhere((item) => item.size == 0.0);
-                  _asks[_asks.indexOf(row)].size=element[1];
-                }else{
-                  print('Add list');
-                  _asks.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
-                }
-                return true;
-              });
+               _asks.removeWhere((i)=>i.size==0.0);
+               index=_asks.indexWhere((item) => item.price==element[0]);
+               if(index>-1){
+                 _asks[index].size=element[1];
+               }else{
+                 _asks.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+               }
+
             }else{
               _asks.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
             }
