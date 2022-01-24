@@ -11,6 +11,7 @@ import 'package:dio/dio.dart';
 import 'package:payarapp/data/api/model/model_ticker_price_api.dart';
 import 'package:payarapp/data/mapper/mapper_trading_data.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_bid.dart';
+import 'package:payarapp/domain/model/trading/model_trades.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 import '../../../../constant.dart';
@@ -54,7 +55,7 @@ class WebSocketClient{
        'op': 'subscribe', 'channel': 'trades', 'market': 'DOGE/USD'
      }));
      _channelTrades!.stream.listen((event) {
-       update(event);
+       update(jsonDecode(event)['data']);
      });
 
    }

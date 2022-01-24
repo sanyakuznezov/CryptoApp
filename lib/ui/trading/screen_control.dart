@@ -37,6 +37,7 @@ class _ScreenControlState extends State<ScreenControl> {
     _stateListTicker=StateListTicker();
     _stateListTicker!.getTicker();
     _stateListTicker!.getOrderBook();
+    _stateListTicker!.getTrade();
     _stateListTicker!.getAllBalances();
   }
 

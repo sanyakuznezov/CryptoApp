@@ -4,19 +4,19 @@
 
  class TradeHandler{
 
-    static const double SALE_THRESHOLD=0.05;
-    static const double PURCHASE_THRESHOLD=0.05;
+    static const double TAKE_PROFIT=0.08;
+    static const double STOP_LOSS=0.07;
     bool _isCall=false;
     double? priceSell;
     double? priceSellTrendFell;
     double? profit;
     buy(priceBuy){
       _isCall=false;
-      priceSell=priceBuy+(priceBuy*SALE_THRESHOLD)/100;
+      priceSell=priceBuy+(priceBuy*TAKE_PROFIT)/100;
     }
 
     bid(priceBid){
-      priceSellTrendFell=priceBid-(priceBid*SALE_THRESHOLD)/100;
+      priceSellTrendFell=priceBid-(priceBid*STOP_LOSS)/100;
     }
 
 

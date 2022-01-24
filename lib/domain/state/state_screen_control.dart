@@ -6,6 +6,7 @@
 
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -15,6 +16,7 @@ import 'package:payarapp/domain/model/trading/model_log_trading.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_ask.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_bid.dart';
 import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
+import 'package:payarapp/domain/model/trading/model_trades.dart';
 import 'package:payarapp/internal/dependencies/repository_module.dart';
 import 'package:payarapp/util/trade_handler.dart';
 part 'state_screen_control.g.dart';
@@ -40,6 +42,7 @@ abstract class StateListTickerBase with Store{
     TradeHandler _tradeHandler=TradeHandler();
     List<ModelOrderBookBid> _bids=[];
     List<ModelOrderBookAsk> _asks=[];
+    List<ModelTrades> _trading=[];
     int _tick=0;
     double _tickPrice=0.0;
     bool _isBuy=false;
@@ -54,12 +57,11 @@ abstract class StateListTickerBase with Store{
         _priceMarketAsk=ticker!.ask;
         _priceMarketBid=ticker!.bid;
         hasDataTicker=true;
-        _isBuy=isValidTrade(_priceMarketBid);
+        _isBuy=_isValidTradeByLevel(_priceMarketBid);
         if(_isTrading){
           if(_stateTrade==1){
-            if(_isBuy){
-              startTrading();
-            }
+            startTrading();
+
           }else{
             _tradeHandler.control(bidPriceOfTicker:ticker!.bid, callback:(int status,double price,double profit){
               if(status==1){
@@ -96,15 +98,26 @@ abstract class StateListTickerBase with Store{
 
    }
 
+   _isValidTradeByGlass({required List<ModelOrderBookBid> bids,required List<ModelOrderBookAsk> asks}){
+      double sizeBid=0.0;
+      double sizeAsk=0.0;
+      bids.forEach((element) {
+        sizeBid+=element.size;
+      });
+      asks.forEach((element) {
+        sizeAsk+=element.size;
+      });
+      return sizeAsk<sizeBid;
+   }
 
-   isValidTrade(double bid){
+
+   _isValidTradeByLevel(double bid){
       bool result=false;
       if(_tick==0){
         _tickPrice=bid+(bid*0.005)/100;
       }
       _tick++;
       if(_tickPrice<bid&&_tick==2){
-        print('tick $_tick _tickPrice $_tickPrice bid $bid');
         result= true;
        }
       if(_tick==2){
@@ -120,23 +133,22 @@ abstract class StateListTickerBase with Store{
       // webSocketClient!.subscribeOrders(channel: Constant.CHANNEL_ORDERS, update:(data){
       //   print('Orders $data');
       // });
-     // webSocketClient!.subscribeTrades(update: (value){
-     //   print('Trades data ${value}');
-     // });
    }
 
    @action
    getOrderBook(){
       webSocketClient!.subscribeOrderbookgrouped(update: (data){
         List asks=data['asks'] as List;
-        int index=-1;
+        List bids=data['bids'] as List;
+        int _indexAsk=-1;
+        int _indexBid=-1;
         if(asks.isNotEmpty){
           asks.forEach((element) {
             if(_asks.isNotEmpty){
                _asks.removeWhere((i)=>i.size==0.0);
-               index=_asks.indexWhere((item) => item.price==element[0]);
-               if(index>-1){
-                 _asks[index].size=element[1];
+               _indexAsk=_asks.indexWhere((item) => item.price==element[0]);
+               if(_indexAsk>-1){
+                 _asks[_indexAsk].size=element[1];
                }else{
                  _asks.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
                }
@@ -148,11 +160,46 @@ abstract class StateListTickerBase with Store{
 
           });
         }
-         _asks.forEach((element) {
-           print('list ask ${element.price}- ${element.size} lenght ${_asks.length}');
-         });
+
+        if(bids.isNotEmpty){
+          bids.forEach((element) {
+            if(_bids.isNotEmpty){
+              _bids.removeWhere((i)=>i.size==0.0);
+              _indexBid=_bids.indexWhere((item) => item.price==element[0]);
+              if(_indexBid>-1){
+                _bids[_indexBid].size=element[1];
+              }else{
+                _bids.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+              }
+
+            }else{
+              _bids.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+            }
+
+
+          });
+        }
+
       });
+
+
    }
+
+
+   @action
+   getTrade(){
+     webSocketClient!.subscribeTrades(update: (value){
+          List trades= value as List;
+          trades.forEach((element) {
+            _trading.add(ModelTrades.fromApi(map:element as Map<String,dynamic>));
+
+          });
+
+          _trading.forEach((element) {
+            print('Trades ${element.price} side ${element.side}');
+          });
+     });
+    }
 
     @action
     Future<void> getAllBalances() async{
@@ -193,5 +240,9 @@ abstract class StateListTickerBase with Store{
         listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: '-',profit: 0,nameLog:'Stop trading', size: 3,price: _priceMarketAsk));
 
     }
+
+
+
+
 
 }
