@@ -179,7 +179,7 @@ abstract class StateListTickerBase with Store{
 
           });
         }
-
+          print('Validate ${_isValidTradeByGlass(bids: _bids, asks: _asks)}');
       });
 
 
@@ -195,9 +195,9 @@ abstract class StateListTickerBase with Store{
 
           });
 
-          _trading.forEach((element) {
-            print('Trades ${element.price} side ${element.side}');
-          });
+          // _trading.forEach((element) {
+          //   print('Trades ${element.price} side ${element.side}');
+          // });
      });
     }
 

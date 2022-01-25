@@ -5,7 +5,7 @@
  class TradeHandler{
 
     static const double TAKE_PROFIT=0.08;
-    static const double STOP_LOSS=0.07;
+    static const double STOP_LOSS=0.08;
     bool _isCall=false;
     double? priceSell;
     double? priceSellTrendFell;

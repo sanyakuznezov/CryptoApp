@@ -22,6 +22,7 @@ class  ScreenControl extends StatefulWidget{
 class _ScreenControlState extends State<ScreenControl> {
 
   StateListTicker? _stateListTicker;
+  bool _isTrade=false;
 
 
   @override
@@ -49,7 +50,16 @@ class _ScreenControlState extends State<ScreenControl> {
           backgroundColor: Colors.orange,
           child: Icon(Icons.update,color: Colors.white,),
           onPressed: () {
-            _stateListTicker!.startTrading();
+            if(!_isTrade){
+              _stateListTicker!.startTrading();
+              _isTrade=true;
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Trade Start')));
+            }else{
+              _stateListTicker!.stopTrading();
+              _isTrade=false;
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Trade Stop')));
+            }
+
 
         },
         ),
