@@ -7,6 +7,7 @@ import 'package:payarapp/data/api/service/socket/websocketclient.dart';
 
 class ApiModule{
       static ApiUtil? _apiUtil;
+      static WebSocketClient? _webSocketClient;
 
 
       static ApiUtil apiUtil(){

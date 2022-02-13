@@ -17,6 +17,7 @@ import 'package:payarapp/domain/model/trading/model_orderbook_ask.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_bid.dart';
 import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
 import 'package:payarapp/domain/model/trading/model_trades.dart';
+import 'package:payarapp/internal/dependencies/api_modul.dart';
 import 'package:payarapp/internal/dependencies/repository_module.dart';
 import 'package:payarapp/util/trade_handler.dart';
 part 'state_screen_control.g.dart';
@@ -31,9 +32,9 @@ abstract class StateListTickerBase with Store{
      List<ModelAllBalances>? listBalances;
     @observable
     bool isError=false;
+    WebSocketClient  _webSocketClient=WebSocketClient();
     @observable
     ModelTickerPrice? ticker;
-    WebSocketClient? webSocketClient=WebSocketClient();
     double _priceMarketAsk=0;
     double _priceMarketBid=0;
     bool _isTrading=false;
@@ -52,7 +53,7 @@ abstract class StateListTickerBase with Store{
     @action
     getTicker(){
       hasDataTicker=false;
-      webSocketClient!.subscribeTicker(update: (ModelTickerPrice data){
+     _webSocketClient.subscribeTicker(update: (ModelTickerPrice data){
         ticker=data;
         _priceMarketAsk=ticker!.ask;
         _priceMarketBid=ticker!.bid;
@@ -97,7 +98,7 @@ abstract class StateListTickerBase with Store{
 
 
    }
-
+   //метод спроса-предложения
    _isValidTradeByGlass({required List<ModelOrderBookBid> bids,required List<ModelOrderBookAsk> asks}){
       double sizeBid=0.0;
       double sizeAsk=0.0;
@@ -110,7 +111,7 @@ abstract class StateListTickerBase with Store{
       return sizeAsk<sizeBid;
    }
 
-
+   //метод пробития исскуственных микроуровней
    _isValidTradeByLevel(double bid){
       bool result=false;
       if(_tick==0){
@@ -137,7 +138,7 @@ abstract class StateListTickerBase with Store{
 
    @action
    getOrderBook(){
-      webSocketClient!.subscribeOrderbookgrouped(update: (data){
+     _webSocketClient.subscribeOrderbookgrouped(update: (data){
         List asks=data['asks'] as List;
         List bids=data['bids'] as List;
         int _indexAsk=-1;
@@ -179,7 +180,7 @@ abstract class StateListTickerBase with Store{
 
           });
         }
-          print('Validate ${_isValidTradeByGlass(bids: _bids, asks: _asks)}');
+
       });
 
 
@@ -188,16 +189,16 @@ abstract class StateListTickerBase with Store{
 
    @action
    getTrade(){
-     webSocketClient!.subscribeTrades(update: (value){
+     _webSocketClient.subscribeTrades(update: (value){
           List trades= value as List;
           trades.forEach((element) {
             _trading.add(ModelTrades.fromApi(map:element as Map<String,dynamic>));
 
           });
 
-          // _trading.forEach((element) {
-          //   print('Trades ${element.price} side ${element.side}');
-          // });
+          _trading.forEach((element) {
+            print('Trades ${element.price} side ${element.side}');
+          });
      });
     }
 
@@ -214,7 +215,7 @@ abstract class StateListTickerBase with Store{
 
    @action
     close(){
-      webSocketClient!.close();
+     _webSocketClient.close();
    }
 
    @action

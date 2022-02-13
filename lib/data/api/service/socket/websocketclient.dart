@@ -42,7 +42,9 @@ class WebSocketClient{
        'op': 'subscribe', 'channel': Constant.CHANNEL_TICKER, 'market': 'DOGE/USD'
      }));
      _chanellTicker!.stream.listen((event) {
-       update(MapperTradingData.fromApiTicker(modelTickerPriceApi: ModelTickerPriceApi.fromApi(map: jsonDecode(event)['data'])));
+       if(jsonDecode(event)['data']!=null){
+         update(MapperTradingData.fromApiTicker(modelTickerPriceApi: ModelTickerPriceApi.fromApi(map: jsonDecode(event)['data'])));
+       }
      }).onError((error){
        print("error ws");
      });
@@ -55,7 +57,9 @@ class WebSocketClient{
        'op': 'subscribe', 'channel': 'trades', 'market': 'DOGE/USD'
      }));
      _channelTrades!.stream.listen((event) {
-       update(jsonDecode(event)['data']);
+       if(jsonDecode(event)['data']!=null){
+         update(jsonDecode(event)['data']);
+       }
      });
 
    }
@@ -79,7 +83,9 @@ class WebSocketClient{
     );
      _channel!.sink.add(jsonEncode({'op': 'subscribe', 'channel': 'orders'}));
      _channel!.stream.listen((event) {
-       update(event);
+       if(event!=null){
+         update(event);
+       }
 
      }).onError((error){
        print('Error subscrabe $error');
@@ -95,7 +101,10 @@ class WebSocketClient{
        'op': 'subscribe', 'channel': 'orderbook', 'market': 'DOGE/USD'
      }));
      _channelOrdersbookGrouped!.stream.listen((event) {
-       update(jsonDecode(event)['data']);
+       if(jsonDecode(event)['data']!=null){
+         update(jsonDecode(event)['data']);
+       }
+
      });
 
    }

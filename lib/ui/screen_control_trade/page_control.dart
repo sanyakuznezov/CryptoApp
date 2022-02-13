@@ -5,21 +5,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:payarapp/data/api/model/model_ticker_price_api.dart';
-import 'package:payarapp/data/api/service/socket/websocketclient.dart';
-import 'package:payarapp/data/mapper/mapper_trading_data.dart';
-import 'package:payarapp/domain/model/trading/model_log_trading.dart';
-import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
 import 'package:payarapp/domain/state/state_screen_control.dart';
-import 'package:payarapp/internal/dependencies/repository_module.dart';
-import 'package:payarapp/ui/trading/list_log_trading.dart';
+import 'package:payarapp/ui/screen_control_trade/widgets/items_log_trading.dart';
 
-class  ScreenControl extends StatefulWidget{
+
+class  PageControl extends StatefulWidget{
   @override
-  State<ScreenControl> createState() => _ScreenControlState();
+  State<PageControl> createState() => _PageControlState();
 }
 
-class _ScreenControlState extends State<ScreenControl> {
+class _PageControlState extends State<PageControl> {
 
   StateListTicker? _stateListTicker;
   bool _isTrade=false;
@@ -33,12 +28,11 @@ class _ScreenControlState extends State<ScreenControl> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _stateListTicker=StateListTicker();
     _stateListTicker!.getTicker();
-    _stateListTicker!.getOrderBook();
-    _stateListTicker!.getTrade();
+    //_stateListTicker!.getOrderBook();
+    //_stateListTicker!.getTrade();
     _stateListTicker!.getAllBalances();
   }
 
@@ -196,9 +190,9 @@ class _ScreenControlState extends State<ScreenControl> {
                   Observer(
                     builder: (context) {
                       if(_stateListTicker!.listLogTrading.isNotEmpty){
-                        return ListLogTrading(listmodelLogTrading: _stateListTicker!.listLogTrading);
+                        return PageListLogTrading(listmodelLogTrading: _stateListTicker!.listLogTrading);
                       }
-                      return ListLogTrading(listmodelLogTrading: _stateListTicker!.listLogTrading);
+                      return PageListLogTrading(listmodelLogTrading: _stateListTicker!.listLogTrading);
 
                     },
                   )

@@ -6,19 +6,20 @@
 
   import 'package:flutter/material.dart';
 import 'package:payarapp/domain/model/trading/model_log_trading.dart';
+import 'package:payarapp/ui/screen_glass/page_glass.dart';
 
-class ListLogTrading extends StatefulWidget{
+class PageListLogTrading extends StatefulWidget{
 
   List<ModelLogTrading> listmodelLogTrading;
 
-  ListLogTrading({required this.listmodelLogTrading});
+  PageListLogTrading({required this.listmodelLogTrading});
 
 
   @override
-  State<ListLogTrading> createState() => _ListLogTradingState();
+  State<PageListLogTrading> createState() => _PageListLogTradingState();
 }
 
-class _ListLogTradingState extends State<ListLogTrading> {
+class _PageListLogTradingState extends State<PageListLogTrading> {
 
 
   @override
@@ -72,58 +73,63 @@ class _ListLogTradingState extends State<ListLogTrading> {
                  ),
                ),
              ),
-         Container(
-           margin:const EdgeInsets.all(5.0),
-           height: 100,
-           width: 100,
-           decoration: BoxDecoration(
-               borderRadius: BorderRadius.circular(10.0),
-               color: Colors.blueGrey[500]
-           ),
-           child: Padding(
-             padding: const EdgeInsets.all(8.0),
-             child: Column(
-               mainAxisAlignment: MainAxisAlignment.center,
-               children: [
-                 Icon(Icons.local_grocery_store,color: Colors.blueGrey[800],size: 30,),
-                 Padding(
-                   padding: const EdgeInsets.all(3.0),
-                   child: Text('BUY/SEll',style: TextStyle(
-                       color:  Colors.blueGrey[900],
-                       fontSize: 13
-                   ),),
-                 ),
-               Row(
+         GestureDetector(
+           onTap: (){
+             Navigator.push(context, MaterialPageRoute(builder: (context)=>PageGlass()));
+           },
+           child: Container(
+             margin:const EdgeInsets.all(5.0),
+             height: 100,
+             width: 100,
+             decoration: BoxDecoration(
+                 borderRadius: BorderRadius.circular(10.0),
+                 color: Colors.blueGrey[500]
+             ),
+             child: Padding(
+               padding: const EdgeInsets.all(8.0),
+               child: Column(
                  mainAxisAlignment: MainAxisAlignment.center,
                  children: [
-                   Text('${getBuyAndSellProfitDown(_list)}',style: TextStyle(
-                       color:  Colors.blueGrey[900],
-                       fontSize: 11,
-                       fontWeight: FontWeight.bold
-                   ),),
+                   Icon(Icons.local_grocery_store,color: Colors.blueGrey[800],size: 30,),
                    Padding(
-                     padding: const EdgeInsets.fromLTRB(3.0,0,0,0),
-                     child: Icon(Icons.arrow_circle_down_rounded,color:Colors.red,size: 11,),
-                   )
-                 ],
-               ),
+                     padding: const EdgeInsets.all(3.0),
+                     child: Text('BUY/SEll',style: TextStyle(
+                         color:  Colors.blueGrey[900],
+                         fontSize: 13
+                     ),),
+                   ),
                  Row(
                    mainAxisAlignment: MainAxisAlignment.center,
                    children: [
-                     Text('${getBuyAndSellProfitUp(_list)}',style: TextStyle(
+                     Text('${getBuyAndSellProfitDown(_list)}',style: TextStyle(
                          color:  Colors.blueGrey[900],
                          fontSize: 11,
                          fontWeight: FontWeight.bold
                      ),),
                      Padding(
                        padding: const EdgeInsets.fromLTRB(3.0,0,0,0),
-                       child: Icon(Icons.arrow_circle_up_rounded,color:Colors.green,size: 11,),
+                       child: Icon(Icons.arrow_circle_down_rounded,color:Colors.red,size: 11,),
                      )
                    ],
-                 )
+                 ),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       Text('${getBuyAndSellProfitUp(_list)}',style: TextStyle(
+                           color:  Colors.blueGrey[900],
+                           fontSize: 11,
+                           fontWeight: FontWeight.bold
+                       ),),
+                       Padding(
+                         padding: const EdgeInsets.fromLTRB(3.0,0,0,0),
+                         child: Icon(Icons.arrow_circle_up_rounded,color:Colors.green,size: 11,),
+                       )
+                     ],
+                   )
 
 
-               ],
+                 ],
+               ),
              ),
            ),
          ),

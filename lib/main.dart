@@ -7,7 +7,7 @@ import 'package:page_transition/page_transition.dart';
 
 import 'package:payarapp/internal/dependencies/main_module.dart';
 
-import 'package:payarapp/ui/trading/screen_control.dart';
+import 'package:payarapp/ui/screen_control_trade/page_control.dart';
 import 'package:web_socket_channel/web_socket_channel.dart';
 
 
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home:  ScreenControl(),
+      home:  PageControl(),
     );
   }
 
