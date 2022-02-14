@@ -7,9 +7,10 @@ import 'dart:convert';
 
 import 'package:mobx/mobx.dart';
 import 'package:payarapp/data/api/service/socket/websocketclient.dart';
+import 'package:payarapp/domain/model/trading/model_order_book.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_ask.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_bid.dart';
-import 'package:payarapp/internal/dependencies/api_modul.dart';
+
 
 
 
@@ -27,8 +28,8 @@ abstract class StateScreenGlassBase with Store{
   @action
   getOrderBook(){
     _webSocketClient.subscribeOrderbookgrouped(update: (data){
-      List<dynamic> asks=data['asks'] as List;
-      List<dynamic> bids=data['bids'] as List;
+      List asks=ModelOrderBook.fromApi(map: data).asks;
+      List bids=ModelOrderBook.fromApi(map: data).bids;
       int _indexAsk=-1;
       int _indexBid=-1;
       if(asks.isNotEmpty){
@@ -49,7 +50,9 @@ abstract class StateScreenGlassBase with Store{
 
         });
       }
-
+      _asks.forEach((element) {
+        print('Asks ${element.price}');
+      });
       if(bids.isNotEmpty){
         bids.forEach((element) {
           if(_bids.isNotEmpty){
@@ -68,12 +71,12 @@ abstract class StateScreenGlassBase with Store{
 
         });
       }
+      _bids.forEach((element) {
+        print('Bids ${element.price}');
+      });
 
     });
 
-    _bids.forEach((element) {
-      print('Bids ${element.price}');
-    });
 
   }
 
