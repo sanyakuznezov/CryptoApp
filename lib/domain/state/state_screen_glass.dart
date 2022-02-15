@@ -21,59 +21,55 @@ abstract class StateScreenGlassBase with Store{
 
   WebSocketClient  _webSocketClient=WebSocketClient();
   @observable
-  List<ModelOrderBookBid> _bids=[];
+  List<ModelOrderBookBid> bidsFinal=[];
   @observable
-  List<ModelOrderBookAsk> _asks=[];
+  List<ModelOrderBookAsk> asksFinal=[];
+  @observable
+  bool hasData=false;
 
   @action
   getOrderBook(){
+    hasData=false;
     _webSocketClient.subscribeOrderbookgrouped(update: (data){
       List asks=ModelOrderBook.fromApi(map: data).asks;
       List bids=ModelOrderBook.fromApi(map: data).bids;
+      hasData=true;
       int _indexAsk=-1;
       int _indexBid=-1;
       if(asks.isNotEmpty){
         asks.forEach((element) {
-          if(_asks.isNotEmpty){
-            _asks.removeWhere((i)=>i.size==0.0);
-            _indexAsk=_asks.indexWhere((item) => item.price==element[0]);
+          if(asks.isNotEmpty){
+            asksFinal.removeWhere((i)=>i.size==0.0);
+            _indexAsk=asksFinal.indexWhere((item) => item.price==element[0]);
             if(_indexAsk>-1){
-              _asks[_indexAsk].size=element[1];
+              asksFinal[_indexAsk].size=element[1];
             }else{
-              _asks.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+              asksFinal.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
             }
 
           }else{
-            _asks.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+            asksFinal.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
           }
-
 
         });
       }
-      _asks.forEach((element) {
-        print('Asks ${element.price}');
-      });
+
       if(bids.isNotEmpty){
         bids.forEach((element) {
-          if(_bids.isNotEmpty){
-            _bids.removeWhere((i)=>i.size==0.0);
-            _indexBid=_bids.indexWhere((item) => item.price==element[0]);
+          if(bids.isNotEmpty){
+            bidsFinal.removeWhere((i)=>i.size==0.0);
+            _indexBid=bidsFinal.indexWhere((item) => item.price==element[0]);
             if(_indexBid>-1){
-              _bids[_indexBid].size=element[1];
+              bidsFinal[_indexBid].size=element[1];
             }else{
-              _bids.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+              bidsFinal.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
             }
 
           }else{
-            _bids.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+            bidsFinal.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
           }
-
-
         });
       }
-      _bids.forEach((element) {
-        print('Bids ${element.price}');
-      });
 
     });
 
