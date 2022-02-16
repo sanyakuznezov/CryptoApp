@@ -28,22 +28,24 @@ class _PageGlassState extends State<PageGlass> {
         height: MediaQuery.of(context).size.height,
         child: Observer(builder: (_){
            if(_stateScreenGlass!.hasData){
-             return SizedBox(
-               height:40*20,
-               child: Column(
-                 children: [
-                   Column(
-                     children: List.generate(20, (index){
-                       return _ItemGlassAsk(price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
-                     }),
-                   ),
-                   Column(
-                     children: List.generate(20, (index){
-                       return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
-                     }),
-                   ),
+             return SingleChildScrollView(
+               child: SizedBox(
+                 height:(_stateScreenGlass!.bidsFinal.length+_stateScreenGlass!.asksFinal.length)*20,
+                 child: Column(
+                   children: [
+                     Column(
+                       children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
+                         return _ItemGlassAsk(price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
+                       }),
+                     ),
+                     Column(
+                       children: List.generate(_stateScreenGlass!.bidsFinal.length, (index){
+                         return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
+                       }),
+                     ),
 
-                 ],
+                   ],
+                 ),
                ),
              );
            }

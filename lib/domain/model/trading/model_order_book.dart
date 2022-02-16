@@ -11,9 +11,10 @@ part 'model_order_book.g.dart';
 
   List bids;
   List asks;
+  String action;
 
 
-  ModelOrderBook({required this.bids,required this.asks});
+  ModelOrderBook({required this.bids,required this.asks,required this.action});
 
   factory ModelOrderBook.fromApi({required Map<String,dynamic> map}){
     return  _$ModelOrderBookFromJson(map);

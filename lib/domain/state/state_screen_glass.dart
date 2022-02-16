@@ -27,6 +27,7 @@ abstract class StateScreenGlassBase with Store{
   @observable
   bool hasData=false;
 
+
   @action
   getOrderBook(){
     hasData=false;
@@ -34,43 +35,54 @@ abstract class StateScreenGlassBase with Store{
       List asks=ModelOrderBook.fromApi(map: data).asks;
       List bids=ModelOrderBook.fromApi(map: data).bids;
       hasData=true;
+      asks.reversed;
       int _indexAsk=-1;
       int _indexBid=-1;
       if(asks.isNotEmpty){
         asks.forEach((element) {
-          if(asks.isNotEmpty){
-            asksFinal.removeWhere((i)=>i.size==0.0);
-            _indexAsk=asksFinal.indexWhere((item) => item.price==element[0]);
-            if(_indexAsk>-1){
-              asksFinal[_indexAsk].size=element[1];
-            }else{
-              asksFinal.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
-            }
-
-          }else{
+          if(data['action']=='partial'){
             asksFinal.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+          }else if(data['action']=='update'){
+              _indexAsk=asksFinal.indexWhere((item) => item.price==element[0]);
+              if(_indexAsk>-1){
+                asksFinal[_indexAsk].size=element[1];
+              }else{
+                for(int i=0;asksFinal.length>i;i++){
+                    if(asksFinal[i].price>element[0]){
+                      asksFinal.insert(i+1, ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+                      break;
+                    }
+                }
+                //asksFinal.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+              }
+              asksFinal.removeWhere((i)=>i.size==0.0);
           }
+
+
 
         });
       }
-
       if(bids.isNotEmpty){
         bids.forEach((element) {
-          if(bids.isNotEmpty){
-            bidsFinal.removeWhere((i)=>i.size==0.0);
-            _indexBid=bidsFinal.indexWhere((item) => item.price==element[0]);
-            if(_indexBid>-1){
-              bidsFinal[_indexBid].size=element[1];
-            }else{
-              bidsFinal.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
-            }
-
-          }else{
+          if(data['action']=='partial'){
             bidsFinal.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+          }else if(data['action']=='update'){
+              _indexBid=bidsFinal.indexWhere((item) => item.price==element[0]);
+              if(_indexBid>-1){
+                bidsFinal[_indexBid].size=element[1];
+              }else{
+                for(int i=0;bidsFinal.length>i;i++){
+                  if(bidsFinal[i].price<element[0]){
+                    bidsFinal.insert(i+1, ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+                    break;
+                  }
+                }
+               // bidsFinal.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+              }
+              bidsFinal.removeWhere((i)=>i.size==0.0);
           }
         });
-      }
-
+     }
     });
 
 
