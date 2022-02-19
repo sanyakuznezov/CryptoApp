@@ -5,6 +5,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:payarapp/data/api/service/socket/websocketclient.dart';
 import 'package:payarapp/domain/model/trading/model_order_book.dart';
@@ -44,13 +45,13 @@ abstract class StateScreenGlassBase with Store{
             asksFinal.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
           }else if(data['action']=='update'){
               _indexAsk=asksFinal.indexWhere((item) => item.price==element[0]);
+              asksFinal.removeWhere((i)=>i.size==0.0);
               if(_indexAsk>-1){
                 asksFinal[_indexAsk].size=element[1];
               }else{
                 for (int i=0;asksFinal.length>i;i++){
                   if(asksFinal[i].price>element[0]){
-                    asksFinal.insert(i+1, ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
-                    asksFinal.removeWhere((i)=>i.size==0.0);
+                    asksFinal.insert(i, ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
                     break;
                   }
                 }
@@ -68,20 +69,19 @@ abstract class StateScreenGlassBase with Store{
             bidsFinal.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
           }else if(data['action']=='update'){
               _indexBid=bidsFinal.indexWhere((item) => item.price==element[0]);
+              bidsFinal.removeWhere((i)=>i.size==0.0);
               if(_indexBid>-1){
                 bidsFinal[_indexBid].size=element[1];
               }else{
                 for(int i=0;bidsFinal.length>i;i++) {
                   if(bidsFinal[i].price<element[0]){
-                    bidsFinal.insert(i+1, ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
-                    bidsFinal.removeWhere((i)=>i.size==0.0);
+                    bidsFinal.insert(i, ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
                     break;
                   }
                 }
+
               }
 
-
-              print('ASk ${asksFinal.length}');
 
           }
         });

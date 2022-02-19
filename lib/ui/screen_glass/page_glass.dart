@@ -28,26 +28,24 @@ class _PageGlassState extends State<PageGlass> {
         child: Observer(builder: (_){
            if(_stateScreenGlass!.hasData){
              return SingleChildScrollView(
-               child: SizedBox(
-                 height:2750,
-                 child: Row(
-                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                   children: [
-                     Column(
-                       crossAxisAlignment: CrossAxisAlignment.start,
-                       children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
-                         return _ItemGlassAsk(price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
-                       }),
-                     ),
-                     Column(
-                       crossAxisAlignment: CrossAxisAlignment.end,
-                       children: List.generate(_stateScreenGlass!.bidsFinal.length, (index){
-                         return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
-                       }),
-                     ),
+               child: Row(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+                   Column(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
+                       return _ItemGlassAsk(price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
+                     }),
+                   ),
+                   Column(
+                     crossAxisAlignment: CrossAxisAlignment.end,
+                     children: List.generate(_stateScreenGlass!.bidsFinal.length, (index){
+                       return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
+                     }),
+                   ),
 
-                   ],
-                 ),
+                 ],
                ),
              );
            }
