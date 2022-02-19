@@ -29,9 +29,9 @@ abstract class StateScreenGlassBase with Store{
 
 
   @action
-  getOrderBook(){
+  getOrderBook() {
     hasData=false;
-    _webSocketClient.subscribeOrderbookgrouped(update: (data){
+   _webSocketClient.subscribeOrderbookgrouped(update: (data){
       List asks=ModelOrderBook.fromApi(map: data).asks;
       List bids=ModelOrderBook.fromApi(map: data).bids;
       hasData=true;
@@ -39,7 +39,7 @@ abstract class StateScreenGlassBase with Store{
       int _indexAsk=-1;
       int _indexBid=-1;
       if(asks.isNotEmpty){
-        asks.forEach((element) {
+        asks.forEach((element)  async {
           if(data['action']=='partial'){
             asksFinal.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
           }else if(data['action']=='update'){
@@ -47,23 +47,23 @@ abstract class StateScreenGlassBase with Store{
               if(_indexAsk>-1){
                 asksFinal[_indexAsk].size=element[1];
               }else{
-                for(int i=0;asksFinal.length>i;i++){
-                    if(asksFinal[i].price>element[0]){
-                      asksFinal.insert(i+1, ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
-                      break;
-                    }
+                for (int i=0;asksFinal.length>i;i++){
+                  if(asksFinal[i].price>element[0]){
+                    asksFinal.insert(i+1, ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+                    asksFinal.removeWhere((i)=>i.size==0.0);
+                    break;
+                  }
                 }
-                //asksFinal.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
               }
-              asksFinal.removeWhere((i)=>i.size==0.0);
+
+
+
+
           }
-
-
-
         });
       }
       if(bids.isNotEmpty){
-        bids.forEach((element) {
+        bids.forEach((element) async {
           if(data['action']=='partial'){
             bidsFinal.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
           }else if(data['action']=='update'){
@@ -71,22 +71,28 @@ abstract class StateScreenGlassBase with Store{
               if(_indexBid>-1){
                 bidsFinal[_indexBid].size=element[1];
               }else{
-                for(int i=0;bidsFinal.length>i;i++){
+                for(int i=0;bidsFinal.length>i;i++) {
                   if(bidsFinal[i].price<element[0]){
                     bidsFinal.insert(i+1, ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
+                    bidsFinal.removeWhere((i)=>i.size==0.0);
                     break;
                   }
                 }
-               // bidsFinal.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
               }
-              bidsFinal.removeWhere((i)=>i.size==0.0);
+
+
+              print('ASk ${asksFinal.length}');
+
           }
         });
+
      }
     });
 
 
   }
+
+
 
   @action
   close(){

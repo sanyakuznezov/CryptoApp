@@ -21,24 +21,26 @@ class _PageGlassState extends State<PageGlass> {
 
   @override
   Widget build(BuildContext context) {
-    _scrollController.animateTo(MediaQuery.of(context).size.height*2, duration: Duration(seconds: 1), curve: Curves.easeOut);
+
     return Scaffold(
       body: Container(
-        width: MediaQuery.of(context).size.width/2,
-        height: MediaQuery.of(context).size.height,
+        margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
         child: Observer(builder: (_){
            if(_stateScreenGlass!.hasData){
              return SingleChildScrollView(
                child: SizedBox(
-                 height:(_stateScreenGlass!.bidsFinal.length+_stateScreenGlass!.asksFinal.length)*20,
-                 child: Column(
+                 height:2750,
+                 child: Row(
+                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                    children: [
                      Column(
+                       crossAxisAlignment: CrossAxisAlignment.start,
                        children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
                          return _ItemGlassAsk(price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
                        }),
                      ),
                      Column(
+                       crossAxisAlignment: CrossAxisAlignment.end,
                        children: List.generate(_stateScreenGlass!.bidsFinal.length, (index){
                          return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
                        }),
@@ -93,11 +95,13 @@ class _PageGlassState extends State<PageGlass> {
          mainAxisAlignment: MainAxisAlignment.spaceAround,
          children: [
            Padding(
-             padding: const EdgeInsets.all(2.0),
+             padding: const EdgeInsets.all(5.0),
              child: Text('$price'),
            ),
            Divider(),
-           Text('$size'),
+           Text('$size',style: TextStyle(
+             fontWeight: FontWeight.bold
+           ),),
          ],
        ),
      );
@@ -125,11 +129,13 @@ class _PageGlassState extends State<PageGlass> {
          mainAxisAlignment: MainAxisAlignment.spaceAround,
          children: [
            Padding(
-             padding: const EdgeInsets.all(2.0),
+             padding: const EdgeInsets.all(5.0),
              child: Text('$price'),
            ),
            Divider(),
-           Text('$size'),
+           Text('$size',style: TextStyle(
+               fontWeight: FontWeight.bold
+           ),),
          ],
        ),
      );
