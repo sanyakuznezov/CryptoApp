@@ -35,7 +35,7 @@ class _PageGlassState extends State<PageGlass> {
                    Column(
                      crossAxisAlignment: CrossAxisAlignment.start,
                      children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
-                       return _ItemGlassAsk(price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
+                       return _ItemGlassAsk(stateScreenGlass:_stateScreenGlass!,price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
                      }),
                    ),
                    Column(
@@ -61,6 +61,7 @@ class _PageGlassState extends State<PageGlass> {
     super.initState();
     _stateScreenGlass=StateScreenGlass();
     _stateScreenGlass!.getOrderBook();
+    _stateScreenGlass!.getTrade();
     _scrollController=ScrollController();
 
 
@@ -81,26 +82,32 @@ class _PageGlassState extends State<PageGlass> {
 
    final double price;
    final double size;
+   final StateScreenGlass stateScreenGlass;
 
-   _ItemGlassAsk({required this.price, required this.size});
+   _ItemGlassAsk({required this.price, required this.size,required this.stateScreenGlass});
 
    @override
    Widget build(BuildContext context) {
      // TODO: implement build
      return Container(
        color: Colors.redAccent,
-       child: Row(
-         mainAxisAlignment: MainAxisAlignment.spaceAround,
-         children: [
-           Padding(
-             padding: const EdgeInsets.all(5.0),
-             child: Text('$price'),
-           ),
-           Divider(),
-           Text('$size',style: TextStyle(
-             fontWeight: FontWeight.bold
-           ),),
-         ],
+       child: GestureDetector(
+         onTap: (){
+           stateScreenGlass.priceCurrent=price;
+         },
+         child: Row(
+           mainAxisAlignment: MainAxisAlignment.spaceAround,
+           children: [
+             Padding(
+               padding: const EdgeInsets.all(5.0),
+               child: Text('$price'),
+             ),
+             Divider(),
+             Text('$size',style: TextStyle(
+               fontWeight: FontWeight.bold
+             ),),
+           ],
+         ),
        ),
      );
    }

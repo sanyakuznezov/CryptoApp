@@ -11,6 +11,7 @@ import 'package:payarapp/data/api/service/socket/websocketclient.dart';
 import 'package:payarapp/domain/model/trading/model_order_book.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_ask.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_bid.dart';
+import 'package:payarapp/domain/model/trading/model_trades.dart';
 
 
 
@@ -27,6 +28,8 @@ abstract class StateScreenGlassBase with Store{
   List<ModelOrderBookAsk> asksFinal=[];
   @observable
   bool hasData=false;
+  List<ModelTrades> _trading=[];
+  double priceCurrent=0.0;
 
 
   @action
@@ -91,7 +94,23 @@ abstract class StateScreenGlassBase with Store{
 
 
   }
+  @action
+  getTrade(){
+    _webSocketClient.subscribeTrades(update: (value){
+      List trades= value as List;
+      trades.forEach((element) {
+        _trading.add(ModelTrades.fromApi(map:element as Map<String,dynamic>));
 
+      });
+      print('Current price $priceCurrent');
+      _trading.forEach((element) {
+        if(priceCurrent==element.price){
+          print('Succees Order');
+        }
+        print('Trades ${element.price} side ${element.side}');
+      });
+    });
+  }
 
 
   @action
