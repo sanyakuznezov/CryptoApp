@@ -1,19 +1,19 @@
 
- import 'package:payarapp/data/repository/firebase_data_repository.dart';
+ import 'package:payarapp/data/repository/api_data_repository.dart';
 
-import 'package:payarapp/domain/repository/firebase_repository.dart';
+import 'package:payarapp/domain/repository/api_repository.dart';
 
 import 'package:payarapp/internal/dependencies/api_modul.dart';
 
 class RepositoryModule{
-    static FirebaseRepository? _firebaseRepository;
+    static ApiRepository? _apiRepository;
 
 
-    static FirebaseRepository firebaseRepository(){
-      if(_firebaseRepository==null){
-        _firebaseRepository=FirebaseDataRepository(ApiModule.apiUtil());
+    static ApiRepository apiRepository(){
+      if(_apiRepository==null){
+        _apiRepository=ApiDataRepository(ApiModule.apiUtil());
       }
-      return _firebaseRepository!;
+      return _apiRepository!;
     }
 
 

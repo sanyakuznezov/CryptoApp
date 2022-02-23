@@ -16,7 +16,7 @@ class MainModule{
    return _buildContext!;
    }
 
-   static ininBillingAndroid(){
+   static initBillingAndroid(){
       if (defaultTargetPlatform == TargetPlatform.android) {
          InAppPurchaseAndroidPlatformAddition.enablePendingPurchases();
       }

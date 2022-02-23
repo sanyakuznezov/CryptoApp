@@ -3,14 +3,13 @@
   import 'package:payarapp/data/api/api_util.dart';
 import 'package:payarapp/data/api/model/modelorderplaceapi.dart';
 import 'package:payarapp/domain/model/trading/model_all_balances.dart';
-import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
-import 'package:payarapp/domain/repository/firebase_repository.dart';
+import 'package:payarapp/domain/repository/api_repository.dart';
 
-class FirebaseDataRepository extends FirebaseRepository{
+class ApiDataRepository extends ApiRepository{
 
    ApiUtil _apiUtil;
 
-   FirebaseDataRepository(this._apiUtil);
+   ApiDataRepository(this._apiUtil);
 
   @override
   Future<List<ModelAllBalances>> getBalance(){

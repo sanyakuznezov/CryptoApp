@@ -94,23 +94,23 @@ abstract class StateScreenGlassBase with Store{
 
 
   }
-  @action
-  getTrade(){
-    _webSocketClient.subscribeTrades(update: (value){
-      List trades= value as List;
-      trades.forEach((element) {
-        _trading.add(ModelTrades.fromApi(map:element as Map<String,dynamic>));
-
-      });
-      print('Current price $priceCurrent');
-      _trading.forEach((element) {
-        if(priceCurrent==element.price){
-          print('Succees Order');
-        }
-        print('Trades ${element.price} side ${element.side}');
-      });
-    });
-  }
+  // @action
+  // getTrade(){
+  //   _webSocketClient.subscribeTrades(update: (value){
+  //     List trades= value as List;
+  //     trades.forEach((element) {
+  //       _trading.add(ModelTrades.fromApi(map:element as Map<String,dynamic>));
+  //
+  //     });
+  //     print('Current price $priceCurrent');
+  //     _trading.forEach((element) {
+  //       if(priceCurrent==element.price){
+  //         print('Succees Order');
+  //       }
+  //       print('Trades ${element.price} side ${element.side}');
+  //     });
+  //   });
+  // }
 
 
   @action

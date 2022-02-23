@@ -61,10 +61,10 @@ class MainTradingService{
           "price":null,
           "type": modelOrderRequestPlaceApi.type,
           "size": modelOrderRequestPlaceApi.size,
-          "reduceOnly": false,
-          "ioc": false,
-          "postOnly": false,
-          "clientId": null
+          "reduceOnly": modelOrderRequestPlaceApi.reduceOnly,
+          "ioc": modelOrderRequestPlaceApi.ioc,
+          "postOnly": modelOrderRequestPlaceApi.postOnly,
+          "clientId": modelOrderRequestPlaceApi.clientId
         };
         var signaturePayload = utf8.encode('${ts}POST/api/orders');
         signaturePayload+=utf8.encode(jsonEncode(body));
@@ -86,6 +86,10 @@ class MainTradingService{
         if (error.type == DioErrorType.receiveTimeout ||
             error.type == DioErrorType.sendTimeout) {
           //  timeout error
+        }
+
+        if (error.response!.statusCode==429) {
+          //Превышение ограничений скорости
         }
 
 

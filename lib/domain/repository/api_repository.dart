@@ -3,7 +3,7 @@
 import 'package:payarapp/data/api/model/modelorderplaceapi.dart';
 import 'package:payarapp/domain/model/trading/model_all_balances.dart';
 
-abstract class FirebaseRepository{
+abstract class ApiRepository{
 
   Future<List<ModelAllBalances>> getBalance();
   Future<bool> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi});

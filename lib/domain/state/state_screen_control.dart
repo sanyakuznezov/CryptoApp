@@ -205,7 +205,7 @@ abstract class StateListTickerBase with Store{
     @action
     Future<void> getAllBalances() async{
        hasDataBalances=false;
-       final result=await RepositoryModule.firebaseRepository().getBalance().catchError((error){
+       final result=await RepositoryModule.apiRepository().getBalance().catchError((error){
          //error hendler
        });
        hasDataBalances=true;

@@ -61,7 +61,7 @@ class _PageGlassState extends State<PageGlass> {
     super.initState();
     _stateScreenGlass=StateScreenGlass();
     _stateScreenGlass!.getOrderBook();
-    _stateScreenGlass!.getTrade();
+   // _stateScreenGlass!.getTrade();
     _scrollController=ScrollController();
 
 
