@@ -38,6 +38,8 @@ abstract class StateScreenGlassBase with Store{
   double priceCurrent=0.0;
   double pB=0;
   double pS=0;
+  @observable
+  bool trandUp=true;
 
 
   @action
@@ -92,10 +94,32 @@ abstract class StateScreenGlassBase with Store{
         });
 
      }
+      trandHandler(bidsFinal, asksFinal);
     });
   }
 
-  getSubscribeOrdrers(){
+  @action
+  trandHandler(List<ModelOrderBookBid> bids,List<ModelOrderBookAsk> asks){
+    int glassAsksLevel=0;
+    int glassBidsLevel=0;
+    for(int i=0;i<20;i++){
+      if(bids[i].size>asks[i].size){
+        glassAsksLevel++;
+      }else{
+        glassBidsLevel++;
+      }
+
+        if(glassAsksLevel>glassBidsLevel){
+          trandUp=true;
+        }else{
+          trandUp=false;
+        }
+
+
+    }
+  }
+
+  getSubscribeOrders(){
     _webSocketClient.subscribeOrders(update: (data){
       print('Open order ${data}');
     });
