@@ -58,7 +58,7 @@ class MainTradingService{
         var body={
           "market": modelOrderRequestPlaceApi.market,
           "side": modelOrderRequestPlaceApi.side,
-          "price":null,
+          "price":modelOrderRequestPlaceApi.price,
           "type": modelOrderRequestPlaceApi.type,
           "size": modelOrderRequestPlaceApi.size,
           "reduceOnly": modelOrderRequestPlaceApi.reduceOnly,
@@ -79,7 +79,7 @@ class MainTradingService{
               headers: {'FTX-KEY':API_KEY,'FTX-SIGN':sha256Result,'FTX-TS': ts},
             )
         );
-
+        print('Price place ${response.data}');
         return response.data['success'];
 
       }on DioError catch(error){

@@ -8,20 +8,20 @@ class StrategyLimitOrder {
 
 
 
-   placeOrderSell({required String market,required,required int percentageOfBalance}){
+   placeOrderSell({required String market,required int percentageOfBalance,required price}){
      RepositoryModule.apiRepository().placeOrder(modelOrderRequestPlaceApi:
      ModelOrderRequestPlaceApi(
          market: market,
          side: Constant.SIDE_SELL,
          //todo compute price
-         price: 0,
+         price: price,
          type: Constant.TYPE_ORDER_LIMIT,
          //todo init balance usd
-         size: _getSize(percentageOfBalance, 0),
+         size: 1,
          reduceOnly: false,
          ioc: false,
          postOnly: false,
-         clientId:''));
+         clientId:null));
    }
 
 
@@ -30,8 +30,20 @@ class StrategyLimitOrder {
    }
 
 
-  placeOrderBuy(){
-
+  placeOrderBuy({required String market,required int percentageOfBalance,required price}){
+    RepositoryModule.apiRepository().placeOrder(modelOrderRequestPlaceApi:
+    ModelOrderRequestPlaceApi(
+        market: market,
+        side: Constant.SIDE_BUY,
+        //todo compute price
+        price: price,
+        type: Constant.TYPE_ORDER_LIMIT,
+        //todo init balance usd
+        size: 1,
+        reduceOnly: false,
+        ioc: false,
+        postOnly: false,
+        clientId:null));
 
 
   }

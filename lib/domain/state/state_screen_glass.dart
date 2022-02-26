@@ -7,10 +7,14 @@ import 'dart:convert';
 
 import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
+import 'package:payarapp/constant.dart';
 import 'package:payarapp/data/api/service/socket/websocketclient.dart';
+import 'package:payarapp/domain/features/strategy_limit_order_place.dart';
+import 'package:payarapp/domain/features/strategy_market_order_place.dart';
 import 'package:payarapp/domain/model/trading/model_order_book.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_ask.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_bid.dart';
+import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
 import 'package:payarapp/domain/model/trading/model_trades.dart';
 
 
@@ -22,6 +26,8 @@ class StateScreenGlass=StateScreenGlassBase with _$StateScreenGlass;
 abstract class StateScreenGlassBase with Store{
 
   WebSocketClient  _webSocketClient=WebSocketClient();
+  late StrategyMarket _strategyMarket=StrategyMarket();
+  late StrategyLimitOrder _strategyLimitOrder=StrategyLimitOrder();
   @observable
   List<ModelOrderBookBid> bidsFinal=[];
   @observable
@@ -30,6 +36,8 @@ abstract class StateScreenGlassBase with Store{
   bool hasData=false;
   List<ModelTrades> _trading=[];
   double priceCurrent=0.0;
+  double pB=0;
+  double pS=0;
 
 
   @action
@@ -59,10 +67,6 @@ abstract class StateScreenGlassBase with Store{
                   }
                 }
               }
-
-
-
-
           }
         });
       }
@@ -84,15 +88,36 @@ abstract class StateScreenGlassBase with Store{
                 }
 
               }
-
-
           }
         });
 
      }
     });
+  }
 
+  getSubscribeOrdrers(){
+    _webSocketClient.subscribeOrders(update: (data){
+      print('Open order ${data}');
+    });
+  }
 
+  getTicker(){
+    _webSocketClient.subscribeTicker(update: (ModelTickerPrice data){
+      pB = data.ask;
+      pS = data.bid;
+    });
+  }
+
+  sell(){
+    print('Price client sell $pS}');
+    //_strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price: pB);
+    // _strategyMarket.placeOrderMarketSell(market: Constant.MARKET_DOGE_USD);
+  }
+
+  buy(){
+    print('Price client buy $pB}');
+    //_strategyLimitOrder.placeOrderBuy(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price: pS);
+    //_strategyMarket.placeOrderMarketBuy(market: Constant.MARKET_DOGE_USD);
   }
   // @action
   // getTrade(){

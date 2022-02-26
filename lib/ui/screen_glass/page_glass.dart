@@ -26,25 +26,40 @@ class _PageGlassState extends State<PageGlass> {
       body: Container(
         margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
         child: Observer(builder: (_){
-           if(_stateScreenGlass!.hasData){
+           if(!_stateScreenGlass!.hasData){
              return SingleChildScrollView(
                child: Row(
                  crossAxisAlignment: CrossAxisAlignment.start,
                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                  children: [
-                   Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
-                       return _ItemGlassAsk(stateScreenGlass:_stateScreenGlass!,price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
-                     }),
-                   ),
-                   Column(
-                     crossAxisAlignment: CrossAxisAlignment.end,
-                     children: List.generate(_stateScreenGlass!.bidsFinal.length, (index){
-                       return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
-                     }),
-                   ),
-
+                   // Column(
+                   //   crossAxisAlignment: CrossAxisAlignment.start,
+                   //   children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
+                   //     return _ItemGlassAsk(stateScreenGlass:_stateScreenGlass!,price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
+                   //   }),
+                   // ),
+                   // Column(
+                   //   crossAxisAlignment: CrossAxisAlignment.end,
+                   //   children: List.generate(_stateScreenGlass!.bidsFinal.length, (index){
+                   //     return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
+                   //   }),
+                   // ),
+                    ElevatedButton(
+                       style: ButtonStyle(
+                         backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                       ),
+                       onPressed: (){
+                         _stateScreenGlass!.sell();
+                       },
+                       child: Text('Sell')),
+                   ElevatedButton(
+                       style: ButtonStyle(
+                         backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                       ),
+                       onPressed: (){
+                         _stateScreenGlass!.buy();
+                       },
+                       child: Text('Buy'))
                  ],
                ),
              );
@@ -60,8 +75,9 @@ class _PageGlassState extends State<PageGlass> {
   void initState() {
     super.initState();
     _stateScreenGlass=StateScreenGlass();
-    _stateScreenGlass!.getOrderBook();
-   // _stateScreenGlass!.getTrade();
+    //_stateScreenGlass!.getOrderBook();
+    _stateScreenGlass!.getSubscribeOrdrers();
+    _stateScreenGlass!.getTicker();
     _scrollController=ScrollController();
 
 

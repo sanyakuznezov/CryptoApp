@@ -65,7 +65,7 @@ class WebSocketClient{
    }
    //Todo not work
    //получение данных  открыты орерах
-   subscribeOrders({required String channel,required Function update})async{
+   subscribeOrders({required Function update})async{
 
      final ts=DateTime.now().millisecondsSinceEpoch;
      var key = utf8.encode(API_PRIVATE_KEY);
