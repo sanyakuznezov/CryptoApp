@@ -28,47 +28,41 @@ class _PageGlassState extends State<PageGlass> {
         child: Observer(builder: (_){
            if(_stateScreenGlass!.hasData){
              return SingleChildScrollView(
-               child: Center(
-                 child: Container(
-                   height: MediaQuery.of(context).size.height,
-                   child: _stateScreenGlass!.trandUp?Icon(Icons.arrow_circle_up,color: Colors.green,size: 100,):Icon(Icons.arrow_circle_down,color: Colors.red,size: 100,),
-                 ),
+               child:
+                Row(
+                 crossAxisAlignment: CrossAxisAlignment.start,
+                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                 children: [
+
+                   // Column(
+                   //   crossAxisAlignment: CrossAxisAlignment.start,
+                   //   children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
+                   //     return _ItemGlassAsk(stateScreenGlass:_stateScreenGlass!,price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
+                   //   }),
+                   // ),
+                   // Column(
+                   //   crossAxisAlignment: CrossAxisAlignment.end,
+                   //   children: List.generate(_stateScreenGlass!.bidsFinal.length, (index){
+                   //     return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
+                   //   }),
+                   // ),
+                   Column(
+                     children: [
+                          Text('profit ${_stateScreenGlass!.takeProfit}'),
+                          Text('lossed ${_stateScreenGlass!.takeLosses}')
+                     ],
+                   ),
+                   ElevatedButton(
+                       style: ButtonStyle(
+                         backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                       ),
+                       onPressed: (){
+                         _stateScreenGlass!.isTrade=true;
+                       },
+                       child: Text('start')),
+
+                 ],
                ),
-               // child: Row(
-               //   crossAxisAlignment: CrossAxisAlignment.start,
-               //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-               //   children: [
-               //
-               //     // Column(
-               //     //   crossAxisAlignment: CrossAxisAlignment.start,
-               //     //   children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
-               //     //     return _ItemGlassAsk(stateScreenGlass:_stateScreenGlass!,price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
-               //     //   }),
-               //     // ),
-               //     // Column(
-               //     //   crossAxisAlignment: CrossAxisAlignment.end,
-               //     //   children: List.generate(_stateScreenGlass!.bidsFinal.length, (index){
-               //     //     return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
-               //     //   }),
-               //     // ),
-               //     //  ElevatedButton(
-               //     //     style: ButtonStyle(
-               //     //       backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-               //     //     ),
-               //     //     onPressed: (){
-               //     //       _stateScreenGlass!.sell();
-               //     //     },
-               //     //     child: Text('Sell')),
-               //     // ElevatedButton(
-               //     //     style: ButtonStyle(
-               //     //       backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-               //     //     ),
-               //     //     onPressed: (){
-               //     //       _stateScreenGlass!.buy();
-               //     //     },
-               //     //     child: Text('Buy'))
-               //   ],
-               // ),
              );
            }
 
@@ -84,7 +78,7 @@ class _PageGlassState extends State<PageGlass> {
     _stateScreenGlass=StateScreenGlass();
     _stateScreenGlass!.getOrderBook();
     //_stateScreenGlass!.getSubscribeOrders();
-    //_stateScreenGlass!.getTicker();
+    _stateScreenGlass!.getTicker();
 
 
 

@@ -39,7 +39,19 @@ abstract class StateScreenGlassBase with Store{
   double pB=0;
   double pS=0;
   @observable
+  double profit=0;
+  @observable
+  double takeLosses=0;
+  double takeProfit=0;
+  double stopLoss=0;
+  double buyPrice=0;
+  double sellPrice=0;
+  @observable
   bool trandUp=true;
+  @observable
+  bool isTrade=false;
+  int state=1;
+
 
 
   @action
@@ -58,7 +70,6 @@ abstract class StateScreenGlassBase with Store{
             asksFinal.add(ModelOrderBookAsk(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
           }else if(data['action']=='update'){
               _indexAsk=asksFinal.indexWhere((item) => item.price==element[0]);
-              asksFinal.removeWhere((i)=>i.size==0.0);
               if(_indexAsk>-1){
                 asksFinal[_indexAsk].size=element[1];
               }else{
@@ -69,6 +80,7 @@ abstract class StateScreenGlassBase with Store{
                   }
                 }
               }
+              asksFinal.removeWhere((i)=>i.size==0.0);
           }
         });
       }
@@ -78,7 +90,6 @@ abstract class StateScreenGlassBase with Store{
             bidsFinal.add(ModelOrderBookBid(size:element[1],time:data['time'], price: element[0], checksum: data['checksum']));
           }else if(data['action']=='update'){
               _indexBid=bidsFinal.indexWhere((item) => item.price==element[0]);
-              bidsFinal.removeWhere((i)=>i.size==0.0);
               if(_indexBid>-1){
                 bidsFinal[_indexBid].size=element[1];
               }else{
@@ -90,6 +101,7 @@ abstract class StateScreenGlassBase with Store{
                 }
 
               }
+              bidsFinal.removeWhere((i)=>i.size==0.0);
           }
         });
 
@@ -129,17 +141,50 @@ abstract class StateScreenGlassBase with Store{
     _webSocketClient.subscribeTicker(update: (ModelTickerPrice data){
       pB = data.ask;
       pS = data.bid;
+      if(isTrade){
+       botTrade(pB,pS);
+      }
     });
   }
 
-  sell(){
+  botTrade(double pB,double pS){
+    if(state==1){
+      buy();
+    }
+    if(state==2){
+      handlerTrade(pS);
+    }
+  }
+
+  sell(bool isProfit){
     print('Price client sell $pS}');
+    if(isProfit){
+      takeProfit=pS-buyPrice;
+    }else{
+      takeLosses=pS-buyPrice;
+    }
+    buyPrice=0;
+    stopLoss=0;
+    state=1;
     //_strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price: pB);
     // _strategyMarket.placeOrderMarketSell(market: Constant.MARKET_DOGE_USD);
   }
-
+ handlerTrade(double pS){
+    print('buyPrice $buyPrice pS $pS');
+   if(pS>buyPrice){
+     sell(true);
+   }
+   if(stopLoss>pS){
+     sell(false);
+   }
+ }
   buy(){
-    print('Price client buy $pB}');
+    if(buyPrice==0){
+      buyPrice=pB;
+      stopLoss=bidsFinal[5].price;
+      state=2;
+      print('buyPrice $buyPrice stopLoss $stopLoss');
+    }
     //_strategyLimitOrder.placeOrderBuy(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price: pS);
     //_strategyMarket.placeOrderMarketBuy(market: Constant.MARKET_DOGE_USD);
   }
@@ -165,5 +210,10 @@ abstract class StateScreenGlassBase with Store{
   @action
   close(){
     _webSocketClient.close();
+  }
+
+
+  handlerPriceBid(double bid){
+
   }
 }
