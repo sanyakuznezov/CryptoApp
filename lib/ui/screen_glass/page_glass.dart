@@ -46,12 +46,14 @@ class _PageGlassState extends State<PageGlass> {
                    //     return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
                    //   }),
                    // ),
-                   Column(
-                     children: [
-                          Text('profit ${_stateScreenGlass!.takeProfit}'),
-                          Text('lossed ${_stateScreenGlass!.takeLosses}')
-                     ],
-                   ),
+                   _stateScreenGlass!.isUp==1?Icon(Icons.arrow_circle_down,color: Colors.red,size: 100,):
+               _stateScreenGlass!.isUp==2?Icon(
+                     Icons.arrow_drop_down_circle_sharp,color: Colors.grey,size: 100,
+                   ):Icon(
+                 Icons.arrow_circle_up,color: Colors.green,size: 100,
+               ),
+
+                   Text('Level up ${_stateScreenGlass!.levelUp}'),
                    ElevatedButton(
                        style: ButtonStyle(
                          backgroundColor: MaterialStateProperty.all<Color>(Colors.red),

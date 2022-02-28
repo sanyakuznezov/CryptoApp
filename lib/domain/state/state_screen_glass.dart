@@ -3,6 +3,7 @@
 
 
 
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/services.dart';
@@ -51,6 +52,13 @@ abstract class StateScreenGlassBase with Store{
   @observable
   bool isTrade=false;
   int state=1;
+  @observable
+  int isUp=0;
+  double _oldPriceForlevelUp=0.0;
+  @observable
+  int levelUp=0;
+  double _dot=0.0;
+  Timer? _timer;
 
 
 
@@ -131,6 +139,7 @@ abstract class StateScreenGlassBase with Store{
     }
   }
 
+
   getSubscribeOrders(){
     _webSocketClient.subscribeOrders(update: (data){
       print('Open order ${data}');
@@ -138,14 +147,52 @@ abstract class StateScreenGlassBase with Store{
   }
 
   getTicker(){
+   _timer= Timer.periodic(Duration(seconds: 60), (timer) {
+      _dot=0.0;
+      _oldPriceForlevelUp==0.0;
+      levelUp=0;
+      print('timer work');
+    });
     _webSocketClient.subscribeTicker(update: (ModelTickerPrice data){
       pB = data.ask;
       pS = data.bid;
       if(isTrade){
-       botTrade(pB,pS);
+      // botTrade(pB,pS);
+        candle(pS);
+
+
       }
     });
   }
+
+   candle(double pS){
+     if(_dot==0.0){
+       _dot=pS;
+     }else{
+       if(_dot>pS){
+         isUp=1;
+       }else if(_dot==pS){
+         isUp=2;
+       }else{
+         isUp=3;
+       }
+     }
+     levelUpCandle(pS);
+
+     print("Dot $_dot pS $pS");
+   }
+  //not work
+  @action
+  levelUpCandle(double pS){
+    if(_oldPriceForlevelUp>pS){
+        levelUp--;
+      }else{
+        levelUp++;
+      }
+  }
+
+
+
 
   botTrade(double pB,double pS){
     if(state==1){
@@ -210,6 +257,7 @@ abstract class StateScreenGlassBase with Store{
   @action
   close(){
     _webSocketClient.close();
+    _timer!.cancel();
   }
 
 
