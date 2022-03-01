@@ -59,6 +59,7 @@ abstract class StateScreenGlassBase with Store{
   int levelUp=0;
   double _dot=0.0;
   Timer? _timer;
+  List<double> _i=[];
 
 
 
@@ -149,7 +150,7 @@ abstract class StateScreenGlassBase with Store{
   getTicker(){
    _timer= Timer.periodic(Duration(seconds: 60), (timer) {
       _dot=0.0;
-      _oldPriceForlevelUp==0.0;
+      _i.clear();
       levelUp=0;
       print('timer work');
     });
@@ -159,7 +160,6 @@ abstract class StateScreenGlassBase with Store{
       if(isTrade){
       // botTrade(pB,pS);
         candle(pS);
-
 
       }
     });
@@ -172,23 +172,38 @@ abstract class StateScreenGlassBase with Store{
        if(_dot>pS){
          isUp=1;
        }else if(_dot==pS){
+         _i.clear();
          isUp=2;
        }else{
          isUp=3;
        }
      }
      levelUpCandle(pS);
-
-     print("Dot $_dot pS $pS");
    }
   //not work
   @action
   levelUpCandle(double pS){
-    if(_oldPriceForlevelUp>pS){
+    print('pS $pS');
+    if(_i.isEmpty){
+      _i.add(pS);
+    }else if(_i.length==1){
+      _i.add(pS);
+    }else if(_i.length==2){
+      if(_i[1]!=pS){
+        _i[0]=_i[1];
+        _i[1]=pS;
+      }
+    }
+
+    if(_i.isNotEmpty){
+      if(_i[0]>_i[1]){
         levelUp--;
-      }else{
+      }else if(_i[0]==_i[1]){
+        levelUp=0;
+      }else if(_i[0]<_i[1]){
         levelUp++;
       }
+    }
   }
 
 
