@@ -29,42 +29,51 @@ class _PageGlassState extends State<PageGlass> {
            if(_stateScreenGlass!.hasData){
              return SingleChildScrollView(
                child:
-                Row(
-                 crossAxisAlignment: CrossAxisAlignment.start,
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                 children: [
+                Column(
+                  children: [
+                    Row(
+                     crossAxisAlignment: CrossAxisAlignment.start,
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
 
-                   // Column(
-                   //   crossAxisAlignment: CrossAxisAlignment.start,
-                   //   children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
-                   //     return _ItemGlassAsk(stateScreenGlass:_stateScreenGlass!,price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
-                   //   }),
-                   // ),
-                   // Column(
-                   //   crossAxisAlignment: CrossAxisAlignment.end,
-                   //   children: List.generate(_stateScreenGlass!.bidsFinal.length, (index){
-                   //     return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
-                   //   }),
-                   // ),
-                   _stateScreenGlass!.isUp==1?Icon(Icons.arrow_circle_down,color: Colors.red,size: 100,):
+                       // Column(
+                       //   crossAxisAlignment: CrossAxisAlignment.start,
+                       //   children: List.generate(_stateScreenGlass!.asksFinal.length, (index){
+                       //     return _ItemGlassAsk(stateScreenGlass:_stateScreenGlass!,price: _stateScreenGlass!.asksFinal[index].price, size:  _stateScreenGlass!.asksFinal[index].size);
+                       //   }),
+                       // ),
+                       // Column(
+                       //   crossAxisAlignment: CrossAxisAlignment.end,
+                       //   children: List.generate(_stateScreenGlass!.bidsFinal.length, (index){
+                       //     return _ItemGlassBid(price: _stateScreenGlass!.bidsFinal[index].price, size:  _stateScreenGlass!.bidsFinal[index].size);
+                       //   }),
+                       // ),
+                       _stateScreenGlass!.isUp==1?Icon(Icons.arrow_circle_down,color: Colors.red,size: 100,):
                _stateScreenGlass!.isUp==2?Icon(
-                     Icons.arrow_drop_down_circle_sharp,color: Colors.grey,size: 100,
-                   ):Icon(
-                 Icons.arrow_circle_up,color: Colors.green,size: 100,
+                         Icons.arrow_drop_down_circle_sharp,color: Colors.grey,size: 100,
+                       ):Icon(
+                     Icons.arrow_circle_up,color: Colors.green,size: 100,
                ),
 
-                   Text('Level up ${_stateScreenGlass!.levelUp}'),
-                   ElevatedButton(
-                       style: ButtonStyle(
-                         backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                       ),
-                       onPressed: (){
-                         _stateScreenGlass!.isTrade=true;
-                       },
-                       child: Text('start')),
+                       Text('Level up ${_stateScreenGlass!.levelUp}'),
+                       ElevatedButton(
+                           style: ButtonStyle(
+                             backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                           ),
+                           onPressed: (){
+                             _stateScreenGlass!.isTrade=true;
+                           },
+                           child: Text('start')),
 
-                 ],
+                     ],
                ),
+
+                    Text('Profit ${_stateScreenGlass!.takeProfit}'),
+                    Text('Lossed ${_stateScreenGlass!.takeLosses}'),
+                    Text('Buy ${_stateScreenGlass!.buyPrice}'),
+                    Text('Sell ${_stateScreenGlass!.sellPrice}'),
+                  ],
+                ),
              );
            }
 
@@ -111,7 +120,7 @@ class _PageGlassState extends State<PageGlass> {
        color: Colors.redAccent,
        child: GestureDetector(
          onTap: (){
-           stateScreenGlass.priceCurrent=price;
+           //stateScreenGlass.priceCurrent=price;
          },
          child: Row(
            mainAxisAlignment: MainAxisAlignment.spaceAround,

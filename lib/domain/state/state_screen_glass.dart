@@ -36,15 +36,16 @@ abstract class StateScreenGlassBase with Store{
   @observable
   bool hasData=false;
   List<ModelTrades> _trading=[];
-  double priceCurrent=0.0;
-  double pB=0;
-  double pS=0;
+  double _priceCurrent=0.0;
+  double _pB=0;
+  double _pS=0;
   @observable
   double profit=0;
   @observable
   double takeLosses=0;
+  @observable
   double takeProfit=0;
-  double stopLoss=0;
+  double _stopLoss=0;
   double buyPrice=0;
   double sellPrice=0;
   @observable
@@ -54,12 +55,14 @@ abstract class StateScreenGlassBase with Store{
   int state=1;
   @observable
   int isUp=0;
-  double _oldPriceForlevelUp=0.0;
+  double _priceTakeProfit=0.0;
   @observable
   int levelUp=0;
   double _dot=0.0;
   Timer? _timer;
+  bool _isClearLevel=false;
   List<double> _i=[];
+
 
 
 
@@ -115,7 +118,7 @@ abstract class StateScreenGlassBase with Store{
         });
 
      }
-      trandHandler(bidsFinal, asksFinal);
+     // trandHandler(bidsFinal, asksFinal);
     });
   }
 
@@ -152,15 +155,14 @@ abstract class StateScreenGlassBase with Store{
       _dot=0.0;
       _i.clear();
       levelUp=0;
-      print('timer work');
     });
     _webSocketClient.subscribeTicker(update: (ModelTickerPrice data){
-      pB = data.ask;
-      pS = data.bid;
+      _pB = data.ask;
+      _pS = data.bid;
       if(isTrade){
-      // botTrade(pB,pS);
-        candle(pS);
-
+        candle(_pS);
+        botTrade(_pB,_pS);
+        print('interval ${getInterval(_pB, _pS)}');
       }
     });
   }
@@ -170,20 +172,29 @@ abstract class StateScreenGlassBase with Store{
        _dot=pS;
      }else{
        if(_dot>pS){
+         if(!_isClearLevel&&isUp==3){
+           levelUp=0;
+           _isClearLevel=true;
+         }
          isUp=1;
        }else if(_dot==pS){
          _i.clear();
+         levelUp=0;
          isUp=2;
        }else{
+         if(_isClearLevel&&isUp==1){
+           levelUp=0;
+           _isClearLevel=false;
+         }
          isUp=3;
        }
      }
+
      levelUpCandle(pS);
    }
   //not work
   @action
   levelUpCandle(double pS){
-    print('pS $pS');
     if(_i.isEmpty){
       _i.add(pS);
     }else if(_i.length==1){
@@ -195,7 +206,7 @@ abstract class StateScreenGlassBase with Store{
       }
     }
 
-    if(_i.isNotEmpty){
+    if(_i.length==2){
       if(_i[0]>_i[1]){
         levelUp--;
       }else if(_i[0]==_i[1]){
@@ -211,7 +222,9 @@ abstract class StateScreenGlassBase with Store{
 
   botTrade(double pB,double pS){
     if(state==1){
-      buy();
+      if(isUp==3&&levelUp>50){
+        buy();
+      }
     }
     if(state==2){
       handlerTrade(pS);
@@ -219,33 +232,45 @@ abstract class StateScreenGlassBase with Store{
   }
 
   sell(bool isProfit){
-    print('Price client sell $pS}');
+
+    sellPrice=_pS;
     if(isProfit){
-      takeProfit=pS-buyPrice;
+      takeProfit+=_pS-buyPrice;
+      print('Price client sell takeProfit $_pS}');
     }else{
-      takeLosses=pS-buyPrice;
+      takeLosses+=_pS-buyPrice;
+      print('Price client sell takeLosses $_pS}');
     }
     buyPrice=0;
-    stopLoss=0;
+    _stopLoss=0;
     state=1;
     //_strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price: pB);
     // _strategyMarket.placeOrderMarketSell(market: Constant.MARKET_DOGE_USD);
   }
  handlerTrade(double pS){
-    print('buyPrice $buyPrice pS $pS');
-   if(pS>buyPrice){
+   if(pS>_priceTakeProfit){
      sell(true);
    }
-   if(stopLoss>pS){
+   if(_stopLoss>pS){
      sell(false);
    }
  }
+
+  getInterval(double ask,double bid){
+    return ask-bid;
+  }
+
+
+
+
   buy(){
-    if(buyPrice==0){
-      buyPrice=pB;
-      stopLoss=bidsFinal[5].price;
+    if(buyPrice==0.0){
+      buyPrice=_pB;
+      sellPrice=0.0;
+      _priceTakeProfit=asksFinal[2].price;
+      _stopLoss=bidsFinal[4].price;
       state=2;
-      print('buyPrice $buyPrice stopLoss $stopLoss');
+      print('buyPrice $buyPrice _priceTakeProfit $_priceTakeProfit stopLoss $_stopLoss');
     }
     //_strategyLimitOrder.placeOrderBuy(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price: pS);
     //_strategyMarket.placeOrderMarketBuy(market: Constant.MARKET_DOGE_USD);
@@ -275,8 +300,4 @@ abstract class StateScreenGlassBase with Store{
     _timer!.cancel();
   }
 
-
-  handlerPriceBid(double bid){
-
-  }
 }
