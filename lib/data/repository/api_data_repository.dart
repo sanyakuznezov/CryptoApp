@@ -2,7 +2,9 @@
 
   import 'package:payarapp/data/api/api_util.dart';
 import 'package:payarapp/data/api/model/modelorderplaceapi.dart';
+import 'package:payarapp/data/local_data_base/app_data_base.dart';
 import 'package:payarapp/domain/model/trading/model_all_balances.dart';
+import 'package:payarapp/domain/model/trading/model_log_trading.dart';
 import 'package:payarapp/domain/repository/api_repository.dart';
 
 class ApiDataRepository extends ApiRepository{
@@ -54,6 +56,27 @@ class ApiDataRepository extends ApiRepository{
   @override
   Future<void> getTrades({required String market}) {
     return _apiUtil.getTrades(market:market);
+  }
+
+  @override
+  Future<void> insertLogTrading({required ModelLogTrading modelLogTrading}) async{
+    final database = await $FloorAppDataBase.databaseBuilder('app_database.db').build();
+    final logDao = database.logtradingDao;
+    await logDao.insertDataUser(modelLogTrading);
+  }
+
+  @override
+  Future<List<ModelLogTrading>?> getListTrading() async{
+    final database = await $FloorAppDataBase.databaseBuilder('app_database.db').build();
+    final logDao = database.logtradingDao;
+    return logDao.getListLog();
+  }
+
+  @override
+  Future<void> cleanListLog() async{
+    final database = await $FloorAppDataBase.databaseBuilder('app_database.db').build();
+    final logDao = database.logtradingDao;
+    await logDao.clear();
   }
 
 
