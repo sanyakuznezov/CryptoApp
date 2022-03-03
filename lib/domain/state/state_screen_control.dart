@@ -70,10 +70,10 @@ abstract class StateListTickerBase with Store{
                 listBalances![0].total=listBalances![0].total+price*3;
                 listBalances![1].total=listBalances![1].total+3;
                 _stateTrade=1;
-                listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'open',profit: profit,nameLog:'Sell Start', size: 3,price: price));
-                Timer(Duration(seconds: 2), (){
-                  listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'executed',profit: profit,nameLog:'Sell End', size: 3,price: 0));
-                });
+                // listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'open',profit: profit,nameLog:'Sell Start', size: 3,price: price));
+                // Timer(Duration(seconds: 2), (){
+                //   listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'executed',profit: profit,nameLog:'Sell End', size: 3,price: 0));
+                // });
 
               }
 
@@ -82,10 +82,10 @@ abstract class StateListTickerBase with Store{
                 listBalances![0].total=listBalances![0].total+price*3;
                 listBalances![1].total=listBalances![1].total+3;
                 _stateTrade=1;
-                listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'open',profit: profit,nameLog:'Sell Start Trend Fell', size: 3,price: price));
-                Timer(Duration(seconds: 2), (){
-                  listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'executed',profit: profit,nameLog:'Sell End Trend Fell', size: 3,price: 0));
-                });
+                // listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'open',profit: profit,nameLog:'Sell Start Trend Fell', size: 3,price: price));
+                // Timer(Duration(seconds: 2), (){
+                //   listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'executed',profit: profit,nameLog:'Sell End Trend Fell', size: 3,price: 0));
+                // });
               }
             });
           }
@@ -228,17 +228,17 @@ abstract class StateListTickerBase with Store{
         listBalances![0].total=listBalances![0].total-_priceMarketAsk*3;
         listBalances![1].total=listBalances![1].total-3;
         _stateTrade=2;
-         listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'open',profit: 0,nameLog:'BUY Start', size: 3,price: _priceMarketAsk));
-         Timer(Duration(seconds: 2), (){
-           listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'executed',profit: 0,nameLog:'BUY End', size: 3,price: _priceMarketAsk));
-         });
+         // listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'open',profit: 0,nameLog:'BUY Start', size: 3,price: _priceMarketAsk));
+         // Timer(Duration(seconds: 2), (){
+         //   listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: 'executed',profit: 0,nameLog:'BUY End', size: 3,price: _priceMarketAsk));
+         // });
       }
    }
 
     @action
     stopTrading(){
          _isTrading=false;
-        listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: '-',profit: 0,nameLog:'Stop trading', size: 3,price: _priceMarketAsk));
+       // listLogTrading.add(ModelLogTrading(market: 'DOGE/USD',timeStamp:DateTime.now().toString(),status: '-',profit: 0,nameLog:'Stop trading', size: 3,price: _priceMarketAsk));
 
     }
 

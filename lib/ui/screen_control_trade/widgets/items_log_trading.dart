@@ -174,9 +174,9 @@ class _PageListLogTradingState extends State<PageListLogTrading> {
   getBuyAndSellProfitUp(List<ModelLogTrading> list){
     int c=0;
     list.forEach((element) {
-      if(element.nameLog=='Sell End'&&element.status=='executed'){
-        c++;
-      }
+      // if(element.nameLog=='Sell End'&&element.status=='executed'){
+      //   c++;
+      // }
     });
     return c;
   }
@@ -184,9 +184,9 @@ class _PageListLogTradingState extends State<PageListLogTrading> {
    getBuyAndSellProfitDown(List<ModelLogTrading> list){
      int c=0;
      list.forEach((element) {
-       if(element.nameLog=='Sell End Trend Fell'&&element.status=='executed'){
-         c++;
-       }
+       // if(element.nameLog=='Sell End Trend Fell'&&element.status=='executed'){
+       //   c++;
+       // }
      });
      return c;
    }
@@ -226,10 +226,10 @@ class _PageListLogTradingState extends State<PageListLogTrading> {
                       style: TextStyle(
                         color: Colors.grey,
                       ),),
-                      Text('${modelLogTrading.status}',
-                        style: TextStyle(
-                            color: Colors.grey
-                        ),)
+                      // Text('${modelLogTrading.status}',
+                      //   style: TextStyle(
+                      //       color: Colors.grey
+                      //   ),)
                     ],
                   ),
                   Row(
@@ -238,10 +238,10 @@ class _PageListLogTradingState extends State<PageListLogTrading> {
                         style: TextStyle(
                             color: Colors.grey
                         ),),
-                      Text('${modelLogTrading.market}',
-                        style: TextStyle(
-                            color: Colors.grey
-                        ),)
+                      // Text('${modelLogTrading.market}',
+                      //   style: TextStyle(
+                      //       color: Colors.grey
+                      //   ),)
                     ],
                   ),
                   Row(
@@ -274,10 +274,10 @@ class _PageListLogTradingState extends State<PageListLogTrading> {
                         style: TextStyle(
                             color: Colors.grey
                         ),),
-                      Text('${modelLogTrading.size}',
-                        style: TextStyle(
-                            color: Colors.grey
-                        ),)
+                      // Text('${modelLogTrading.size}',
+                      //   style: TextStyle(
+                      //       color: Colors.grey
+                      //   ),)
                     ],
                   ),
                   Row(
@@ -286,10 +286,10 @@ class _PageListLogTradingState extends State<PageListLogTrading> {
                         style: TextStyle(
                             color: Colors.grey
                         ),),
-                      Text('${modelLogTrading.price}',
-                        style: TextStyle(
-                            color: Colors.grey
-                        ),)
+                      // Text('${modelLogTrading.price}',
+                      //   style: TextStyle(
+                      //       color: Colors.grey
+                      //   ),)
                     ],
                   ),
                   Row(
@@ -298,10 +298,10 @@ class _PageListLogTradingState extends State<PageListLogTrading> {
                         style: TextStyle(
                             color: Colors.grey
                         ),),
-                      Text('${modelLogTrading.nameLog}',
-                        style: TextStyle(
-                            color: Colors.grey
-                        ),)
+                      // Text('${modelLogTrading.nameLog}',
+                      //   style: TextStyle(
+                      //       color: Colors.grey
+                      //   ),)
                     ],
                   ),
                   Divider(color: Colors.grey[600],)

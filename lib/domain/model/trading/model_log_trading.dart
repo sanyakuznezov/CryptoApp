@@ -1,17 +1,22 @@
 
 
+ import 'package:floor/floor.dart';
 
+@entity
  class ModelLogTrading{
-
+   @primaryKey
+   int? id;
    String timeStamp;
-   String status;
    double profit;
-   String nameLog;
-   double price;
-   double size;
-   String market;
+   double priceBuy;
+   double priceSell;
+   double intervalAskBid;
+   bool glassAskDischarged;
+   double levelUp;
+   bool isUp;
 
-   ModelLogTrading({required this.market,required this.timeStamp,required this.status,required this.profit,required this.nameLog,required this.price,required this.size});
+   ModelLogTrading({required this.priceBuy,required this.priceSell,required this.intervalAskBid,required this.glassAskDischarged,required this.levelUp,
+     required this.isUp,required this.timeStamp,required this.profit});
 
 
  }
