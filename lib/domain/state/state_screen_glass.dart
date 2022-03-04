@@ -12,11 +12,13 @@ import 'package:payarapp/constant.dart';
 import 'package:payarapp/data/api/service/socket/websocketclient.dart';
 import 'package:payarapp/domain/features/strategy_limit_order_place.dart';
 import 'package:payarapp/domain/features/strategy_market_order_place.dart';
+import 'package:payarapp/domain/model/trading/model_log_trading.dart';
 import 'package:payarapp/domain/model/trading/model_order_book.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_ask.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_bid.dart';
 import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
 import 'package:payarapp/domain/model/trading/model_trades.dart';
+import 'package:payarapp/internal/dependencies/repository_module.dart';
 
 
 
@@ -62,12 +64,15 @@ abstract class StateScreenGlassBase with Store{
   Timer? _timer;
   bool _isClearLevel=false;
   List<double> _i=[];
+  Map _log={'stopLoss':0.0,'timeStampBuy':0,'profit':0.0,'priceBuy':0.0,'priceSell':0.0,'intervalAskBidBuy':0.0,'glassAskDischargedBuy':false,
+  'levelUpBuy':0.0,'isUpSell':0,'timeStampSell':0,'intervalAskBidSell':0.0,'glassAskDischargedSell':false,
+    'levelUpSell':0.0,'isUpBuy':0};
 
 
 
 
   @action
-  getOrderBook() {
+  getOrderBook()async{
     hasData=false;
    _webSocketClient.subscribeOrderbookgrouped(update: (data){
       List asks=ModelOrderBook.fromApi(map: data).asks;
@@ -118,7 +123,7 @@ abstract class StateScreenGlassBase with Store{
         });
 
      }
-     // trandHandler(bidsFinal, asksFinal);
+      trandHandler(bidsFinal, asksFinal);
     });
   }
 
@@ -162,7 +167,7 @@ abstract class StateScreenGlassBase with Store{
       if(isTrade){
         candle(_pS);
         botTrade(_pB,_pS);
-        print('interval ${getInterval(_pB, _pS)}');
+
       }
     });
   }
@@ -222,9 +227,10 @@ abstract class StateScreenGlassBase with Store{
 
   botTrade(double pB,double pS){
     if(state==1){
-      if(isUp==3&&levelUp>50){
-        buy();
-      }
+      // if(isUp==3&&levelUp>50){
+      //   buy();
+      // }
+      buy();
     }
     if(state==2){
       handlerTrade(pS);
@@ -232,18 +238,39 @@ abstract class StateScreenGlassBase with Store{
   }
 
   sell(bool isProfit){
-
     sellPrice=_pS;
     if(isProfit){
       takeProfit+=_pS-buyPrice;
-      print('Price client sell takeProfit $_pS}');
+      _log.update('profit', (value) => takeProfit);
     }else{
       takeLosses+=_pS-buyPrice;
-      print('Price client sell takeLosses $_pS}');
+      _log.update('profit', (value) => takeLosses);
+
     }
     buyPrice=0;
     _stopLoss=0;
     state=1;
+    _log.update('priceSell', (value) => sellPrice);
+    _log.update('intervalAskBidSell', (value) => getInterval(_pB, _pS));
+    _log.update('glassAskDischargedSell', (value) =>trandUp );
+    _log.update('levelUpSell', (value) => levelUp);
+    _log.update('isUpSell', (value) => isUp);
+    _log.update('timeStampSell', (value) => DateTime.now().toString());
+    RepositoryModule.apiRepository().insertLogTrading(modelLogTrading:ModelLogTrading(
+      stopLoss: _log['stopLoss'],
+        priceBuy: _log['priceBuy'],
+        priceSell: _log['priceSell'],
+        intervalAskBidSell: _log['intervalAskBidSell'],
+        intervalAskBidBuy: _log['intervalAskBidBuy'],
+        glassAskDischargedBuy: _log['glassAskDischargedBuy'],
+        glassAskDischargedSell: _log['glassAskDischargedSell'],
+        levelUpBuy: _log['levelUpBuy'],
+        levelUpSell: _log['levelUpSell'],
+        isUpSell: _log['isUpSell'],
+        isUpBuy: _log['isUpBuy'],
+        timeStampBuy: _log['timeStampBuy'],
+        timeStampSell: _log['timeStampSell'],
+        profit: _log['profit']));
     //_strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price: pB);
     // _strategyMarket.placeOrderMarketSell(market: Constant.MARKET_DOGE_USD);
   }
@@ -260,7 +287,9 @@ abstract class StateScreenGlassBase with Store{
     return ask-bid;
   }
 
-
+  Future<List<ModelLogTrading>?> getListLog()async{
+    return await RepositoryModule.apiRepository().getListTrading();
+  }
 
 
   buy(){
@@ -270,6 +299,13 @@ abstract class StateScreenGlassBase with Store{
       _priceTakeProfit=asksFinal[2].price;
       _stopLoss=bidsFinal[4].price;
       state=2;
+      _log.update('priceBuy', (value) => buyPrice);
+      _log.update('intervalAskBidBuy', (value) => getInterval(_pB, _pS));
+      _log.update('glassAskDischargedBuy', (value) => trandUp);
+      _log.update('levelUpBuy', (value) => levelUp);
+      _log.update('isUpBuy', (value) => isUp);
+      _log.update('timeStampBuy', (value) => DateTime.now().toString());
+      _log.update('stopLoss', (value) => _stopLoss);
       print('buyPrice $buyPrice _priceTakeProfit $_priceTakeProfit stopLoss $_stopLoss');
     }
     //_strategyLimitOrder.placeOrderBuy(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price: pS);

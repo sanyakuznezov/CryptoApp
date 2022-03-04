@@ -42,34 +42,39 @@ class _PageListLogTradingState extends State<PageListLogTrading> {
      return Wrap(
        crossAxisAlignment: WrapCrossAlignment.center,
        children: [
-             Container(
-               margin:const EdgeInsets.all(5.0),
-               height: 100,
-               width: 100,
-               decoration: BoxDecoration(
-                 borderRadius: BorderRadius.circular(10.0),
-                 color: Colors.blueGrey[500]
-               ),
-               child: Padding(
-                 padding: const EdgeInsets.all(8.0),
-                 child: Column(
-                   mainAxisAlignment: MainAxisAlignment.center,
-                   children: [
-                     Icon(Icons.psychology_outlined,color:Colors.blueGrey[800],size: 30,),
-                     Padding(
-                       padding: const EdgeInsets.all(3.0),
-                       child: Text('ALL LOG',style: TextStyle(
-                           color:  Colors.blueGrey[900],
-                           fontSize: 13,
+             GestureDetector(
+               onTap: (){
 
-                       ),),
-                     ),
-                     Text('${getAllLog(_list)}',style: TextStyle(
-                       color: Colors.blueGrey[900],
-                       fontSize: 11,
-                       fontWeight: FontWeight.bold
-                     ),)
-                   ],
+               },
+               child: Container(
+                 margin:const EdgeInsets.all(5.0),
+                 height: 100,
+                 width: 100,
+                 decoration: BoxDecoration(
+                   borderRadius: BorderRadius.circular(10.0),
+                   color: Colors.blueGrey[500]
+                 ),
+                 child: Padding(
+                   padding: const EdgeInsets.all(8.0),
+                   child: Column(
+                     mainAxisAlignment: MainAxisAlignment.center,
+                     children: [
+                       Icon(Icons.psychology_outlined,color:Colors.blueGrey[800],size: 30,),
+                       Padding(
+                         padding: const EdgeInsets.all(3.0),
+                         child: Text('ALL LOG',style: TextStyle(
+                             color:  Colors.blueGrey[900],
+                             fontSize: 13,
+
+                         ),),
+                       ),
+                       Text('${getAllLog(_list)}',style: TextStyle(
+                         color: Colors.blueGrey[900],
+                         fontSize: 11,
+                         fontWeight: FontWeight.bold
+                       ),)
+                     ],
+                   ),
                  ),
                ),
              ),
@@ -250,10 +255,10 @@ class _PageListLogTradingState extends State<PageListLogTrading> {
                         style: TextStyle(
                             color: Colors.grey
                         ),),
-                      Text('${modelLogTrading.timeStamp}',
-                        style: TextStyle(
-                            color: Colors.grey
-                        ),)
+                      // Text('${modelLogTrading.timeStamp}',
+                      //   style: TextStyle(
+                      //       color: Colors.grey
+                      //   ),)
                     ],
                   ),
                   Row(

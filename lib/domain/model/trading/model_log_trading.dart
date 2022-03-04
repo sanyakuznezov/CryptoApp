@@ -6,17 +6,26 @@
  class ModelLogTrading{
    @primaryKey
    int? id;
-   String timeStamp;
+   String timeStampBuy;
+   String timeStampSell;
    double profit;
+   double stopLoss;
    double priceBuy;
    double priceSell;
-   double intervalAskBid;
-   bool glassAskDischarged;
-   double levelUp;
-   bool isUp;
+   double intervalAskBidBuy;
+   double intervalAskBidSell;
+   bool glassAskDischargedBuy;
+   bool glassAskDischargedSell;
+   int levelUpBuy;
+   int levelUpSell;
+   int isUpBuy;
+   int isUpSell;
 
-   ModelLogTrading({required this.priceBuy,required this.priceSell,required this.intervalAskBid,required this.glassAskDischarged,required this.levelUp,
-     required this.isUp,required this.timeStamp,required this.profit});
+   ModelLogTrading({required this.stopLoss,required this.priceBuy,required this.priceSell,required this.intervalAskBidSell,required this.intervalAskBidBuy,required this.glassAskDischargedBuy,
+     required this.glassAskDischargedSell,required this.levelUpBuy,
+     required this.levelUpSell, required this.isUpSell,required this.isUpBuy,
+     required this.timeStampBuy,required this.timeStampSell,
+     required this.profit});
 
 
  }

@@ -60,15 +60,20 @@ class ApiDataRepository extends ApiRepository{
 
   @override
   Future<void> insertLogTrading({required ModelLogTrading modelLogTrading}) async{
+    print('Dtat model ${modelLogTrading.stopLoss}');
     final database = await $FloorAppDataBase.databaseBuilder('app_database.db').build();
     final logDao = database.logtradingDao;
-    await logDao.insertDataUser(modelLogTrading);
+    await logDao.insertDataUser(modelLogTrading).catchError((error){
+      print('Error db $error');
+    });
+
   }
 
   @override
   Future<List<ModelLogTrading>?> getListTrading() async{
     final database = await $FloorAppDataBase.databaseBuilder('app_database.db').build();
     final logDao = database.logtradingDao;
+    print('Get data base ${logDao.getListLog()}');
     return logDao.getListLog();
   }
 

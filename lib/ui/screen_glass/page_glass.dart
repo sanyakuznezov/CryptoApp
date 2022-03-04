@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:payarapp/domain/state/state_screen_glass.dart';
+import 'package:payarapp/ui/screen_list_log/page_log_list.dart';
 
 class PageGlass extends StatefulWidget{
 
@@ -23,6 +24,13 @@ class _PageGlassState extends State<PageGlass> {
   Widget build(BuildContext context) {
 
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: (){
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>PageLogList()));
+
+
+        },
+      ),
       body: Container(
         margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
         child: Observer(builder: (_){
