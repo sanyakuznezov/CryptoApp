@@ -9,6 +9,7 @@
    String timeStampBuy;
    String timeStampSell;
    double profit;
+   double takeProfit;
    double stopLoss;
    double priceBuy;
    double priceSell;
@@ -21,7 +22,7 @@
    int isUpBuy;
    int isUpSell;
 
-   ModelLogTrading({required this.stopLoss,required this.priceBuy,required this.priceSell,required this.intervalAskBidSell,required this.intervalAskBidBuy,required this.glassAskDischargedBuy,
+   ModelLogTrading({required this.takeProfit,required this.stopLoss,required this.priceBuy,required this.priceSell,required this.intervalAskBidSell,required this.intervalAskBidBuy,required this.glassAskDischargedBuy,
      required this.glassAskDischargedSell,required this.levelUpBuy,
      required this.levelUpSell, required this.isUpSell,required this.isUpBuy,
      required this.timeStampBuy,required this.timeStampSell,

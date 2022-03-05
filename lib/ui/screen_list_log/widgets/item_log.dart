@@ -27,8 +27,8 @@ class ItemLog extends StatelessWidget{
           Text('Buy',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 15)),
           Row(
             children: [
-              Text('priceBuy: '),
-              Text('${modelLogTrading.priceBuy}')
+              Text('takeProfit: '),
+              Text('${modelLogTrading.takeProfit}')
             ],
 
           ),

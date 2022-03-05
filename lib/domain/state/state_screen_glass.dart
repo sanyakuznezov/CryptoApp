@@ -64,7 +64,7 @@ abstract class StateScreenGlassBase with Store{
   Timer? _timer;
   bool _isClearLevel=false;
   List<double> _i=[];
-  Map _log={'stopLoss':0.0,'timeStampBuy':0,'profit':0.0,'priceBuy':0.0,'priceSell':0.0,'intervalAskBidBuy':0.0,'glassAskDischargedBuy':false,
+  Map _log={'takeProfit':0.0,'stopLoss':0.0,'timeStampBuy':0,'profit':0.0,'priceBuy':0.0,'priceSell':0.0,'intervalAskBidBuy':0.0,'glassAskDischargedBuy':false,
   'levelUpBuy':0.0,'isUpSell':0,'timeStampSell':0,'intervalAskBidSell':0.0,'glassAskDischargedSell':false,
     'levelUpSell':0.0,'isUpBuy':0};
 
@@ -257,6 +257,7 @@ abstract class StateScreenGlassBase with Store{
     _log.update('isUpSell', (value) => isUp);
     _log.update('timeStampSell', (value) => DateTime.now().toString());
     RepositoryModule.apiRepository().insertLogTrading(modelLogTrading:ModelLogTrading(
+        takeProfit: _log['takeProfit'],
       stopLoss: _log['stopLoss'],
         priceBuy: _log['priceBuy'],
         priceSell: _log['priceSell'],
@@ -299,6 +300,7 @@ abstract class StateScreenGlassBase with Store{
       _priceTakeProfit=asksFinal[2].price;
       _stopLoss=bidsFinal[4].price;
       state=2;
+      _log.update('takeProfit', (value) => _priceTakeProfit);
       _log.update('priceBuy', (value) => buyPrice);
       _log.update('intervalAskBidBuy', (value) => getInterval(_pB, _pS));
       _log.update('glassAskDischargedBuy', (value) => trandUp);
@@ -306,7 +308,7 @@ abstract class StateScreenGlassBase with Store{
       _log.update('isUpBuy', (value) => isUp);
       _log.update('timeStampBuy', (value) => DateTime.now().toString());
       _log.update('stopLoss', (value) => _stopLoss);
-      print('buyPrice $buyPrice _priceTakeProfit $_priceTakeProfit stopLoss $_stopLoss');
+
     }
     //_strategyLimitOrder.placeOrderBuy(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price: pS);
     //_strategyMarket.placeOrderMarketBuy(market: Constant.MARKET_DOGE_USD);
