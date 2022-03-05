@@ -8,6 +8,8 @@
 import 'package:payarapp/domain/model/trading/model_log_trading.dart';
 import 'package:payarapp/ui/screen_glass/page_glass.dart';
 
+import '../../screen_list_log/page_log_list.dart';
+
 class PageListLogTrading extends StatefulWidget{
 
   List<ModelLogTrading> listmodelLogTrading;
@@ -44,7 +46,7 @@ class _PageListLogTradingState extends State<PageListLogTrading> {
        children: [
              GestureDetector(
                onTap: (){
-
+                 Navigator.push(context, MaterialPageRoute(builder: (context)=>PageLogList()));
                },
                child: Container(
                  margin:const EdgeInsets.all(5.0),
