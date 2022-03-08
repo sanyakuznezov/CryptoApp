@@ -74,7 +74,7 @@ abstract class StateScreenGlassBase with Store{
   @action
   getOrderBook()async{
     hasData=false;
-   _webSocketClient.subscribeOrderbookgrouped(update: (data){
+   _webSocketClient.subscribeOrderBookGrouped(update: (data){
       List asks=ModelOrderBook.fromApi(map: data).asks;
       List bids=ModelOrderBook.fromApi(map: data).bids;
       hasData=true;

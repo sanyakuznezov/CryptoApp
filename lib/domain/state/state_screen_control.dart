@@ -138,7 +138,7 @@ abstract class StateListTickerBase with Store{
 
    @action
    getOrderBook(){
-     _webSocketClient.subscribeOrderbookgrouped(update: (data){
+     _webSocketClient.subscribeOrderBookGrouped(update: (data){
         List asks=data['asks'] as List;
         List bids=data['bids'] as List;
         int _indexAsk=-1;
