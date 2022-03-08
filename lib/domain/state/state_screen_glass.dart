@@ -38,7 +38,7 @@ abstract class StateScreenGlassBase with Store{
   @observable
   bool hasData=false;
   List<ModelTrades> _trading=[];
-  double _priceCurrent=0.0;
+  Map _checkLevel={'l1':false,'l2':false};
   double _pB=0;
   double _pS=0;
   @observable
@@ -156,7 +156,7 @@ abstract class StateScreenGlassBase with Store{
   }
 
   getTicker(){
-   _timer= Timer.periodic(Duration(seconds: 60), (timer) {
+   _timer= Timer.periodic(Duration(minutes: 5), (timer) {
       _dot=0.0;
       _i.clear();
       levelUp=0;
@@ -220,6 +220,16 @@ abstract class StateScreenGlassBase with Store{
         levelUp++;
       }
     }
+
+    if(levelUp<0){
+      if(!_checkLevel['l1']){
+        _checkLevel.update('l1', (value) => true);
+      }
+    }else{
+      if(!_checkLevel['l2']){
+        _checkLevel.update('l2', (value) => true);
+      }
+    }
   }
 
 
@@ -227,10 +237,9 @@ abstract class StateScreenGlassBase with Store{
 
   botTrade(double pB,double pS){
     if(state==1){
-      // if(isUp==3&&levelUp>50){
-      //   buy();
-      // }
-      buy();
+      if(isUp==3&&levelUp>50&&trandUp){
+        buy();
+      }
     }
     if(state==2){
       handlerTrade(pS);
@@ -337,5 +346,22 @@ abstract class StateScreenGlassBase with Store{
     _webSocketClient.close();
     _timer!.cancel();
   }
+
+//todo проратать стратегию buy-market sell-limit
+  testTrade()async{
+   final result=await _strategyMarket.placeOrderMarketBuy(market: Constant.MARKET_DOGE_USD);
+   print('Result buy $result price $_pB');
+    if(result){
+      print('Sell price ${asksFinal[1].price}');
+     final sell=await _strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price:asksFinal[1].price);
+      if(sell){
+        print('order sell place succes');
+      }else{
+        print('order sell place error');
+      }
+
+    }
+  }
+
 
 }

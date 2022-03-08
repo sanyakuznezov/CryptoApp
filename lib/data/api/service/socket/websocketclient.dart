@@ -63,10 +63,9 @@ class WebSocketClient{
      });
 
    }
-   //Todo not work
+
    //получение данных  открыты орерах
    subscribeOrders({required Function update})async{
-
      final ts=DateTime.now().millisecondsSinceEpoch;
      var key = utf8.encode(API_PRIVATE_KEY);
      var signaturePayload = utf8.encode('${ts}websocket_login');
@@ -86,9 +85,8 @@ class WebSocketClient{
        if(event!=null){
          update(event);
        }
-
      }).onError((error){
-       print('Error subscrabe $error');
+
      });
 
 

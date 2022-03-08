@@ -30,8 +30,8 @@ class StrategyMarket{
    }
 
 
-   placeOrderMarketBuy({required String market}){
-    RepositoryModule.apiRepository().placeOrder(modelOrderRequestPlaceApi:
+   Future<bool>placeOrderMarketBuy({required String market})async{
+  final result=await RepositoryModule.apiRepository().placeOrder(modelOrderRequestPlaceApi:
     ModelOrderRequestPlaceApi(
         market: market,
         side: Constant.SIDE_BUY,
@@ -44,5 +44,8 @@ class StrategyMarket{
         ioc: false,
         postOnly: false,
         clientId:null));
+
+       return result;
    }
+
  }

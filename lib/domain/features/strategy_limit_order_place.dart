@@ -8,8 +8,8 @@ class StrategyLimitOrder {
 
 
 
-   placeOrderSell({required String market,required int percentageOfBalance,required price}){
-     RepositoryModule.apiRepository().placeOrder(modelOrderRequestPlaceApi:
+   Future<bool>placeOrderSell({required String market,required int percentageOfBalance,required price})async{
+    final result=await RepositoryModule.apiRepository().placeOrder(modelOrderRequestPlaceApi:
      ModelOrderRequestPlaceApi(
          market: market,
          side: Constant.SIDE_SELL,
@@ -22,6 +22,7 @@ class StrategyLimitOrder {
          ioc: false,
          postOnly: false,
          clientId:null));
+     return result;
    }
 
 
