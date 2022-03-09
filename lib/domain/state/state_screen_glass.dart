@@ -13,6 +13,7 @@ import 'package:payarapp/data/api/service/socket/websocketclient.dart';
 import 'package:payarapp/domain/features/strategy_limit_order_place.dart';
 import 'package:payarapp/domain/features/strategy_market_order_place.dart';
 import 'package:payarapp/domain/model/trading/model_log_trading.dart';
+import 'package:payarapp/domain/model/trading/model_open_order.dart';
 import 'package:payarapp/domain/model/trading/model_order_book.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_ask.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_bid.dart';
@@ -356,11 +357,24 @@ abstract class StateScreenGlassBase with Store{
      final sell=await _strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price:asksFinal[1].price);
       if(sell){
         print('order sell place succes');
+        handlerOpenOrder();
       }else{
         print('order sell place error');
       }
 
     }
+  }
+
+  handlerOpenOrder(){
+   Timer.periodic(Duration(seconds: 2), (timer) async{
+  final model=await RepositoryModule.apiRepository().getOpenOrders();
+     if(model!.isNotEmpty){
+         print('handlerOpenOrder ${model[0].status}');
+     }else{
+       print('Close order');
+       timer.cancel();
+     }
+   });
   }
 
 

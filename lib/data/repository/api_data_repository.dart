@@ -5,6 +5,7 @@ import 'package:payarapp/data/api/model/modelorderplaceapi.dart';
 import 'package:payarapp/data/local_data_base/app_data_base.dart';
 import 'package:payarapp/domain/model/trading/model_all_balances.dart';
 import 'package:payarapp/domain/model/trading/model_log_trading.dart';
+import 'package:payarapp/domain/model/trading/model_open_order.dart';
 import 'package:payarapp/domain/repository/api_repository.dart';
 
 class ApiDataRepository extends ApiRepository{
@@ -43,9 +44,9 @@ class ApiDataRepository extends ApiRepository{
    }
 
   @override
-  Future<void> getOpenOrders() async{
+  Future<List<ModelOpenOrder>?> getOpenOrders() async{
     // TODO: implement getOrders
-    await _apiUtil.getOpenOrders();
+   return await _apiUtil.getOpenOrders();
   }
 
   @override

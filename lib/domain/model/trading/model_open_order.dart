@@ -8,15 +8,15 @@ class ModelOpenOrder{
 
 
  String createdAt;
-  int filledSize;
+  double filledSize;
   String future;
   int id;
   String market;
   double price;
  double avgFillPrice;
-  int remainingSize;
+  double remainingSize;
   String side;
-  int size;
+  double size;
   String status;
   String type;
   bool reduceOnly;

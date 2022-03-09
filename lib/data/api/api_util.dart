@@ -3,6 +3,7 @@
 import 'package:payarapp/data/api/service/rest/main_trading_service.dart';
 import 'package:payarapp/data/mapper/mapper_trading_data.dart';
 import 'package:payarapp/domain/model/trading/model_all_balances.dart';
+import 'package:payarapp/domain/model/trading/model_open_order.dart';
 import 'package:payarapp/domain/model/trading/model_ticker_price.dart';
 
 import 'model/modelorderplaceapi.dart';
@@ -42,8 +43,8 @@ class ApiUtil{
     Future<void> startTrending() async{
       await _mainTradingService.startTrending();
     }
-    Future<void> getOpenOrders()async{
-      await _mainTradingService.getOpenOrders();
+    Future<List<ModelOpenOrder>?> getOpenOrders()async{
+     return await _mainTradingService.getOpenOrders();
     }
 
     Future<bool> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi})async{

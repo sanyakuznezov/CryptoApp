@@ -9,6 +9,7 @@ import 'package:crypto/crypto.dart';
 import 'package:dio/dio.dart';
 import 'package:payarapp/data/api/model/model_all_balances_api.dart';
 import 'package:payarapp/data/api/model/modelorderplaceapi.dart';
+import 'package:payarapp/domain/model/trading/model_open_order.dart';
 
 class MainTradingService{
 
@@ -43,7 +44,9 @@ class MainTradingService{
            error.type == DioErrorType.sendTimeout) {
        //  timeout error
        }
-
+       if (error.response!.statusCode==429) {
+         //Превышение ограничений скорости
+       }
 
        return null;
      }
@@ -118,7 +121,9 @@ class MainTradingService{
           error.type == DioErrorType.sendTimeout) {
         //  timeout error
       }
-
+      if (error.response!.statusCode==429) {
+        //Превышение ограничений скорости
+      }
       print('DioError order ${error}');
       return null;
     }
@@ -130,7 +135,7 @@ class MainTradingService{
 
 
 
- Future<void> getOpenOrders() async{
+ Future<List<ModelOpenOrder>?> getOpenOrders() async{
    try{
      final ts=DateTime.now().millisecondsSinceEpoch;
      var key = utf8.encode(API_PRIVATE_KEY);
@@ -147,14 +152,17 @@ class MainTradingService{
            headers: {'FTX-KEY':API_KEY,'FTX-SIGN':sha256Result,'FTX-TS': ts},
          )
      );
-    print('respone order ${response.data}');
-
+   return (response.data['result'] as List)
+       .map((x) => ModelOpenOrder.fromApi(map: x))
+       .toList();
    }on DioError catch(error){
      if (error.type == DioErrorType.receiveTimeout ||
          error.type == DioErrorType.sendTimeout) {
        //  timeout error
      }
-
+     if (error.response!.statusCode==429) {
+       //Превышение ограничений скорости
+     }
      print('DioError order ${error}');
      return null;
    }
