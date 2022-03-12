@@ -1,5 +1,7 @@
 
 
+import 'dart:ffi';
+
 import 'package:json_annotation/json_annotation.dart';
 part 'model_open_order.g.dart';
 
@@ -7,22 +9,22 @@ part 'model_open_order.g.dart';
 class ModelOpenOrder{
 
 
- String createdAt;
-  double filledSize;
-  String future;
-  int id;
-  String market;
-  double price;
- double avgFillPrice;
-  double remainingSize;
-  String side;
-  double size;
-  String status;
-  String type;
-  bool reduceOnly;
-  bool ioc;
-  bool postOnly;
-  var clientId;
+ String? createdAt;
+  double? filledSize;
+  String? future;
+  int? id;
+  String? market;
+  double? price;
+ double? avgFillPrice;
+  double? remainingSize;
+  String? side;
+  double? size;
+  String? status;
+  String? type;
+  bool? reduceOnly;
+  bool? ioc;
+  bool? postOnly;
+  int? clientId;
 
   ModelOpenOrder({required this.createdAt,required this.filledSize,required this.future,
   required this.id,required this.market,required this.price,required this.avgFillPrice,required this.remainingSize,
