@@ -54,7 +54,7 @@ class MainTradingService{
     }
 
 
-    Future<bool> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi})async{
+    Future<int> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi})async{
       try{
         final ts=DateTime.now().millisecondsSinceEpoch;
         var key = utf8.encode(API_PRIVATE_KEY);
@@ -83,7 +83,7 @@ class MainTradingService{
             )
         );
         print('Price place ${response.data}');
-        return response.data['success'];
+        return response.data['result']['id'] as int;
 
       }on DioError catch(error){
         if (error.type == DioErrorType.receiveTimeout ||
@@ -96,7 +96,7 @@ class MainTradingService{
         }
 
 
-        return false;
+        return 0;
       }
 
 
@@ -170,7 +170,40 @@ class MainTradingService{
  }
 
 
+ Future<bool> cancelOrder({required String id})async{
+   try{
+     final ts=DateTime.now().millisecondsSinceEpoch;
+     var key = utf8.encode(API_PRIVATE_KEY);
+     var signaturePayload = utf8.encode('${ts}DELETE/api/orders/$id');
+     final hmac256=Hmac(sha256, key);
+     Digest sha256Result = hmac256.convert(signaturePayload);
+     final response = await _dio.delete(
+         'orders/$id',
+         options: Options(
+           sendTimeout: 5000,
+           receiveTimeout: 10000,
+           headers: {'FTX-KEY':API_KEY,'FTX-SIGN':sha256Result,'FTX-TS': ts},
+         )
+     );
+     return response.data['success'];
 
+   }on DioError catch(error){
+     if (error.type == DioErrorType.receiveTimeout ||
+         error.type == DioErrorType.sendTimeout) {
+       //  timeout error
+     }
+     print('Error cancel $error');
+     if (error.response!.statusCode==429) {
+       //Превышение ограничений скорости
+     }
+
+
+     return false;
+   }
+
+
+
+ }
 
 
 

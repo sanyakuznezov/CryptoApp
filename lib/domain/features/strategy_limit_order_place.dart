@@ -8,7 +8,7 @@ class StrategyLimitOrder {
 
 
 
-   Future<bool>placeOrderSell({required String market,required int percentageOfBalance,required price})async{
+   Future<int>placeOrderSell({required String market,required int percentageOfBalance,required price})async{
     final result=await RepositoryModule.apiRepository().placeOrder(modelOrderRequestPlaceApi:
      ModelOrderRequestPlaceApi(
          market: market,

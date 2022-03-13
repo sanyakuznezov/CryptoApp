@@ -30,7 +30,7 @@ class StrategyMarket{
    }
 
 
-   Future<bool>placeOrderMarketBuy({required String market})async{
+   Future<int>placeOrderMarketBuy({required String market})async{
   final result=await RepositoryModule.apiRepository().placeOrder(modelOrderRequestPlaceApi:
     ModelOrderRequestPlaceApi(
         market: market,

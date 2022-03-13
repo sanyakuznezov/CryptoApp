@@ -5,6 +5,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:payarapp/domain/state/state_screen_glass.dart';
+import 'package:payarapp/internal/dependencies/repository_module.dart';
 import 'package:payarapp/ui/screen_list_log/page_log_list.dart';
 
 class PageGlass extends StatefulWidget{
@@ -69,8 +70,8 @@ class _PageGlassState extends State<PageGlass> {
                              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
                            ),
                            onPressed: (){
-                            // _stateScreenGlass!.isTrade=true;
-                             _stateScreenGlass!.testTrade();
+                             _stateScreenGlass!.isTrade=true;
+
                            },
                            child: Text('start')),
 

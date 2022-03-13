@@ -54,7 +54,7 @@ abstract class StateScreenGlassBase with Store{
   @observable
   bool trandUp=true;
   @observable
-  bool isTrade=true;
+  bool isTrade=false;
   int state=1;
   @observable
   int isUp=0;
@@ -66,6 +66,7 @@ abstract class StateScreenGlassBase with Store{
   bool _isClearLevel=false;
   List<double> _i=[];
   int _index=0;
+  int _idOrder=0;
   bool _isSell=false;
   Map _log={'takeProfit':0.0,'stopLoss':0.0,'timeStampBuy':0,'profit':0.0,'priceBuy':0.0,'priceSell':0.0,'intervalAskBidBuy':0.0,'glassAskDischargedBuy':false,
   'levelUpBuy':0.0,'isUpSell':0,'timeStampSell':0,'intervalAskBidSell':0.0,'glassAskDischargedSell':false,
@@ -134,12 +135,17 @@ abstract class StateScreenGlassBase with Store{
   }
 
   @action
-  trandHandler(List<ModelOrderBookBid> bids,List<ModelOrderBookAsk> asks){
+  trandHandler(List<ModelOrderBookBid> bids,List<ModelOrderBookAsk> asks) {
     _index=0;
  asks.forEach((element) {
    _index++;
    if(element.price==sellPrice){
      print('Position order $_index');
+     if(_index>20){
+       //close order
+       print('Cancel order ID $_idOrder');
+       cancelOrder();
+     }
    }
  });
     // int glassAsksLevel=0;
@@ -161,7 +167,12 @@ abstract class StateScreenGlassBase with Store{
     // }
   }
 
-
+  cancelOrder()async{
+    final result= await RepositoryModule.apiRepository().cancelOrder(id: _idOrder.toString());
+    isTrade=false;
+    _isSell=false;
+    print('Cancel Order Result $result');
+  }
   // getSubscribeOrders(){
   //   _webSocketClient.subscribeOrders(update: (data){
   //     print('Open order ${data}');
@@ -250,9 +261,9 @@ abstract class StateScreenGlassBase with Store{
 
   botTrade(double pB,double pS){
     if(state==1){
-      if(isUp==3&&levelUp>50){
+      if(isUp==3&&levelUp>10){
         //buy();
-
+        testTrade();
       }
     }
     if(state==2){
@@ -298,11 +309,7 @@ abstract class StateScreenGlassBase with Store{
   //   //_strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price: pB);
   //   // _strategyMarket.placeOrderMarketSell(market: Constant.MARKET_DOGE_USD);
   // }
- // handlerTrade(double pS){
- //   if(pS>_priceTakeProfit){
- //     sell(true);
- //   }
- //   if(_stopLoss>pS){
+ // handlerTrade(double g
  //     sell(false);
  //   }
  // }
@@ -363,15 +370,31 @@ abstract class StateScreenGlassBase with Store{
 
 //todo проратать стратегию buy-market sell-limit
   testTrade()async{
+    state=2;
    final result=await _strategyMarket.placeOrderMarketBuy(market: Constant.MARKET_DOGE_USD);
-   print('Result buy $result price $_pB');
-    if(result){
-      sellPrice=asksFinal[1].price;
-      _isSell=true;
-      print('Sell price ${sellPrice}');
-     final sell=await _strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price:asksFinal[1].price);
-      if(sell){
-        print('order sell place succes');
+       buyPrice=_pB;
+      _priceTakeProfit=asksFinal[2].price;
+      //_stopLoss=bidsFinal[4].price;
+      state=2;
+      _log.update('takeProfit', (value) => _priceTakeProfit);
+      _log.update('priceBuy', (value) => buyPrice);
+      _log.update('intervalAskBidBuy', (value) => getInterval(_pB, _pS));
+      _log.update('glassAskDischargedBuy', (value) => trandUp);
+      _log.update('levelUpBuy', (value) => levelUp);
+      _log.update('isUpBuy', (value) => isUp);
+      _log.update('timeStampBuy', (value) => DateTime.now().toString());
+      _log.update('stopLoss', (value) => _stopLoss);
+
+
+   print('Result buy $result price $buyPrice');
+    if(result>0){
+      print('Sell price ${asksFinal[2].price}');
+      sellPrice=asksFinal[2].price;
+     final sell=await _strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price:asksFinal[2].price);
+      if(sell>0){
+        print('order sell place succes ID=$sell');
+        _idOrder=sell;
+        _isSell=true;
         handlerOpenOrder();
       }else{
         print('order sell place error');
@@ -383,16 +406,45 @@ abstract class StateScreenGlassBase with Store{
   handlerOpenOrder(){
    Timer.periodic(Duration(seconds: 2), (timer) async{
   final model=await RepositoryModule.apiRepository().getOpenOrders();
-     if(model!.isNotEmpty){
-         print('handlerOpenOrder ${model[0].status}');
-     }else{
+     if(model!.isEmpty){
        print('Close order');
        _isSell=false;
+       state=1;
+       takeProfit+=sellPrice-buyPrice;
+       _log.update('profit', (value) => takeProfit);
+       buyPrice=0.0;
+       _log.update('priceSell', (value) => sellPrice);
+       _log.update('intervalAskBidSell', (value) => getInterval(_pB, _pS));
+       _log.update('glassAskDischargedSell', (value) =>trandUp );
+       _log.update('levelUpSell', (value) => levelUp);
+       _log.update('isUpSell', (value) => isUp);
+       _log.update('timeStampSell', (value) => DateTime.now().toString());
+       RepositoryModule.apiRepository().insertLogTrading(modelLogTrading:ModelLogTrading(
+           takeProfit: _log['takeProfit'],
+           stopLoss: _log['stopLoss'],
+           priceBuy: _log['priceBuy'],
+           priceSell: _log['priceSell'],
+           intervalAskBidSell: _log['intervalAskBidSell'],
+           intervalAskBidBuy: _log['intervalAskBidBuy'],
+           glassAskDischargedBuy: _log['glassAskDischargedBuy'],
+           glassAskDischargedSell: _log['glassAskDischargedSell'],
+           levelUpBuy: _log['levelUpBuy'],
+           levelUpSell: _log['levelUpSell'],
+           isUpSell: _log['isUpSell'],
+           isUpBuy: _log['isUpBuy'],
+           timeStampBuy: _log['timeStampBuy'],
+           timeStampSell: _log['timeStampSell'],
+           profit: _log['profit']));
        sellPrice=0.0;
+       _idOrder=0;
+       isUp=0;
+       levelUp=0;
        timer.cancel();
      }
    });
   }
+
+
 
 
 }

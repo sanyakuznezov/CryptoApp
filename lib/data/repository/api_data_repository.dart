@@ -50,7 +50,7 @@ class ApiDataRepository extends ApiRepository{
   }
 
   @override
-  Future<bool> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi}) async{
+  Future<int> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi}) async{
     return await _apiUtil.placeOrder(modelOrderRequestPlaceApi: modelOrderRequestPlaceApi);
   }
 
@@ -85,7 +85,9 @@ class ApiDataRepository extends ApiRepository{
     await logDao.clear();
   }
 
-
+   Future<bool> cancelOrder({required String id})async{
+       return await _apiUtil.cancelOrder(id: id);
+   }
 
   // @override
   // Future<Order> getOrder({String? idUser}) {

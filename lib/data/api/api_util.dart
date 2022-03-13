@@ -47,11 +47,15 @@ class ApiUtil{
      return await _mainTradingService.getOpenOrders();
     }
 
-    Future<bool> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi})async{
+    Future<int> placeOrder({required ModelOrderRequestPlaceApi modelOrderRequestPlaceApi})async{
       return await _mainTradingService.placeOrder(modelOrderRequestPlaceApi: modelOrderRequestPlaceApi);
     }
 
     Future<void> getTrades({required String market}) async{
-      _mainTradingService.getTrades(market: market);
+     await _mainTradingService.getTrades(market: market);
+    }
+
+    Future<bool> cancelOrder({required String id})async{
+      return await _mainTradingService.cancelOrder(id: id);
     }
 }
