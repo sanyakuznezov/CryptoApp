@@ -39,7 +39,6 @@ abstract class StateScreenGlassBase with Store{
   @observable
   bool hasData=false;
   List<ModelTrades> _trading=[];
-  Map _checkLevel={'l1':false,'l2':false};
   double _pB=0;
   double _pS=0;
   @observable
@@ -143,7 +142,6 @@ abstract class StateScreenGlassBase with Store{
      print('Position order $_index');
      if(_index>20){
        //close order
-       print('Cancel order ID $_idOrder');
        cancelOrder();
      }
    }
@@ -168,9 +166,9 @@ abstract class StateScreenGlassBase with Store{
   }
 
   cancelOrder()async{
-    final result= await RepositoryModule.apiRepository().cancelOrder(id: _idOrder.toString());
     isTrade=false;
     _isSell=false;
+    final result= await RepositoryModule.apiRepository().cancelOrder(id: _idOrder.toString());
     print('Cancel Order Result $result');
   }
   // getSubscribeOrders(){
@@ -237,23 +235,24 @@ abstract class StateScreenGlassBase with Store{
 
     if(_i.length==2){
       if(_i[0]>_i[1]){
+        if(levelUp>0){
+          levelUp=0;
+        }
         levelUp--;
-      }else if(_i[0]==_i[1]){
-        levelUp=0;
       }else if(_i[0]<_i[1]){
+        if(levelUp<0){
+          levelUp=0;
+        }
         levelUp++;
       }
     }
 
     if(levelUp<0){
-      if(!_checkLevel['l1']){
-        _checkLevel.update('l1', (value) => true);
-      }
+      isUp=1;
     }else{
-      if(!_checkLevel['l2']){
-        _checkLevel.update('l2', (value) => true);
-      }
+      isUp=3;
     }
+
   }
 
 
@@ -261,7 +260,7 @@ abstract class StateScreenGlassBase with Store{
 
   botTrade(double pB,double pS){
     if(state==1){
-      if(isUp==3&&levelUp>10){
+      if(levelUp<20){
         //buy();
         testTrade();
       }
@@ -373,8 +372,7 @@ abstract class StateScreenGlassBase with Store{
     state=2;
    final result=await _strategyMarket.placeOrderMarketBuy(market: Constant.MARKET_DOGE_USD);
        buyPrice=_pB;
-      _priceTakeProfit=asksFinal[2].price;
-      //_stopLoss=bidsFinal[4].price;
+      _priceTakeProfit=asksFinal[1].price;
       state=2;
       _log.update('takeProfit', (value) => _priceTakeProfit);
       _log.update('priceBuy', (value) => buyPrice);
@@ -390,7 +388,7 @@ abstract class StateScreenGlassBase with Store{
     if(result>0){
       print('Sell price ${asksFinal[2].price}');
       sellPrice=asksFinal[2].price;
-     final sell=await _strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price:asksFinal[2].price);
+     final sell=await _strategyLimitOrder.placeOrderSell(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price:asksFinal[1].price);
       if(sell>0){
         print('order sell place succes ID=$sell');
         _idOrder=sell;
