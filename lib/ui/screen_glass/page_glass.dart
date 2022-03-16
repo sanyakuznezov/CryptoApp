@@ -64,7 +64,7 @@ class _PageGlassState extends State<PageGlass> {
                      Icons.arrow_circle_up,color: Colors.green,size: 100,
                ),
 
-                       Text('Level up ${_stateScreenGlass!.levelUp}'),
+                       Text('Level up ${_stateScreenGlass!.levelUpAsk}'),
                        ElevatedButton(
                            style: ButtonStyle(
                              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
