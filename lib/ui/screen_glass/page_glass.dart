@@ -71,6 +71,7 @@ class _PageGlassState extends State<PageGlass> {
                            ),
                            onPressed: (){
                              _stateScreenGlass!.isTrade=true;
+                             _stateScreenGlass!.state=1;
 
                            },
                            child: Text('start')),
@@ -82,6 +83,19 @@ class _PageGlassState extends State<PageGlass> {
                     Text('Lossed ${_stateScreenGlass!.takeLosses}'),
                     Text('Buy ${_stateScreenGlass!.buyPrice}'),
                     Text('Sell ${_stateScreenGlass!.sellPrice}'),
+                    Padding(padding: EdgeInsets.all(30.0),
+                    child: Text('Position Order - ${_stateScreenGlass!.positionOrder}'),),
+
+                    Container(
+                      color: Colors.red,
+                      height: _stateScreenGlass!.asksRatio,
+                      width: 50.0
+                    ),
+                    Container(
+                        color: Colors.green,
+                        height: _stateScreenGlass!.bidsRatio,
+                        width: 50.0
+                    ),
                   ],
                 ),
              );

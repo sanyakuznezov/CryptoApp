@@ -13,7 +13,6 @@ import 'package:payarapp/data/api/service/socket/websocketclient.dart';
 import 'package:payarapp/domain/features/strategy_limit_order_place.dart';
 import 'package:payarapp/domain/features/strategy_market_order_place.dart';
 import 'package:payarapp/domain/model/trading/model_log_trading.dart';
-import 'package:payarapp/domain/model/trading/model_open_order.dart';
 import 'package:payarapp/domain/model/trading/model_order_book.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_ask.dart';
 import 'package:payarapp/domain/model/trading/model_orderbook_bid.dart';
@@ -70,6 +69,12 @@ abstract class StateScreenGlassBase with Store{
   int _index=0;
   int _idOrder=0;
   bool _isPlace=false;
+  @observable
+  double asksRatio=0.0;
+  @observable
+  double bidsRatio=0.0;
+  @observable
+  int positionOrder=0;
   Map _log={'takeProfit':0.0,'stopLoss':0.0,'timeStampBuy':0,'profit':0.0,'priceBuy':0.0,'priceSell':0.0,'intervalAskBidBuy':0.0,'glassAskDischargedBuy':false,
   'levelUpBuy':0.0,'isUpSell':0,'timeStampSell':0,'intervalAskBidSell':0.0,'glassAskDischargedSell':false,
     'levelUpSell':0.0,'isUpBuy':0};
@@ -133,32 +138,61 @@ abstract class StateScreenGlassBase with Store{
         trandHandler(bidsFinal, asksFinal);
       }
 
+      ratioAskBid(bidsFinal, asksFinal);
+
     });
   }
 
   @action
   trandHandler(List<ModelOrderBookBid> bids,List<ModelOrderBookAsk> asks) {
-    _index=0;
-    if(state==2){
-      bids.forEach((element) {
-        _index++;
-        if(element.price==buyPrice){
-          print('Position order buy $_index');
-          if(_index>20){
-            cancelOrder();
-          }
-        }
-      });
-    }else if(state==4){
-      asks.forEach((element) {
-        _index++;
-        if(element.price==sellPrice){
-          print('Position order sell $_index');
-          if(_index>20){
-            cancelOrder();
-          }
-        }
-      });
+    _index = 0;
+    // if(state==2){
+    //   bids.forEach((element) {
+    //     _index++;
+    //     if(element.price==buyPrice){
+    //       print('Position order buy $_index');
+    //       // if(_index>20){
+    //       //   cancelOrder();
+    //       // }
+    //     }
+    //   });
+    // }else if(state==4){
+    //   asks.forEach((element) {
+    //     _index++;
+    //     if(element.price==sellPrice){
+    //       print('Position order sell $_index');
+    //       _isPlace=false;
+    //       // if(_index>20){
+    //       //   cancelOrder();
+    //       // }
+    //     }
+    //   });
+
+    asks.where((element){
+      if(element.price==sellPrice){
+        positionOrder=0;
+        return true;
+      }else{
+        return false;
+      }
+    });
+    asks.forEach((element) {
+      _index++;
+      if (element.price == sellPrice) {
+       positionOrder=_index;
+        // if(state==1){
+        //   _isPlace = false;
+        //   if (_index < 25) {
+        //     state=2;
+        //     _isPlace=true;
+        //     print('Position sell price $_index price $sellPrice');
+        //   }
+        // }else{
+        //   print('Position order sell Place status $_index price $sellPrice');
+        // }
+      }
+    });
+
     }
 
     // int glassAsksLevel=0;
@@ -178,7 +212,7 @@ abstract class StateScreenGlassBase with Store{
     //
     //
     // }
-  }
+
 
   cancelOrder()async{
     isTrade=false;
@@ -202,12 +236,32 @@ abstract class StateScreenGlassBase with Store{
     _webSocketClient.subscribeTicker(update: (ModelTickerPrice data){
       _pB = data.ask;
       _pS = data.bid;
+      candle(_pB,_pS);
       if(isTrade){
-        candle(_pB,_pS);
         botTrade();
 
       }
     });
+  }
+
+
+
+  ratioAskBid(List<ModelOrderBookBid> bids,List<ModelOrderBookAsk> asks){
+    double askOrderSize=0.0;
+    double bidOrderSize=0.0;
+    bids.forEach((element) {
+        bidOrderSize+=element.size;
+    });
+    asks.forEach((element) {
+      askOrderSize+=element.size;
+    });
+
+    double i=askOrderSize+bidOrderSize;
+    double aP=(askOrderSize*100)/i;
+    double bP=(bidOrderSize*100)/i;
+    asksRatio=(300.0*aP)/100;
+    bidsRatio=(300.0*bP)/100;
+
   }
 
    candle(double pB,double pS){
@@ -303,13 +357,14 @@ abstract class StateScreenGlassBase with Store{
   }
 
 
-
+  // точка входа в процесс торгов
   botTrade(){
     if(state==1){
-      buy();
+      //buy();
+      testTrade();
     }
     if(state==3){
-      sell();
+     // sell();
 
     }
   }
@@ -348,7 +403,7 @@ abstract class StateScreenGlassBase with Store{
     }
   }
 
-
+  //спред интервал
   getInterval(double ask,double bid){
     return ask-bid;
   }
@@ -385,10 +440,14 @@ abstract class StateScreenGlassBase with Store{
   }
 
 //todo проратать стратегию buy-market sell-limit
-  testTrade(int status)async{
-    state=2;
+  testTrade()async{
   // final result=await _strategyMarket.placeOrderMarketBuy(market: Constant.MARKET_DOGE_USD);
+      state=2;
        buyPrice=_pB;
+       print('Buy price ${buyPrice}');
+       print('Sell price order ${getSellPrice(buyPrice,asksFinal)}');
+       sellPrice=getSellPrice(buyPrice,asksFinal);
+       _isPlace=true;
      // _priceTakeProfit=asksFinal[1].price;
       // _log.update('takeProfit', (value) => _priceTakeProfit);
       // _log.update('priceBuy', (value) => buyPrice);
@@ -400,16 +459,32 @@ abstract class StateScreenGlassBase with Store{
       // _log.update('stopLoss', (value) => _stopLoss);
 
 
-      sellPrice=asksFinal[0].price;
-     final sell=await _strategyLimitOrder.placeOrderBuy(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price:asksFinal[0].price);
-      if(sell>0){
-        _idOrder=sell;
-        _isPlace=true;
-        handlerOpenOrder();
-      }else{
-        print('order sell place error');
-      }
+      //sellPrice=asksFinal[0].price;
+     // final sell=await _strategyLimitOrder.placeOrderBuy(market: Constant.MARKET_DOGE_USD, percentageOfBalance: 100, price:asksFinal[0].price);
+     //  if(sell>0){
+     //    _idOrder=sell;
+     //    _isPlace=true;
+     //    handlerOpenOrder();
+     //  }else{
+     //    print('order sell place error');
+     //  }
 
+
+  }
+
+  //расчет цены продажи
+  getSellPrice(double buyPrice,List<ModelOrderBookAsk> asks){
+    double p=0.2;
+    double r=(buyPrice*p)/100;
+    double f=buyPrice+r;
+    double fPrice=0.0;
+    for(int i=0;i<asks.length;i++){
+      if(asks[i].price>f){
+        fPrice=asks[i].price;
+        break;
+      }
+    }
+    return fPrice;
 
   }
 
